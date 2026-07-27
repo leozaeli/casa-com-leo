@@ -121,18 +121,12 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
 .key-image, .key-wash { position: absolute; inset: 0; pointer-events: none; }
 .key-image { z-index: 0; opacity: calc(.1 + var(--reveal, 0) * .9); transform: translate3d(0, calc((1 - var(--reveal, 0)) * 18%), 0) scale(calc(1.08 - var(--reveal, 0) * .08)); background: url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2200&q=90') center/cover; will-change: opacity, transform; }
 .key-wash { z-index: 1; background: linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.08) 72%), linear-gradient(0deg, rgba(0,0,0,.4), transparent 65%); opacity: calc(1 - var(--reveal, 0) * .55); }
-.key-scene { position: absolute; z-index: 2; top: 29%; left: 78%; width: 128px; height: 178px; transform: translate(-50%, -50%) scale(calc(1 - var(--reveal, 0) * .18)); opacity: calc(1 - var(--reveal, 0) * 1.1); will-change: transform, opacity; }
-.lock-body { position: absolute; left: 8px; bottom: 0; width: 112px; height: 98px; border: 2px solid rgba(255,255,255,.84); border-radius: 18px; background: rgba(255,255,255,.04); box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 20px 50px rgba(0,0,0,.3); }
-.lock-shackle { position: absolute; z-index: -1; top: 0; left: 26px; width: 74px; height: 106px; border: 2px solid rgba(255,255,255,.84); border-bottom: 0; border-radius: 56px 56px 0 0; transform-origin: 20px 100%; transform: rotate(calc(var(--reveal, 0) * 42deg)); }
-.lock-shackle span { position: absolute; right: -3px; bottom: -4px; width: 5px; height: 25px; background: rgba(255,255,255,.84); }
-.keyhole { position: absolute; top: 38px; left: 49px; width: 13px; height: 23px; border-radius: 9px 9px 7px 7px; background: var(--accent); }
-.keyhole::after { content: ''; position: absolute; left: 3px; bottom: -8px; width: 7px; height: 13px; background: var(--accent); }
 .key-copy { position: absolute; z-index: 3; left: max(24px, calc((100vw - var(--max)) / 2)); right: 24px; bottom: 12%; opacity: calc(1 - var(--reveal, 0) * 1.15); transform: translateY(calc(var(--reveal, 0) * -40px)); }
 .key-copy h1 { max-width: 700px; margin-bottom: 23px; font-size: clamp(4rem, 8.5vw, 8rem); font-weight: 500; letter-spacing: -.085em; line-height: .87; }
 .key-copy .hero-copy { max-width: 320px; color: rgba(255,255,255,.72); font-size: 14px; line-height: 1.5; }
-.scroll-prompt { position: absolute; z-index: 3; right: max(24px, calc((100vw - var(--max)) / 2)); bottom: 8%; color: rgba(255,255,255,.72); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; opacity: calc(1 - var(--reveal, 0) * 1.8); }
-.scroll-prompt span { margin-right: 10px; color: var(--accent); }
-.scroll-prompt b { display: inline-block; margin-left: 12px; color: var(--accent); font-size: 18px; font-weight: 400; }
+.scroll-prompt { position: absolute; z-index: 3; top: 50%; right: max(24px, calc((100vw - var(--max)) / 2)); display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,.72); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; writing-mode: vertical-rl; opacity: calc(1 - var(--reveal, 0) * 1.8); transform: translateY(-50%); }
+.scroll-prompt span { color: var(--accent); }
+.scroll-prompt b { color: var(--accent); font-size: 18px; font-weight: 400; }
 .key-reveal-label { position: absolute; z-index: 3; right: max(24px, calc((100vw - var(--max)) / 2)); bottom: 8%; color: #fff; font-family: 'Playfair Display', serif; font-size: 25px; opacity: calc((var(--reveal, 0) - .6) * 3); }
 .key-reveal-label span { display: block; margin-top: 6px; color: rgba(255,255,255,.65); font-family: 'DM Sans', sans-serif; font-size: 11px; }
 @media (max-width: 900px) {
@@ -149,7 +143,7 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
   .key-copy h1 { max-width: 90%; font-size: clamp(3rem, 14vw, 5rem); line-height: .9; }
   .key-copy .hero-copy { max-width: 240px; font-size: 13px; }
   .key-scene { top: 24%; left: 82%; transform: translate(-50%, -50%) scale(.5); }
-  .scroll-prompt { left: 16px; right: auto; bottom: 6%; font-size: 9px; }
+  .scroll-prompt { top: auto; left: 16px; right: auto; bottom: 6%; display: block; font-size: 9px; writing-mode: horizontal-tb; transform: none; }
   .key-reveal-label { left: 16px; right: auto; bottom: 6%; font-size: 20px; }
   section { padding: 76px 0; }
   .section-head { display: block; margin-bottom: 30px; }
