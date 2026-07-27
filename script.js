@@ -20,3 +20,21 @@ if (form) {
     document.querySelector('.success')?.classList.add('show');
   });
 }
+
+const keyHero = document.querySelector('.key-hero');
+let scrollTicking = false;
+const updateKeyReveal = () => {
+  if (!keyHero) return;
+  const bounds = keyHero.getBoundingClientRect();
+  const travel = Math.max(keyHero.offsetHeight - window.innerHeight, 1);
+  const progress = Math.min(1, Math.max(0, -bounds.top / travel));
+  keyHero.style.setProperty('--reveal', progress.toFixed(3));
+  scrollTicking = false;
+};
+window.addEventListener('scroll', () => {
+  if (!scrollTicking) {
+    window.requestAnimationFrame(updateKeyReveal);
+    scrollTicking = true;
+  }
+}, { passive: true });
+updateKeyReveal();
