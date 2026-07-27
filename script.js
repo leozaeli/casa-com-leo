@@ -22,19 +22,18 @@ if (form) {
 }
 
 const keyHero = document.querySelector('.key-hero');
-let scrollTicking = false;
-const updateKeyReveal = () => {
+let revealFrame = 0;
+function updateKeyReveal() {
   if (!keyHero) return;
-  const bounds = keyHero.getBoundingClientRect();
-  const travel = Math.max(keyHero.offsetHeight - window.innerHeight, 1);
-  const progress = Math.min(1, Math.max(0, -bounds.top / travel));
+  const rect = keyHero.getBoundingClientRect();
+  const distance = Math.max(keyHero.offsetHeight - window.innerHeight, 1);
+  const progress = Math.max(0, Math.min(1, -rect.top / distance));
   keyHero.style.setProperty('--reveal', progress.toFixed(3));
-  scrollTicking = false;
-};
-window.addEventListener('scroll', () => {
-  if (!scrollTicking) {
-    window.requestAnimationFrame(updateKeyReveal);
-    scrollTicking = true;
-  }
-}, { passive: true });
+  revealFrame = 0;
+}
+function requestRevealUpdate() {
+  if (!revealFrame) revealFrame = window.requestAnimationFrame(updateKeyReveal);
+}
+window.addEventListener('scroll', requestRevealUpdate, { passive: true });
+window.addEventListener('resize', requestRevealUpdate, { passive: true });
 updateKeyReveal();
