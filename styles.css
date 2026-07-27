@@ -172,3 +172,11 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
   .scroll-prompt { left: 16px; right: auto; }
   .key-reveal-label { display: none; }
 }
+/* Keep the lock clear of the headline on every viewport. */
+.key-scene { top: 31%; left: 78%; }
+@media (max-width: 760px) {
+  .key-scene { top: 25%; left: 80%; transform: translate(-50%, -50%) scale(.52); }
+}
+@media (max-width: 420px) {
+  .key-scene { top: 23%; left: 82%; transform: translate(-50%, -50%) scale(.44); }
+}
