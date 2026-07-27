@@ -139,7 +139,7 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
   nav { height: 64px; }
   .key-hero { height: 175vh; }
   .key-stage { height: 100vh; min-height: 540px; }
-  .key-copy { left: 16px; right: 16px; bottom: 15%; }
+  .key-copy { left: 16px; right: 16px; bottom: 24%; }
   .key-copy h1 { max-width: 90%; font-size: clamp(3rem, 14vw, 5rem); line-height: .9; }
   .key-copy .hero-copy { max-width: 240px; font-size: 13px; }
   .key-scene { top: 24%; left: 82%; transform: translate(-50%, -50%) scale(.5); }
@@ -154,7 +154,7 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
 }
 @media (max-width: 420px) {
   .key-hero { height: 160vh; }
-  .key-copy { bottom: 17%; }
+  .key-copy { bottom: 26%; }
   .key-copy h1 { max-width: 100%; font-size: clamp(2.8rem, 13.5vw, 4.2rem); }
   .key-scene { top: 22%; left: 84%; transform: translate(-50%, -50%) scale(.42); }
   .key-reveal-label { display: none; }
