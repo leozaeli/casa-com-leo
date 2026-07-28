@@ -102,16 +102,18 @@ if (window.location.pathname.replace(/\/+$/, '') === '/contato') {
   });
 }
 
-const menuToggle = document.querySelector('.menu-toggle');
-const mobileNav = document.querySelector('.nav-links');
-if (menuToggle && mobileNav) {
+const menuToggles = document.querySelectorAll('.menu-toggle');
+menuToggles.forEach((menuToggle) => {
+  const mobileNav = menuToggle.parentElement?.querySelector('.nav-links');
+  if (!mobileNav) return;
   const closeMenu = () => {
     menuToggle.classList.remove('open');
     mobileNav.classList.remove('open');
     menuToggle.setAttribute('aria-expanded', 'false');
     menuToggle.setAttribute('aria-label', 'Abrir menu');
   };
-  menuToggle.addEventListener('click', () => {
+  menuToggle.addEventListener('click', (event) => {
+    event.stopPropagation();
     const isOpen = menuToggle.classList.toggle('open');
     mobileNav.classList.toggle('open', isOpen);
     menuToggle.setAttribute('aria-expanded', String(isOpen));
@@ -124,4 +126,4 @@ if (menuToggle && mobileNav) {
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeMenu();
   });
-}
+});
