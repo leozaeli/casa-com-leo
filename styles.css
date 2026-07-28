@@ -117,7 +117,7 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
 
 /* Scroll reveal hero */
 .key-hero { position: relative; height: 220vh; color: #fff; background: #1b1b1b; }
-.key-stage { position: sticky; top: 0; height: 100vh; min-height: 620px; overflow: hidden; isolation: isolate; background: #1b1b1b; }
+.key-stage { position: sticky; top: 0; height: 100vh; height: 100svh; min-height: 100vh; min-height: 100svh; overflow: hidden; isolation: isolate; background: #1b1b1b; }
 .key-image, .key-wash { position: absolute; inset: 0; pointer-events: none; }
 .key-image { z-index: 0; opacity: 1; transform: translate3d(0, calc((1 - var(--reveal, 0)) * 12%), 0) scale(calc(1.04 - var(--reveal, 0) * .04)); background: url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2200&q=90') center/cover; will-change: opacity, transform; }
 .key-wash { z-index: 1; background: linear-gradient(90deg, rgba(0,0,0,.42), rgba(0,0,0,.04) 72%), linear-gradient(0deg, rgba(0,0,0,.1), transparent 65%); opacity: calc(1 - var(--reveal, 0) * .55); }
@@ -138,7 +138,7 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
   html, body { overflow-x: hidden; }
   nav { height: 64px; }
   .key-hero { height: 190vh; }
-  .key-stage { height: 100vh; min-height: 540px; }
+  .key-stage { height: 100vh; height: 100svh; min-height: 100vh; min-height: 100svh; }
   .key-copy { left: 16px; right: 16px; bottom: 24%; }
   .key-copy h1 { max-width: 90%; font-size: clamp(3rem, 14vw, 5rem); line-height: .9; }
   .key-copy .hero-copy { max-width: 240px; font-size: 13px; }
