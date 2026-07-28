@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Imóveis selecionados entre Salvador e Praia do Forte.">
+  <title>Ver imóveis — Casa com Leo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="listing-page">
+  <nav>
+    <div class="nav-inner">
+      <a class="brand" href="index.html"><span class="brand-mark">L</span> casa com leo</a>
+      <div class="nav-links"><a class="active" href="imoveis.html">Ver imóveis</a><a href="index.html#sobre">Manifesto</a><a href="index.html#contato">Contato</a></div>
+      <a class="nav-cta" href="index.html#contato">Fale comigo</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="listing-intro">
+      <div class="wrap">
+        <a class="back-link" href="index.html">← Voltar para a home</a>
+        <p class="eyebrow">Curadoria Casa com Leo · Bahia</p>
+        <div class="listing-heading"><h1>Encontre o<br>seu lugar.</h1><p>Explore uma seleção de imóveis entre Salvador e Praia do Forte. Filtre por localização, tipo, valor e tamanho até encontrar o que conversa com você.</p></div>
+      </div>
+    </section>
+
+    <section class="listing-catalog">
+      <div class="wrap">
+        <div class="filter-panel" aria-label="Filtros de imóveis">
+          <div class="filter-panel-top"><div><p class="eyebrow">Refine sua busca</p><h2>Do seu jeito.</h2></div><button class="clear-filters" type="button" id="clear-filters">Limpar filtros</button></div>
+          <div class="filter-fields">
+            <label>Localização<select id="location-filter"><option value="todos">Todas as localizações</option><option value="salvador">Salvador</option><option value="praia-do-forte">Praia do Forte</option><option value="itacimirim">Itacimirim</option><option value="guarajuba">Guarajuba</option></select></label>
+            <label>Tipo de imóvel<select id="type-filter"><option value="todos">Todos os tipos</option><option value="casa">Casa</option><option value="apartamento">Apartamento</option><option value="cobertura">Cobertura</option></select></label>
+            <label>Faixa de valor<select id="price-filter"><option value="todos">Qualquer valor</option><option value="ate-7">Até R$ 7 milhões</option><option value="7-10">R$ 7 a 10 milhões</option><option value="acima-10">Acima de R$ 10 milhões</option></select></label>
+            <label>Suítes<select id="bedroom-filter"><option value="todos">Qualquer quantidade</option><option value="2">2 ou mais</option><option value="3">3 ou mais</option><option value="4">4 ou mais</option></select></label>
+          </div>
+        </div>
+
+        <div class="results-bar"><p><strong id="results-count">3 imóveis</strong> encontrados</p><label class="sort-field">Ordenar por<select id="sort-filter"><option value="featured">Destaques</option><option value="price-asc">Menor valor</option><option value="price-desc">Maior valor</option><option value="area-desc">Maior área</option></select></label></div>
+        <div class="property-grid listing-grid" id="property-results">
+          <a class="property-card listing-card" data-location="itacimirim" data-category="casa" data-price="8900000" data-bedrooms="4" data-area="420" href="imoveis/casa-itacimirim.html"><div class="property-image"><img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85" alt="Sala de estar ampla em uma casa contemporânea"><span class="property-tag">Casa · Exclusivo</span></div><div class="property-info"><div><h3>Casa Itacimirim</h3><p>Itacimirim · Bahia · 4 suítes · 420 m²</p></div><span class="property-price">R$ 8,9 mi</span></div></a>
+          <a class="property-card listing-card" data-location="praia-do-forte" data-category="apartamento" data-price="6400000" data-bedrooms="3" data-area="198" href="imoveis/apartamento-praia-do-forte.html"><div class="property-image"><img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1200&q=85" alt="Interior elegante de apartamento em Praia do Forte"><span class="property-tag">Apartamento</span></div><div class="property-info"><div><h3>Praia do Forte 360</h3><p>Praia do Forte · Bahia · 3 suítes · 198 m²</p></div><span class="property-price">R$ 6,4 mi</span></div></a>
+          <a class="property-card listing-card" data-location="guarajuba" data-category="cobertura" data-price="12800000" data-bedrooms="4" data-area="365" href="imoveis/cobertura-guarajuba.html"><div class="property-image"><img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85" alt="Cobertura sofisticada com vista para o litoral baiano"><span class="property-tag">Cobertura · Vista</span></div><div class="property-info"><div><h3>Cobertura Guarajuba</h3><p>Guarajuba · Bahia · 4 suítes · 365 m²</p></div><span class="property-price">R$ 12,8 mi</span></div></a>
+        </div>
+        <div class="empty-results" id="empty-results" hidden><p class="eyebrow">Nenhum encontro ainda</p><h2>Vamos ampliar a busca?</h2><p>Não encontramos imóveis com esses filtros. Tente outra combinação ou fale comigo para uma curadoria personalizada.</p><button class="button" type="button" id="empty-clear">Limpar filtros</button></div>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap footer-inner"><span>© 2026 casa com leo</span><span>Salvador · Praia do Forte · Bahia</span></div></footer>
+  <script src="script.js"></script>
+</body>
+</html>

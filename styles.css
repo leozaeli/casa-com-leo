@@ -159,3 +159,50 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
   .key-scene { top: 22%; left: 84%; transform: translate(-50%, -50%) scale(.42); }
   .key-reveal-label { display: none; }
 }
+/* Imóveis: catálogo e filtros */
+.nav-links a.active { color: var(--ink); font-weight: 600; }
+.listing-intro { padding: 145px 0 90px; background: #e8e8e4; }
+.listing-intro .back-link { margin-bottom: 68px; color: #666; }
+.listing-heading { display: grid; grid-template-columns: 1fr 360px; align-items: end; gap: 60px; }
+.listing-heading h1 { margin-bottom: 0; font-size: clamp(4rem, 9vw, 8.5rem); font-weight: 500; letter-spacing: -.09em; line-height: .84; }
+.listing-heading p { max-width: 340px; margin-bottom: 4px; color: #666; font-size: 14px; line-height: 1.7; }
+.listing-catalog { background: var(--white); }
+.filter-panel { margin-bottom: 55px; padding: 32px; background: var(--paper); }
+.filter-panel-top { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 30px; }
+.filter-panel-top .eyebrow { margin-bottom: 10px; }
+.filter-panel h2 { margin-bottom: 0; font-size: 36px; font-weight: 500; letter-spacing: -.06em; }
+.clear-filters { cursor: pointer; border: 0; border-bottom: 1px solid var(--ink); padding: 5px 0; color: var(--ink); background: transparent; font-size: 12px; }
+.filter-fields { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.filter-fields label, .sort-field { display: grid; gap: 9px; color: var(--muted); font-size: 11px; }
+.filter-fields select, .sort-field select { width: 100%; border: 1px solid var(--line); border-radius: 0; padding: 14px 12px; color: var(--ink); background: var(--white); font-size: 12px; outline: none; }
+.filter-fields select:focus, .sort-field select:focus { border-color: var(--ink); }
+.results-bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 26px; }
+.results-bar p { margin: 0; color: var(--muted); font-size: 12px; }
+.results-bar strong { color: var(--ink); font-weight: 600; }
+.sort-field { display: flex; align-items: center; grid-template-columns: auto 160px; gap: 10px; }
+.sort-field select { padding: 9px 10px; }
+.listing-card[hidden] { display: none; }
+.listing-grid { grid-template-columns: repeat(3, 1fr); }
+.empty-results { padding: 100px 0; text-align: center; }
+.empty-results[hidden] { display: none; }
+.empty-results .eyebrow { margin-bottom: 14px; }
+.empty-results h2 { margin-bottom: 14px; font-size: clamp(2.6rem, 5vw, 5rem); font-weight: 500; letter-spacing: -.07em; }
+.empty-results p:not(.eyebrow) { max-width: 390px; margin: 0 auto 25px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+@media (max-width: 900px) {
+  .filter-fields { grid-template-columns: repeat(2, 1fr); }
+  .listing-heading { grid-template-columns: 1fr 280px; gap: 32px; }
+}
+@media (max-width: 760px) {
+  .listing-intro { padding: 115px 0 70px; }
+  .listing-intro .back-link { margin-bottom: 50px; }
+  .listing-heading { display: block; }
+  .listing-heading h1 { margin-bottom: 35px; font-size: clamp(4rem, 18vw, 6.5rem); }
+  .listing-heading p { max-width: 100%; }
+  .filter-panel { padding: 24px 18px; }
+  .filter-panel-top { align-items: start; }
+  .filter-panel h2 { font-size: 30px; }
+  .filter-fields { grid-template-columns: 1fr; }
+  .results-bar { align-items: start; flex-direction: column; gap: 14px; }
+  .sort-field { width: 100%; grid-template-columns: auto 1fr; }
+}
