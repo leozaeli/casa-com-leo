@@ -101,19 +101,3 @@ if (window.location.pathname.replace(/\/+$/, '') === '/contato') {
     document.querySelector('#contato')?.scrollIntoView();
   });
 }
-const focusTitles = [...document.querySelectorAll('h1, h2, h3')];
-function updateTitleFocus() {
-  if (!focusTitles.length) return;
-  const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-  const focusStart = viewportHeight * .88;
-  const focusDistance = viewportHeight * .42;
-  focusTitles.forEach((title) => {
-    const rect = title.getBoundingClientRect();
-    const focus = Math.max(0, Math.min(1, (focusStart - rect.top) / focusDistance));
-    title.style.setProperty('--title-focus', focus.toFixed(3));
-  });
-}
-focusTitles.forEach((title) => title.classList.add('focus-title'));
-window.addEventListener('scroll', updateTitleFocus, { passive: true });
-window.addEventListener('resize', updateTitleFocus, { passive: true });
-updateTitleFocus();
