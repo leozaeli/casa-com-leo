@@ -1,0 +1,14 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/imoveis.html", "destination": "/imoveis", "permanent": true },
+    { "source": "/imoveis/:slug.html", "destination": "/imoveis/:slug", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/contato", "destination": "/index.html" },
+    { "source": "/imoveis", "destination": "/imoveis.html" },
+    { "source": "/imoveis/:slug", "destination": "/imoveis/:slug.html" }
+  ]
+}

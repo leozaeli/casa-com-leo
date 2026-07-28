@@ -95,3 +95,8 @@ if (listingPage) {
   document.querySelector('#empty-clear')?.addEventListener('click', clearListingFilters);
   applyListingFilters();
 }
+if (window.location.pathname.replace(/\/+$/, '') === '/contato') {
+  window.addEventListener('load', () => {
+    document.querySelector('#contato')?.scrollIntoView();
+  });
+}
