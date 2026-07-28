@@ -27,8 +27,9 @@ function updateKeyReveal() {
   if (!keyHero) return;
   const rect = keyHero.getBoundingClientRect();
   const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-  const distance = Math.max(keyHero.offsetHeight - viewportHeight, 1);
-  const rawProgress = Math.max(0, Math.min(1, -rect.top / distance));
+  const distance = keyHero.offsetHeight - viewportHeight;
+  const isMobile = window.matchMedia('(max-width: 700px)').matches;
+  const rawProgress = isMobile || distance <= 2 ? 0 : Math.max(0, Math.min(1, -rect.top / distance));
   const progress = Math.pow(rawProgress, 2);
   keyHero.style.setProperty('--reveal', progress.toFixed(3));
   revealFrame = 0;
