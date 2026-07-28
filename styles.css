@@ -121,7 +121,7 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
 .key-image, .key-wash { position: absolute; inset: 0; pointer-events: none; }
 .key-image { z-index: 0; opacity: calc(.1 + var(--reveal, 0) * .9); transform: translate3d(0, calc((1 - var(--reveal, 0)) * 18%), 0) scale(calc(1.08 - var(--reveal, 0) * .08)); background: url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2200&q=90') center/cover; will-change: opacity, transform; }
 .key-wash { z-index: 1; background: linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.08) 72%), linear-gradient(0deg, rgba(0,0,0,.4), transparent 65%); opacity: calc(1 - var(--reveal, 0) * .55); }
-.key-copy { position: absolute; z-index: 3; left: max(24px, calc((100vw - var(--max)) / 2)); right: 24px; bottom: 18%; opacity: calc(1 - var(--reveal, 0) * 1.15); transform: translateY(calc(var(--reveal, 0) * -40px)); }
+.key-copy { position: absolute; z-index: 3; left: max(24px, calc((100vw - var(--max)) / 2)); right: 24px; bottom: 28%; opacity: calc(1 - var(--reveal, 0) * 1.15); transform: translateY(calc(var(--reveal, 0) * -40px)); }
 .key-copy h1 { max-width: 700px; margin-bottom: 23px; font-size: clamp(4rem, 8.5vw, 8rem); font-weight: 500; letter-spacing: -.085em; line-height: .87; }
 .key-copy .hero-copy { max-width: 320px; color: rgba(255,255,255,.72); font-size: 14px; line-height: 1.5; }
 .scroll-prompt { position: absolute; z-index: 3; top: 50%; right: max(24px, calc((100vw - var(--max)) / 2)); display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,.72); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; writing-mode: vertical-rl; opacity: calc(1 - var(--reveal, 0) * 1.8); transform: translateY(-50%); }
