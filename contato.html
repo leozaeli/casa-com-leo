@@ -11,7 +11,7 @@
   <nav>
     <div class="nav-inner">
       <a class="brand" href="/"><span class="brand-mark">L</span> casa com leo</a>
-      <div class="nav-links"><a href="/imoveis">Ver imóveis</a><a href="/#sobre">Manifesto</a><a class="active" href="/contato">Contato</a></div><button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button><a class="nav-cta" href="/contato">Fale comigo</a>
+      <div class="nav-links"><a href="/imoveis">Ver imóveis</a><a href="/#sobre">Manifesto</a><a class="active" href="/contato">Contato</a></div><button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" onclick="const isOpen = this.classList.toggle('open'); const menu = this.parentElement.querySelector('.nav-links'); menu.classList.toggle('open', isOpen); this.setAttribute('aria-expanded', String(isOpen));"><span></span><span></span><span></span></button><a class="nav-cta" href="/contato">Fale comigo</a>
     </div>
   </nav>
   <main class="contact-page-main">
