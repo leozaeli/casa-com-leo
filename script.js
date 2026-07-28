@@ -29,7 +29,7 @@ function updateKeyReveal() {
   const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
   const distance = Math.max(keyHero.offsetHeight - viewportHeight, 1);
   const rawProgress = Math.max(0, Math.min(1, -rect.top / distance));
-  const progress = Math.pow(rawProgress, 1.65);
+  const progress = Math.pow(rawProgress, 2);
   keyHero.style.setProperty('--reveal', progress.toFixed(3));
   revealFrame = 0;
 }
