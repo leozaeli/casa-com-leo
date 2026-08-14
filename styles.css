@@ -115,20 +115,15 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
   .gallery img, .gallery img:last-child { height: 400px; }
 }
 
-/* Scroll reveal hero */
-.key-hero { position: relative; height: 220vh; color: #fff; background: #1b1b1b; }
-.key-stage { position: sticky; top: 0; height: 100vh; height: 100svh; min-height: 100vh; min-height: 100svh; overflow: hidden; isolation: isolate; background: #1b1b1b; }
+/* Hero */
+.key-hero { position: relative; height: 100vh; height: 100svh; color: #fff; background: #1b1b1b; }
+.key-stage { position: relative; height: 100%; overflow: hidden; isolation: isolate; background: #1b1b1b; }
 .key-image, .key-wash { position: absolute; inset: 0; pointer-events: none; }
-.key-image { z-index: 0; opacity: 1; transform: translate3d(0, calc((1 - var(--reveal, 0)) * 12%), 0) scale(calc(1.04 - var(--reveal, 0) * .04)); background: url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2200&q=90') center/cover; will-change: opacity, transform; }
-.key-wash { z-index: 1; background: linear-gradient(90deg, rgba(0,0,0,.42), rgba(0,0,0,.04) 72%), linear-gradient(0deg, rgba(0,0,0,.1), transparent 65%); opacity: calc(1 - var(--reveal, 0) * .55); }
-.key-copy { position: absolute; z-index: 3; left: max(24px, calc((100vw - var(--max)) / 2)); right: 24px; bottom: 28%; opacity: calc(1 - var(--reveal, 0) * 1.15); transform: translateY(calc(var(--reveal, 0) * -40px)); }
+.key-image { z-index: 0; opacity: 1; background: url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2200&q=90') center/cover; }
+.key-wash { z-index: 1; background: linear-gradient(90deg, rgba(0,0,0,.42), rgba(0,0,0,.04) 72%), linear-gradient(0deg, rgba(0,0,0,.1), transparent 65%); }
+.key-copy { position: absolute; z-index: 3; left: max(24px, calc((100vw - var(--max)) / 2)); right: 24px; bottom: 28%; }
 .key-copy h1 { max-width: 700px; margin-bottom: 23px; font-size: clamp(4rem, 8.5vw, 8rem); font-weight: 500; letter-spacing: -.085em; line-height: .87; }
 .key-copy .hero-copy { max-width: 320px; color: rgba(255,255,255,.72); font-size: 14px; line-height: 1.5; }
-.scroll-prompt { position: absolute; z-index: 3; top: 50%; right: max(24px, calc((100vw - var(--max)) / 2)); display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,.72); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; writing-mode: vertical-rl; opacity: calc(1 - var(--reveal, 0) * 1.8); transform: translateY(-50%); }
-.scroll-prompt span { color: var(--accent); }
-.scroll-prompt b { color: var(--accent); font-size: 18px; font-weight: 400; }
-.key-reveal-label { position: absolute; z-index: 3; right: max(24px, calc((100vw - var(--max)) / 2)); bottom: 8%; color: #fff; font-family: 'Playfair Display', serif; font-size: 25px; opacity: calc((var(--reveal, 0) - .6) * 3); }
-.key-reveal-label span { display: block; margin-top: 6px; color: rgba(255,255,255,.65); font-family: 'DM Sans', sans-serif; font-size: 11px; }
 @media (max-width: 900px) {
   .key-copy { left: 32px; right: 32px; }
   .key-copy h1 { font-size: clamp(3.8rem, 10vw, 6rem); }
@@ -137,14 +132,10 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
 @media (max-width: 700px) {
   html, body { overflow-x: hidden; }
   nav { height: 64px; }
-  .key-hero { height: 100svh; }
-  .key-stage { height: 100vh; height: 100svh; min-height: 100vh; min-height: 100svh; }
   .key-copy { left: 16px; right: 16px; bottom: 24%; }
   .key-copy h1 { max-width: 90%; font-size: clamp(3rem, 14vw, 5rem); line-height: .9; }
   .key-copy .hero-copy { max-width: 240px; font-size: 13px; }
   .key-scene { top: 24%; left: 82%; transform: translate(-50%, -50%) scale(.5); }
-  .scroll-prompt { top: auto; left: 16px; right: auto; bottom: 6%; display: block; font-size: 9px; writing-mode: horizontal-tb; transform: none; }
-  .key-reveal-label { left: 16px; right: auto; bottom: 6%; font-size: 20px; }
   section { padding: 76px 0; }
   .section-head { display: block; margin-bottom: 30px; }
   .property-grid { gap: 30px; }
@@ -153,11 +144,9 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
   .gallery img, .gallery img:last-child { height: 350px; }
 }
 @media (max-width: 420px) {
-  .key-hero { height: 100svh; }
   .key-copy { bottom: 26%; }
   .key-copy h1 { max-width: 100%; font-size: clamp(2.8rem, 13.5vw, 4.2rem); }
   .key-scene { top: 22%; left: 84%; transform: translate(-50%, -50%) scale(.42); }
-  .key-reveal-label { display: none; }
 }
 /* Im�veis: cat�logo e filtros */
 .nav-links a.active { color: var(--ink); font-weight: 600; }
@@ -228,8 +217,6 @@ footer { padding: 30px 0; color: var(--muted); background: var(--paper); font-si
   .menu-toggle.open span:nth-child(2) { opacity: 0; }
   .menu-toggle.open span:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
 }
-.key-image { inset: -8%; }
-
 @media (max-width: 700px) {
   .key-hero + .catalog { padding-top: 110px; }
 }

@@ -21,26 +21,6 @@ if (form) {
   });
 }
 
-const keyHero = document.querySelector('.key-hero');
-let revealFrame = 0;
-function updateKeyReveal() {
-  if (!keyHero) return;
-  const rect = keyHero.getBoundingClientRect();
-  const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-  const isMobile = window.matchMedia('(max-width: 700px)').matches;
-  const distance = isMobile ? viewportHeight * .8 : keyHero.offsetHeight - viewportHeight;
-  const rawProgress = Math.max(0, Math.min(1, -rect.top / Math.max(distance, 1)));
-  const progress = Math.pow(rawProgress, 2);
-  keyHero.style.setProperty('--reveal', progress.toFixed(3));
-  revealFrame = 0;
-}
-function requestRevealUpdate() {
-  if (!revealFrame) revealFrame = window.requestAnimationFrame(updateKeyReveal);
-}
-window.addEventListener('scroll', requestRevealUpdate, { passive: true });
-window.addEventListener('resize', requestRevealUpdate, { passive: true });
-updateKeyReveal();
-
 const listingPage = document.querySelector('.listing-page');
 if (listingPage) {
   const locationFilter = document.querySelector('#location-filter');
