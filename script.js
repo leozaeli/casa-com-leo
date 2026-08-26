@@ -107,7 +107,7 @@ function buildContactPopup() {
         <label for="popup-whatsapp">Seu WhatsApp</label>
         <input id="popup-whatsapp" name="whatsapp" required placeholder="(71) 99999-9999">
         <label for="popup-local">Tem preferência de localização para investir em um studio?</label>
-        <input id="popup-local" name="local" placeholder="Ex: Praia do Forte, Salvador, Guarajuba...">
+        <input id="popup-local" name="local" placeholder="Escreva aqui...">
         <button class="button" type="submit">Entrar na lista de espera</button>
       </form>
     </div>` : `
