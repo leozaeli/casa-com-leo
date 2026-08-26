@@ -88,12 +88,29 @@ if (window.location.pathname.replace(/\/+$/, '') === '/contato') {
 
 const WHATSAPP_NUMBER = '5571984266363';
 
+const isStudiosPage = document.body.classList.contains('studios-page');
+
 function buildContactPopup() {
   if (document.querySelector('#contact-popup')) return document.querySelector('#contact-popup');
   const overlay = document.createElement('div');
   overlay.id = 'contact-popup';
   overlay.className = 'popup-overlay';
-  overlay.innerHTML = `
+  overlay.innerHTML = isStudiosPage ? `
+    <div class="popup-card" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+      <button class="popup-close" type="button" aria-label="Fechar">&times;</button>
+      <span class="eyebrow-tag">✉ Lista de espera</span>
+      <h2 id="popup-title">Quero ser avisado</h2>
+      <p class="popup-copy">Entre na lista de espera dos Studios. Avisamos você assim que o projeto for lançado.</p>
+      <form class="popup-form" id="popup-form">
+        <label for="popup-nome">Seu nome</label>
+        <input id="popup-nome" name="nome" required placeholder="Como posso te chamar?">
+        <label for="popup-whatsapp">Seu WhatsApp</label>
+        <input id="popup-whatsapp" name="whatsapp" required placeholder="(71) 99999-9999">
+        <label for="popup-local">Tem preferência de localização para investir em um studio?</label>
+        <input id="popup-local" name="local" placeholder="Ex: Praia do Forte, Salvador, Guarajuba...">
+        <button class="button" type="submit">Entrar na lista de espera</button>
+      </form>
+    </div>` : `
     <div class="popup-card" role="dialog" aria-modal="true" aria-labelledby="popup-title">
       <button class="popup-close" type="button" aria-label="Fechar">&times;</button>
       <span class="eyebrow-tag">✉ Fale comigo</span>
@@ -125,10 +142,14 @@ function buildContactPopup() {
     const form = event.target;
     const nome = form.nome.value.trim();
     const whatsapp = form.whatsapp.value.trim();
-    const mensagem = form.mensagem.value.trim();
-    const lines = [
+    const lines = isStudiosPage ? [
       `Olá! Meu nome é ${nome}.`,
-      mensagem,
+      'Quero entrar na lista de espera dos Studios da Casa com Leo.',
+      form.local.value.trim() ? `Tenho preferência de localização: ${form.local.value.trim()}.` : 'Ainda não tenho uma localização definida.',
+      `Pode me chamar por aqui: ${whatsapp}`,
+    ] : [
+      `Olá! Meu nome é ${nome}.`,
+      form.mensagem.value.trim(),
       `Pode me chamar por aqui: ${whatsapp}`,
     ];
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
@@ -142,14 +163,16 @@ function buildContactPopup() {
 function openContactPopup(trigger) {
   const overlay = buildContactPopup();
   const textarea = overlay.querySelector('#popup-mensagem');
-  const property = trigger?.dataset.property;
-  const kind = trigger?.dataset.popup;
-  if (kind === 'interesse-compra' && property) {
-    textarea.value = `Tenho interesse em comprar o imóvel: ${property}.`;
-  } else if (kind === 'interesse-temporada' && property) {
-    textarea.value = `Tenho interesse na temporada do imóvel: ${property}.`;
-  } else {
-    textarea.value = '';
+  if (textarea) {
+    const property = trigger?.dataset.property;
+    const kind = trigger?.dataset.popup;
+    if (kind === 'interesse-compra' && property) {
+      textarea.value = `Tenho interesse em comprar o imóvel: ${property}.`;
+    } else if (kind === 'interesse-temporada' && property) {
+      textarea.value = `Tenho interesse na temporada do imóvel: ${property}.`;
+    } else {
+      textarea.value = '';
+    }
   }
   overlay.classList.add('open');
   document.body.classList.add('popup-open');
