@@ -85,3 +85,78 @@ if (window.location.pathname.replace(/\/+$/, '') === '/contato') {
     document.querySelector('#contato')?.scrollIntoView();
   });
 }
+
+const WHATSAPP_NUMBER = '5571984266363';
+
+function buildContactPopup() {
+  if (document.querySelector('#contact-popup')) return document.querySelector('#contact-popup');
+  const overlay = document.createElement('div');
+  overlay.id = 'contact-popup';
+  overlay.className = 'popup-overlay';
+  overlay.innerHTML = `
+    <div class="popup-card" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+      <button class="popup-close" type="button" aria-label="Fechar">&times;</button>
+      <span class="eyebrow-tag">✉ Fale comigo</span>
+      <h2 id="popup-title">Vamos conversar?</h2>
+      <p class="popup-copy">Preencha e o WhatsApp abre com sua mensagem pronta pra enviar.</p>
+      <form class="popup-form" id="popup-form">
+        <label for="popup-nome">Seu nome</label>
+        <input id="popup-nome" name="nome" required placeholder="Como posso te chamar?">
+        <label for="popup-whatsapp">Seu WhatsApp</label>
+        <input id="popup-whatsapp" name="whatsapp" required placeholder="(71) 99999-9999">
+        <label for="popup-mensagem">O que você procura?</label>
+        <textarea id="popup-mensagem" name="mensagem" required placeholder="Conte um pouco sobre o que você busca."></textarea>
+        <button class="button" type="submit">Enviar pelo WhatsApp</button>
+      </form>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  function closePopup() {
+    overlay.classList.remove('open');
+    document.body.classList.remove('popup-open');
+  }
+
+  overlay.querySelector('.popup-close').addEventListener('click', closePopup);
+  overlay.addEventListener('click', (event) => { if (event.target === overlay) closePopup(); });
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closePopup(); });
+
+  overlay.querySelector('#popup-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const lines = [
+      'Novo contato pelo site casa com leo:',
+      `Nome: ${form.nome.value.trim()}`,
+      `WhatsApp: ${form.whatsapp.value.trim()}`,
+      `Mensagem: ${form.mensagem.value.trim()}`,
+    ];
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
+    closePopup();
+    form.reset();
+  });
+
+  return overlay;
+}
+
+function openContactPopup(trigger) {
+  const overlay = buildContactPopup();
+  const textarea = overlay.querySelector('#popup-mensagem');
+  const property = trigger?.dataset.property;
+  const kind = trigger?.dataset.popup;
+  if (kind === 'interesse-compra' && property) {
+    textarea.value = `Tenho interesse em comprar o imóvel: ${property}.`;
+  } else if (kind === 'interesse-temporada' && property) {
+    textarea.value = `Tenho interesse na temporada do imóvel: ${property}.`;
+  } else {
+    textarea.value = '';
+  }
+  overlay.classList.add('open');
+  document.body.classList.add('popup-open');
+  overlay.querySelector('#popup-nome').focus();
+}
+
+document.addEventListener('click', (event) => {
+  const trigger = event.target.closest('[data-popup]');
+  if (!trigger) return;
+  event.preventDefault();
+  openContactPopup(trigger);
+});

@@ -34,7 +34,7 @@ nav { position: fixed; z-index: 30; inset: 0 0 auto; height: 78px; display: flex
 .nav-links a.active { color: var(--ink); font-weight: 600; }
 .brand { justify-self: center; display: flex; align-items: center; gap: 9px; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
 .brand-mark { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--paper); font-family: 'Poppins', sans-serif; font-size: 13px; }
-.nav-cta { justify-self: end; border: 0; border-radius: 99px; padding: 12px 20px; color: var(--white); background: var(--ink); font-size: 12.5px; font-weight: 600; }
+.nav-cta { justify-self: end; cursor: pointer; border: 0; border-radius: 99px; padding: 12px 20px; color: var(--white); background: var(--ink); font-size: 12.5px; font-weight: 600; }
 .nav-cta:hover { background: #322c22; }
 
 /* Buttons & pills */
@@ -201,6 +201,23 @@ footer { padding: 34px 0; color: var(--muted); background: var(--paper); font-si
 .contact-page-section { min-height: calc(100vh - 78px); padding: 100px 0 90px; }
 .contact-page-section .section-title { max-width: 620px; }
 .contact-page-copy { max-width: 390px; margin: 30px 0 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
+
+/* Contact popup */
+body.popup-open { overflow: hidden; }
+.popup-overlay { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(24,21,15,.55); backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+.popup-overlay.open { opacity: 1; pointer-events: auto; }
+.popup-card { position: relative; width: min(100%, 440px); padding: 36px 32px; border-radius: var(--radius); background: var(--paper); box-shadow: 0 30px 80px rgba(18,15,10,.35); transform: translateY(12px); transition: transform .25s ease; }
+.popup-overlay.open .popup-card { transform: translateY(0); }
+.popup-card h2 { margin: 4px 0 10px; font-size: 26px; font-weight: 600; letter-spacing: -.01em; }
+.popup-copy { margin-bottom: 24px; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+.popup-close { position: absolute; top: 18px; right: 18px; width: 32px; height: 32px; border: 0; border-radius: 50%; color: var(--ink); background: var(--card); font-size: 18px; line-height: 1; cursor: pointer; }
+.popup-close:hover { background: var(--line); }
+.popup-form { display: grid; gap: 14px; }
+.popup-form label { color: var(--muted); font-size: 11.5px; }
+.popup-form input, .popup-form textarea { width: 100%; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 13px 15px; outline: none; color: var(--ink); background: var(--white); }
+.popup-form input:focus, .popup-form textarea:focus { border-color: var(--ink); }
+.popup-form textarea { min-height: 100px; resize: vertical; }
+.popup-form .button { justify-self: stretch; justify-content: center; margin-top: 4px; border: 0; }
 
 /* Mobile nav */
 .menu-toggle { display: none; border: 0; padding: 8px; color: var(--ink); background: transparent; cursor: pointer; }
