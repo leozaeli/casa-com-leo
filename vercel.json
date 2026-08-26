@@ -5,11 +5,13 @@
     { "source": "/index.html", "destination": "/", "permanent": true },
     { "source": "/imoveis.html", "destination": "/imoveis", "permanent": true },
     { "source": "/contato.html", "destination": "/contato", "permanent": true },
-    { "source": "/imoveis/:slug.html", "destination": "/imoveis/:slug", "permanent": true }
+    { "source": "/imoveis/:slug.html", "destination": "/imoveis/:slug", "permanent": true },
+    { "source": "/studios.html", "destination": "/studios", "permanent": true }
   ],
   "rewrites": [
     { "source": "/contato", "destination": "/contato.html" },
     { "source": "/imoveis", "destination": "/imoveis.html" },
-    { "source": "/imoveis/:slug", "destination": "/imoveis/:slug.html" }
+    { "source": "/imoveis/:slug", "destination": "/imoveis/:slug.html" },
+    { "source": "/studios", "destination": "/studios.html" }
   ]
 }
