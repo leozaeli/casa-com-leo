@@ -123,12 +123,13 @@ function buildContactPopup() {
   overlay.querySelector('#popup-form').addEventListener('submit', (event) => {
     event.preventDefault();
     const form = event.target;
+    const nome = form.nome.value.trim();
+    const whatsapp = form.whatsapp.value.trim();
+    const mensagem = form.mensagem.value.trim();
     const lines = [
-      'Novo contato pelo Site',
-      '-----------------------',
-      `Nome: ${form.nome.value.trim()}`,
-      `WhatsApp: ${form.whatsapp.value.trim()}`,
-      `Mensagem: ${form.mensagem.value.trim()}`,
+      `Olá! Meu nome é ${nome}.`,
+      mensagem,
+      `Pode me chamar por aqui: ${whatsapp}`,
     ];
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
     closePopup();
