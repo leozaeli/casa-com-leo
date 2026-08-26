@@ -174,28 +174,63 @@ function buildContactPopup() {
   return overlay;
 }
 
-function openContactPopup(trigger) {
+function openContactPopup(trigger, prefillMessage) {
   const overlay = buildContactPopup();
   const textarea = overlay.querySelector('#popup-mensagem');
-  if (textarea) {
-    const property = trigger?.dataset.property;
-    const kind = trigger?.dataset.popup;
-    if (kind === 'interesse-compra' && property) {
-      textarea.value = `Tenho interesse em comprar o imóvel: ${property}.`;
-    } else if (kind === 'interesse-temporada' && property) {
-      textarea.value = `Tenho interesse na temporada do imóvel: ${property}.`;
-    } else {
-      textarea.value = '';
-    }
-  }
+  if (textarea) textarea.value = prefillMessage || '';
   overlay.classList.add('open');
   document.body.classList.add('popup-open');
   overlay.querySelector('#popup-nome').focus();
+}
+
+const MODALITY_LABELS = { venda: 'Comprar', temporada: 'Aluguel por temporada' };
+const MODALITY_MESSAGES = {
+  venda: (property) => `Tenho interesse em comprar o imóvel: ${property}.`,
+  temporada: (property) => `Tenho interesse na temporada do imóvel: ${property}.`,
+};
+
+function buildChoiceMenu() {
+  if (document.querySelector('#interesse-choice')) return document.querySelector('#interesse-choice');
+  const menu = document.createElement('div');
+  menu.id = 'interesse-choice';
+  menu.className = 'choice-menu';
+  document.body.appendChild(menu);
+  document.addEventListener('click', (event) => {
+    if (menu.classList.contains('open') && !menu.contains(event.target) && !event.target.closest('[data-popup="interesse"]')) {
+      menu.classList.remove('open');
+    }
+  });
+  return menu;
+}
+
+function openInterestFlow(trigger) {
+  const property = trigger.dataset.property;
+  const modalities = (trigger.dataset.modalities || 'venda').split(' ').filter(Boolean);
+  if (modalities.length <= 1) {
+    openContactPopup(trigger, MODALITY_MESSAGES[modalities[0] || 'venda'](property));
+    return;
+  }
+  const menu = buildChoiceMenu();
+  menu.innerHTML = modalities.map((modality) => `<button type="button" class="choice-option" data-modality="${modality}">${MODALITY_LABELS[modality]}</button>`).join('');
+  const rect = trigger.getBoundingClientRect();
+  menu.style.left = `${Math.min(rect.left, window.innerWidth - 220)}px`;
+  menu.style.bottom = `${window.innerHeight - rect.top + 10}px`;
+  menu.classList.add('open');
+  menu.querySelectorAll('.choice-option').forEach((option) => {
+    option.addEventListener('click', () => {
+      menu.classList.remove('open');
+      openContactPopup(trigger, MODALITY_MESSAGES[option.dataset.modality](property));
+    });
+  });
 }
 
 document.addEventListener('click', (event) => {
   const trigger = event.target.closest('[data-popup]');
   if (!trigger) return;
   event.preventDefault();
-  openContactPopup(trigger);
+  if (trigger.dataset.popup === 'interesse') {
+    openInterestFlow(trigger);
+  } else {
+    openContactPopup(trigger);
+  }
 });
