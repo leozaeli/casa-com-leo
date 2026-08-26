@@ -219,6 +219,12 @@ body.popup-open { overflow: hidden; }
 .popup-form textarea { min-height: 100px; resize: vertical; }
 .popup-form .button { justify-self: stretch; justify-content: center; margin-top: 4px; border: 0; }
 
+/* Floating WhatsApp button */
+.whatsapp-float { position: fixed; right: 24px; bottom: 24px; z-index: 40; display: flex; align-items: center; justify-content: center; width: 58px; height: 58px; border: 0; border-radius: 50%; background: #25d366; box-shadow: 0 10px 30px rgba(18,15,10,.3); cursor: pointer; transition: transform .2s ease; }
+.whatsapp-float:hover { transform: scale(1.06); }
+.whatsapp-float svg { width: 28px; height: 28px; }
+.property-page .whatsapp-float { bottom: 104px; }
+
 /* Mobile nav */
 .menu-toggle { display: none; border: 0; padding: 8px; color: var(--ink); background: transparent; cursor: pointer; }
 .menu-toggle span { display: block; width: 22px; height: 1px; margin: 4px 0; background: currentColor; transition: transform .25s ease, opacity .2s ease; }
@@ -275,4 +281,8 @@ body.popup-open { overflow: hidden; }
   .sticky-cta-info { text-align: center; }
   .sticky-cta-actions { justify-content: center; }
   .sticky-cta-actions .button { flex: 1; justify-content: center; }
+
+  .whatsapp-float { right: 16px; bottom: 16px; width: 52px; height: 52px; }
+  .whatsapp-float svg { width: 25px; height: 25px; }
+  .property-page .whatsapp-float { bottom: 156px; }
 }
