@@ -124,7 +124,8 @@ function buildContactPopup() {
     event.preventDefault();
     const form = event.target;
     const lines = [
-      'Novo contato pelo site casa com leo:',
+      'Novo contato pelo Site',
+      '-----------------------',
       `Nome: ${form.nome.value.trim()}`,
       `WhatsApp: ${form.whatsapp.value.trim()}`,
       `Mensagem: ${form.mensagem.value.trim()}`,
