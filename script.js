@@ -25,6 +25,7 @@ const listingPage = document.querySelector('.listing-page');
 if (listingPage) {
   const locationFilter = document.querySelector('#location-filter');
   const typeFilter = document.querySelector('#type-filter');
+  const modalityFilter = document.querySelector('#modality-filter');
   const priceFilter = document.querySelector('#price-filter');
   const bedroomFilter = document.querySelector('#bedroom-filter');
   const sortFilter = document.querySelector('#sort-filter');
@@ -43,11 +44,13 @@ if (listingPage) {
   function applyListingFilters() {
     const location = locationFilter.value;
     const type = typeFilter.value;
+    const modality = modalityFilter.value;
     const price = priceFilter.value;
     const bedrooms = bedroomFilter.value;
     const visibleCards = listingCards.filter((card) => {
       const matches = (location === 'todos' || card.dataset.location === location)
         && (type === 'todos' || card.dataset.category === type)
+        && (modality === 'todos' || card.dataset.modality.split(' ').includes(modality))
         && matchesPrice(Number(card.dataset.price), price)
         && (bedrooms === 'todos' || Number(card.dataset.bedrooms) >= Number(bedrooms));
       card.hidden = !matches;
@@ -67,12 +70,12 @@ if (listingPage) {
   }
 
   function clearListingFilters() {
-    [locationFilter, typeFilter, priceFilter, bedroomFilter].forEach((control) => { control.value = 'todos'; });
+    [locationFilter, typeFilter, modalityFilter, priceFilter, bedroomFilter].forEach((control) => { control.value = 'todos'; });
     sortFilter.value = 'featured';
     applyListingFilters();
   }
 
-  [locationFilter, typeFilter, priceFilter, bedroomFilter, sortFilter].forEach((control) => control.addEventListener('change', applyListingFilters));
+  [locationFilter, typeFilter, modalityFilter, priceFilter, bedroomFilter, sortFilter].forEach((control) => control.addEventListener('change', applyListingFilters));
   document.querySelector('#clear-filters')?.addEventListener('click', clearListingFilters);
   document.querySelector('#empty-clear')?.addEventListener('click', clearListingFilters);
   applyListingFilters();

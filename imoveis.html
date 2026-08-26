@@ -33,6 +33,7 @@
           <div class="filter-fields">
             <label>Localização<select id="location-filter"><option value="todos">Todas as localizações</option><option value="salvador">Salvador</option><option value="praia-do-forte">Praia do Forte</option><option value="itacimirim">Itacimirim</option><option value="guarajuba">Guarajuba</option></select></label>
             <label>Tipo de imóvel<select id="type-filter"><option value="todos">Todos os tipos</option><option value="casa">Casa</option><option value="apartamento">Apartamento</option><option value="cobertura">Cobertura</option></select></label>
+            <label>Finalidade<select id="modality-filter"><option value="todos">Venda e temporada</option><option value="venda">Venda</option><option value="temporada">Aluguel por temporada</option></select></label>
             <label>Faixa de valor<select id="price-filter"><option value="todos">Qualquer valor</option><option value="ate-7">Até R$ 7 milhões</option><option value="7-10">R$ 7 a 10 milhões</option><option value="acima-10">Acima de R$ 10 milhões</option></select></label>
             <label>Suítes<select id="bedroom-filter"><option value="todos">Qualquer quantidade</option><option value="2">2 ou mais</option><option value="3">3 ou mais</option><option value="4">4 ou mais</option></select></label>
           </div>
@@ -40,24 +41,24 @@
 
         <div class="results-bar"><p><strong id="results-count">3 imóveis</strong> encontrados</p><label class="sort-field">Ordenar por<select id="sort-filter"><option value="featured">Destaques</option><option value="price-asc">Menor valor</option><option value="price-desc">Maior valor</option><option value="area-desc">Maior área</option></select></label></div>
         <div class="property-grid listing-grid" id="property-results">
-          <a class="property-card listing-card" data-location="itacimirim" data-category="casa" data-price="8900000" data-bedrooms="4" data-area="420" href="/imoveis/casa-itacimirim">
-            <div class="property-image"><img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85" alt="Sala de estar ampla em uma casa contemporânea"><span class="property-tag"><span class="dot"></span>Disponível</span></div>
+          <a class="property-card listing-card" data-location="itacimirim" data-category="casa" data-modality="venda" data-price="8900000" data-bedrooms="4" data-area="420" href="/imoveis/casa-itacimirim">
+            <div class="property-image"><img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85" alt="Sala de estar ampla em uma casa contemporânea"><span class="property-tag"><span class="dot"></span>Disponível</span><span class="modality-tag modality-venda">Venda</span></div>
             <div class="property-info">
               <div class="property-info-top"><h3>Casa Itacimirim</h3><span class="property-price">R$ 8,9 mi</span></div>
               <p class="property-location">Itacimirim · Bahia</p>
               <div class="property-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"/><path d="M3 18v2M21 18v2M5 10V7a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3"/></svg>4 suítes</span><span><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V3h6M15 3h6v6M21 15v6h-6M9 21H3v-6"/></svg>420 m²</span></div>
             </div>
           </a>
-          <a class="property-card listing-card" data-location="praia-do-forte" data-category="apartamento" data-price="6400000" data-bedrooms="3" data-area="198" href="/imoveis/apartamento-praia-do-forte">
-            <div class="property-image"><img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1200&q=85" alt="Interior elegante de apartamento em Praia do Forte"><span class="property-tag"><span class="dot"></span>Disponível</span></div>
+          <a class="property-card listing-card" data-location="praia-do-forte" data-category="apartamento" data-modality="venda temporada" data-price="6400000" data-bedrooms="3" data-area="198" href="/imoveis/apartamento-praia-do-forte">
+            <div class="property-image"><img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1200&q=85" alt="Interior elegante de apartamento em Praia do Forte"><span class="property-tag"><span class="dot"></span>Disponível</span><span class="modality-tag modality-ambos">Venda e temporada</span></div>
             <div class="property-info">
               <div class="property-info-top"><h3>Praia do Forte 360</h3><span class="property-price">R$ 6,4 mi</span></div>
               <p class="property-location">Praia do Forte · Bahia</p>
               <div class="property-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"/><path d="M3 18v2M21 18v2M5 10V7a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3"/></svg>3 suítes</span><span><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V3h6M15 3h6v6M21 15v6h-6M9 21H3v-6"/></svg>198 m²</span></div>
             </div>
           </a>
-          <a class="property-card listing-card" data-location="guarajuba" data-category="cobertura" data-price="12800000" data-bedrooms="4" data-area="365" href="/imoveis/cobertura-guarajuba">
-            <div class="property-image"><img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85" alt="Cobertura sofisticada com vista para o litoral baiano"><span class="property-tag"><span class="dot"></span>Disponível</span></div>
+          <a class="property-card listing-card" data-location="guarajuba" data-category="cobertura" data-modality="venda" data-price="12800000" data-bedrooms="4" data-area="365" href="/imoveis/cobertura-guarajuba">
+            <div class="property-image"><img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85" alt="Cobertura sofisticada com vista para o litoral baiano"><span class="property-tag"><span class="dot"></span>Disponível</span><span class="modality-tag modality-venda">Venda</span></div>
             <div class="property-info">
               <div class="property-info-top"><h3>Cobertura Guarajuba</h3><span class="property-price">R$ 12,8 mi</span></div>
               <p class="property-location">Guarajuba · Bahia</p>
