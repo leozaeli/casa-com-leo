@@ -80,6 +80,20 @@ if (listingPage) {
   document.querySelector('#empty-clear')?.addEventListener('click', clearListingFilters);
   applyListingFilters();
 }
+const rotatingWord = document.querySelector('#rotating-word');
+if (rotatingWord) {
+  const words = ['endereço', 'investimento', 'negócio'];
+  let wordIndex = 0;
+  setInterval(() => {
+    rotatingWord.style.opacity = '0';
+    setTimeout(() => {
+      wordIndex = (wordIndex + 1) % words.length;
+      rotatingWord.textContent = words[wordIndex];
+      rotatingWord.style.opacity = '1';
+    }, 300);
+  }, 2400);
+}
+
 if (window.location.pathname.replace(/\/+$/, '') === '/contato') {
   window.addEventListener('load', () => {
     document.querySelector('#contato')?.scrollIntoView();
