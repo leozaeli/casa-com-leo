@@ -240,6 +240,6 @@ document.addEventListener('click', (event) => {
   if (trigger.dataset.popup === 'interesse') {
     openInterestFlow(trigger);
   } else {
-    openContactPopup(trigger);
+    openContactPopup(trigger, trigger.dataset.prefill);
   }
 });

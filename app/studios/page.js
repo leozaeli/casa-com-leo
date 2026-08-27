@@ -1,13 +1,19 @@
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
+import StudioCard from '@/components/StudioCard';
+import { listStudios } from '@/lib/studios';
 
 export const metadata = {
   title: 'Studios — Casa com Leo',
   description: 'Casa com Leo Studios — um novo projeto a caminho.',
 };
 
-export default function StudiosPage() {
+export const revalidate = 0;
+
+export default async function StudiosPage() {
+  const studios = await listStudios();
+
   return (
     <>
       <Nav active="studios" />
@@ -63,6 +69,25 @@ export default function StudiosPage() {
             </div>
           </div>
         </section>
+
+        {studios.length > 0 && (
+          <section className="catalog">
+            <div className="wrap">
+              <div className="section-head">
+                <div>
+                  <span className="eyebrow-tag">🏠 Unidades</span>
+                  <h2 className="section-title">Unidades disponíveis.</h2>
+                </div>
+                <p className="section-note">Conheça as unidades já liberadas para reserva.</p>
+              </div>
+              <div className="property-grid">
+                {studios.map((studio) => (
+                  <StudioCard key={studio.id} studio={studio} />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
       <WhatsAppFloat />
