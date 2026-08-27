@@ -5,6 +5,14 @@ import LogoutButton from '@/components/admin/LogoutButton';
 
 const SITE_URL = 'https://www.casacomleo.com.br';
 
+const DashboardIcon = (
+  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="7" height="9" rx="1.5" />
+    <rect x="14" y="3" width="7" height="5" rx="1.5" />
+    <rect x="14" y="12" width="7" height="9" rx="1.5" />
+    <rect x="3" y="16" width="7" height="5" rx="1.5" />
+  </svg>
+);
 const HomeIcon = (
   <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 21V9l8-5 8 5v12" />
@@ -25,10 +33,14 @@ const StudioIcon = (
 
 const GROUPS = [
   {
+    label: 'Geral',
+    links: [{ href: '/', label: 'Dashboard', exact: true, icon: DashboardIcon }],
+  },
+  {
     label: 'Imóveis',
     links: [
-      { href: '/', label: 'Imóveis', exact: true, icon: HomeIcon },
-      { href: '/novo', label: 'Novo imóvel', exact: false, icon: PlusIcon },
+      { href: '/imoveis', label: 'Imóveis', exact: true, icon: HomeIcon },
+      { href: '/imoveis/novo', label: 'Novo imóvel', exact: false, icon: PlusIcon },
     ],
   },
   {
@@ -53,6 +65,12 @@ export default function AdminSidebar() {
           <small>Admin</small>
         </span>
       </a>
+      <a href={SITE_URL} target="_blank" rel="noreferrer" className="admin-goto-site">
+        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M14 5h5v5M19 5l-9 9M6 5H5v14h14v-1" />
+        </svg>
+        Ir para o site
+      </a>
       <div className="admin-nav-groups">
         {GROUPS.map((group) => (
           <div className="admin-nav-group" key={group.label}>
@@ -72,9 +90,6 @@ export default function AdminSidebar() {
         ))}
       </div>
       <div className="admin-sidebar-footer">
-        <a href={`${SITE_URL}/imoveis`} target="_blank" rel="noreferrer" className="admin-view-site">
-          Ver site ↗
-        </a>
         <LogoutButton />
       </div>
     </aside>

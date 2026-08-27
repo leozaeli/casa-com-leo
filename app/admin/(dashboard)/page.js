@@ -1,77 +1,75 @@
-import { listImoveisAdmin, coverPhoto, formatPrice } from '@/lib/imoveis';
-import DeleteImovelForm from '@/components/admin/DeleteImovelForm';
+import { getVisitStats, getRecentLeads, getLeadStats } from '@/lib/analytics';
+import ActiveNow from '@/components/admin/ActiveNow';
 
-const SITE_URL = 'https://www.casacomleo.com.br';
+export const revalidate = 0;
 
 export default async function AdminDashboardPage() {
-  const imoveis = await listImoveisAdmin();
+  const [visitStats, leads, leadStats] = await Promise.all([getVisitStats(), getRecentLeads(8), getLeadStats()]);
 
   return (
     <div>
       <div className="admin-page-head">
         <div>
           <span className="admin-eyebrow">Painel</span>
-          <h1>Imóveis</h1>
-          <p className="admin-page-subtitle">
-            {imoveis.length} {imoveis.length === 1 ? 'imóvel cadastrado' : 'imóveis cadastrados'}
-          </p>
+          <h1>Dashboard</h1>
+          <p className="admin-page-subtitle">Visão geral do site.</p>
         </div>
-        <a className="button" href="/novo">
-          + Novo imóvel
-        </a>
       </div>
 
-      {imoveis.length === 0 ? (
-        <div className="admin-empty">
-          <span className="admin-eyebrow">Catálogo vazio</span>
-          <h2>Nenhum imóvel cadastrado ainda.</h2>
-          <p>Publique o primeiro imóvel para ele aparecer aqui e no site.</p>
-          <a className="button" href="/novo">
-            + Novo imóvel
-          </a>
+      <div className="admin-stat-grid">
+        <div className="admin-stat-card">
+          <span>Visitas hoje</span>
+          <strong>{visitStats.today}</strong>
         </div>
-      ) : (
-        <div className="admin-table-wrap">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Título</th>
-                <th>Localização</th>
-                <th>Preço</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {imoveis.map((imovel) => (
-                <tr key={imovel.id}>
-                  <td>
-                    <img className="admin-table-thumb" src={coverPhoto(imovel)} alt="" />
-                  </td>
-                  <td className="admin-table-title">{imovel.titulo}</td>
-                  <td>{imovel.localizacao}</td>
-                  <td>{formatPrice(imovel.preco)}</td>
-                  <td>
-                    <span className={`admin-badge ${imovel.destaque ? 'admin-badge-on' : 'admin-badge-off'}`}>
-                      <span className="dot"></span>
-                      {imovel.destaque ? 'Publicado' : 'Oculto'}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="admin-table-actions">
-                      <a href={`${SITE_URL}/imoveis/${imovel.slug}`} target="_blank" rel="noreferrer">
-                        Ver página
-                      </a>
-                      <DeleteImovelForm id={imovel.id} slug={imovel.slug} titulo={imovel.titulo} />
-                    </div>
-                  </td>
-                </tr>
+        <div className="admin-stat-card">
+          <span>Visitas (7 dias)</span>
+          <strong>{visitStats.week}</strong>
+        </div>
+        <div className="admin-stat-card">
+          <span>Leads (7 dias)</span>
+          <strong>{leadStats.week}</strong>
+        </div>
+        <ActiveNow />
+      </div>
+
+      <div className="admin-dash-grid">
+        <div className="admin-panel">
+          <h2>Páginas mais visitadas (7 dias)</h2>
+          {visitStats.topPages.length === 0 ? (
+            <p className="admin-hint">Ainda sem dados suficientes.</p>
+          ) : (
+            <ul className="admin-top-pages">
+              {visitStats.topPages.map((p) => (
+                <li key={p.path}>
+                  <span>{p.path}</span>
+                  <strong>{p.count}</strong>
+                </li>
               ))}
-            </tbody>
-          </table>
+            </ul>
+          )}
         </div>
-      )}
+
+        <div className="admin-panel">
+          <h2>Leads recentes</h2>
+          {leads.length === 0 ? (
+            <p className="admin-hint">Nenhum lead ainda.</p>
+          ) : (
+            <ul className="admin-leads-list">
+              {leads.map((lead) => (
+                <li key={lead.id}>
+                  <div className="admin-lead-top">
+                    <strong>{lead.nome || 'Sem nome'}</strong>
+                    <span>{new Date(lead.created_at).toLocaleString('pt-BR')}</span>
+                  </div>
+                  {lead.contato && <span className="admin-lead-contato">{lead.contato}</span>}
+                  {lead.mensagem && <p>{lead.mensagem}</p>}
+                  <span className="admin-hint">via {lead.origem}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

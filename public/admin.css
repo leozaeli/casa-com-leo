@@ -40,6 +40,22 @@
   font-weight: 700;
 }
 
+.admin-goto-site {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--accent);
+  color: var(--ink);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 22px;
+  transition: filter .15s ease;
+}
+.admin-goto-site svg { width: 16px; height: 16px; flex-shrink: 0; }
+.admin-goto-site:hover { filter: brightness(1.08); }
+
 .admin-nav-groups { display: flex; flex-direction: column; gap: 22px; flex: 1; }
 .admin-nav-group { display: flex; flex-direction: column; gap: 4px; }
 .admin-nav-group-label {
@@ -68,8 +84,6 @@
 .admin-nav a.active svg { opacity: 1; }
 
 .admin-sidebar-footer { display: flex; flex-direction: column; gap: 8px; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, .1); }
-.admin-view-site { font-size: 13px; color: rgba(255, 255, 255, .55); padding: 6px 12px; }
-.admin-view-site:hover { color: #fff; }
 .admin-logout {
   border: 1px solid rgba(255, 255, 255, .16);
   background: transparent;
@@ -156,6 +170,42 @@
 .admin-badge-on { background: rgba(76, 122, 82, .12); color: var(--ok); }
 .admin-badge-off { background: rgba(24, 21, 15, .08); color: var(--muted); }
 
+/* Dashboard */
+.admin-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.admin-stat-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 1px 0 var(--line);
+}
+.admin-stat-card > span { font-size: 12.5px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
+.admin-stat-card > strong { font-family: 'Poppins', sans-serif; font-size: 32px; font-weight: 600; }
+.admin-stat-card-live > strong { color: var(--ok); }
+.admin-active-list { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.admin-active-list li { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
+.admin-active-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); flex-shrink: 0; box-shadow: 0 0 0 3px rgba(76, 122, 82, .18); }
+
+.admin-dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+.admin-panel { background: var(--white); border-radius: var(--radius); padding: 26px 28px; box-shadow: 0 1px 0 var(--line); }
+.admin-panel h2 { font-size: 15px; margin-bottom: 16px; }
+
+.admin-top-pages { display: flex; flex-direction: column; gap: 12px; }
+.admin-top-pages li { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; }
+.admin-top-pages li span { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-top-pages li strong { font-family: 'Poppins', sans-serif; flex-shrink: 0; }
+
+.admin-leads-list { display: flex; flex-direction: column; gap: 16px; max-height: 420px; overflow-y: auto; }
+.admin-leads-list li { padding-bottom: 16px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
+.admin-leads-list li:last-child { border-bottom: none; padding-bottom: 0; }
+.admin-lead-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.admin-lead-top strong { font-size: 14px; }
+.admin-lead-top span { font-size: 11.5px; color: var(--muted); flex-shrink: 0; }
+.admin-lead-contato { font-size: 12.5px; color: var(--muted); }
+.admin-leads-list p { font-size: 13px; margin-top: 2px; }
+
 .admin-empty { padding: 80px 20px; text-align: center; background: var(--white); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .admin-empty h2 { font-size: 20px; margin-bottom: 4px; }
 .admin-empty p { color: var(--muted); font-size: 14px; margin-bottom: 22px; max-width: 360px; }
@@ -228,4 +278,7 @@
   .admin-sidebar-footer { flex-direction: row; border-top: 0; padding-top: 0; }
   .admin-main { padding: 28px 20px 80px; }
   .admin-table-wrap { overflow-x: auto; }
+  .admin-goto-site { margin: 0 0 0 12px; padding: 9px 12px; }
+  .admin-goto-site span { display: none; }
+  .admin-dash-grid { grid-template-columns: 1fr; }
 }

@@ -1,9 +1,15 @@
+import { headers } from 'next/headers';
+import Analytics from '@/components/Analytics';
+
 export const metadata = {
   title: 'Casa com Leo — Imóveis com intenção',
   description: 'Casa com Leo — imóveis extraordinários para uma vida com mais intenção.',
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const hdrs = await headers();
+  const isAdminHost = (hdrs.get('host') || '').startsWith('admin.');
+
   return (
     <html lang="pt-BR">
       <head>
@@ -11,6 +17,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         {children}
+        {!isAdminHost && <Analytics />}
         <script src="/script.js" defer></script>
       </body>
     </html>

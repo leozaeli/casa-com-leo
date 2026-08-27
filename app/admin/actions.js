@@ -118,7 +118,7 @@ export async function createImovel(prevState, formData) {
 
   revalidatePath('/imoveis');
   revalidatePath('/');
-  revalidatePath('/admin');
+  revalidatePath('/admin/imoveis');
   redirect(`https://www.casacomleo.com.br/imoveis/${slug}`);
 }
 
@@ -133,7 +133,7 @@ export async function deleteImovel(formData) {
 
   revalidatePath('/imoveis');
   revalidatePath('/');
-  revalidatePath('/admin');
+  revalidatePath('/admin/imoveis');
   if (slug) revalidatePath(`/imoveis/${slug}`);
 }
 

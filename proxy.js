@@ -13,6 +13,10 @@ export async function proxy(request) {
   }
 
   if (hostname === ADMIN_HOST) {
+    if (pathname.startsWith('/api')) {
+      return NextResponse.next();
+    }
+
     const internalPath = pathname.startsWith('/admin') ? pathname : `/admin${pathname === '/' ? '' : pathname}`;
 
     let rewriteUrl = null;

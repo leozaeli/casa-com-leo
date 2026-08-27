@@ -7,6 +7,15 @@ document.querySelectorAll('.menu-toggle').forEach((toggle) => {
   });
 });
 
+function sendLead({ nome, contato, mensagem }) {
+  fetch('/api/lead', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nome, contato, mensagem, origem: window.location.pathname }),
+    keepalive: true,
+  }).catch(() => {});
+}
+
 const filters = document.querySelectorAll('.filter');
 const cards = document.querySelectorAll('.property-card');
 
@@ -25,6 +34,7 @@ const form = document.querySelector('#contact-form');
 if (form) {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
+    sendLead({ nome: form.nome.value.trim(), contato: form.email.value.trim(), mensagem: form.mensagem.value.trim() });
     form.reset();
     document.querySelector('.success')?.classList.add('show');
   });
@@ -175,6 +185,10 @@ function buildContactPopup() {
       form.mensagem.value.trim(),
       `Pode me chamar por aqui: ${whatsapp}`,
     ];
+    const mensagemLead = isStudiosPage
+      ? `Lista de espera Studios. Localização: ${form.local.value.trim() || 'não informada'}.`
+      : form.mensagem.value.trim();
+    sendLead({ nome, contato: whatsapp, mensagem: mensagemLead });
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
     closePopup();
     form.reset();
