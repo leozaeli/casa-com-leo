@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import LogoutButton from '@/components/admin/LogoutButton';
+import AdminSidebar from '@/components/admin/AdminSidebar';
 
 export default async function DashboardLayout({ children }) {
   const supabase = await createClient();
@@ -16,16 +16,7 @@ export default async function DashboardLayout({ children }) {
 
   return (
     <div className="admin-shell">
-      <header className="admin-header">
-        <a className="admin-brand" href="/admin">
-          Casa com Leo · Admin
-        </a>
-        <nav className="admin-nav">
-          <a href="/admin">Imóveis</a>
-          <a href="/admin/novo">+ Novo imóvel</a>
-          <LogoutButton />
-        </nav>
-      </header>
+      <AdminSidebar />
       <main className="admin-main">{children}</main>
     </div>
   );

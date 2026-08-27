@@ -11,7 +11,11 @@ export default function NovoImovelPage() {
   return (
     <div>
       <div className="admin-page-head">
-        <h1>Novo imóvel</h1>
+        <div>
+          <span className="admin-eyebrow">Cadastro</span>
+          <h1>Novo imóvel</h1>
+          <p className="admin-page-subtitle">Preencha os dados abaixo — a página do imóvel é criada automaticamente ao publicar.</p>
+        </div>
       </div>
 
       <form className="admin-form" action={formAction}>

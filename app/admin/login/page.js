@@ -22,15 +22,16 @@ export default function AdminLoginPage() {
       setError('E-mail ou senha inválidos.');
       return;
     }
-    router.push('/admin');
+    router.push('/');
     router.refresh();
   }
 
   return (
     <div className="admin-login-page">
       <form className="admin-login-card" onSubmit={handleSubmit}>
+        <span className="admin-brand-mark admin-login-mark">L</span>
         <h1>Casa com Leo</h1>
-        <p>Acesso restrito.</p>
+        <p>Acesso restrito ao painel administrativo.</p>
         <label htmlFor="email">E-mail</label>
         <input
           id="email"
