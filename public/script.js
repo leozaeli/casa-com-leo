@@ -1,3 +1,12 @@
+document.querySelectorAll('.menu-toggle').forEach((toggle) => {
+  toggle.addEventListener('click', () => {
+    const isOpen = toggle.classList.toggle('open');
+    const menu = toggle.parentElement.querySelector('.nav-links');
+    menu.classList.toggle('open', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  });
+});
+
 const filters = document.querySelectorAll('.filter');
 const cards = document.querySelectorAll('.property-card');
 
@@ -21,7 +30,7 @@ if (form) {
   });
 }
 
-const listingPage = document.querySelector('.listing-page');
+const listingPage = document.querySelector('#property-results');
 if (listingPage) {
   const locationFilter = document.querySelector('#location-filter');
   const typeFilter = document.querySelector('#type-filter');
@@ -102,7 +111,7 @@ if (window.location.pathname.replace(/\/+$/, '') === '/contato') {
 
 const WHATSAPP_NUMBER = '5571984266363';
 
-const isStudiosPage = document.body.classList.contains('studios-page');
+const isStudiosPage = window.location.pathname.replace(/\/+$/, '') === '/studios';
 
 function buildContactPopup() {
   if (document.querySelector('#contact-popup')) return document.querySelector('#contact-popup');
