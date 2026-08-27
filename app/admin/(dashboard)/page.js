@@ -6,28 +6,27 @@ import {
   getRecentLeads,
   getLeadStats,
 } from '@/lib/analytics';
+import { getLeadFunnelCounts, getTemperatureCounts } from '@/lib/leads';
+import { STATUS_OPTIONS, CANAL_LABEL, TEMPERATURA_LABEL } from '@/lib/crm-constants';
 import ActiveNow from '@/components/admin/ActiveNow';
 
 export const revalidate = 0;
 
-const CANAL_LABEL = {
-  formulario: 'Formulário',
-  whatsapp: 'WhatsApp',
-  lista_espera: 'Lista de espera',
-};
-
 export default async function AdminDashboardPage() {
-  const [visitStats, trend, referrers, localities, leads, leadStats] = await Promise.all([
+  const [visitStats, trend, referrers, localities, leads, leadStats, funnelCounts, tempCounts] = await Promise.all([
     getVisitStats(),
     getVisitTrend(14),
     getTopReferrers(),
     getTopLocalities(),
-    getRecentLeads(8),
+    getRecentLeads(5),
     getLeadStats(),
+    getLeadFunnelCounts(),
+    getTemperatureCounts(),
   ]);
 
   const maxTrend = Math.max(1, ...trend.map((d) => d.count));
   const canalEntries = Object.entries(leadStats.byCanal);
+  const openFunnel = STATUS_OPTIONS.filter((o) => !o.value.startsWith('fechado'));
 
   return (
     <div>
@@ -64,6 +63,36 @@ export default async function AdminDashboardPage() {
               <span>{day.date.slice(8, 10)}</span>
             </div>
           ))}
+        </div>
+      </div>
+
+      <div className="admin-panel admin-panel-wide">
+        <div className="admin-panel-head-row">
+          <h2>Funil de leads</h2>
+          <a href="/leads" className="admin-panel-link">
+            Ver CRM completo →
+          </a>
+        </div>
+        <div className="admin-funnel-strip">
+          {openFunnel.map((opt) => (
+            <div className="admin-funnel-step" key={opt.value}>
+              <strong>{funnelCounts[opt.value] || 0}</strong>
+              <span>{opt.label}</span>
+            </div>
+          ))}
+          <div className="admin-funnel-step admin-funnel-step-won">
+            <strong>{funnelCounts.fechado_ganho || 0}</strong>
+            <span>Fechado (ganho)</span>
+          </div>
+          <div className="admin-funnel-step admin-funnel-step-lost">
+            <strong>{funnelCounts.fechado_perdido || 0}</strong>
+            <span>Fechado (perdido)</span>
+          </div>
+        </div>
+        <div className="admin-temp-strip">
+          <span className="admin-temp-pill admin-temp-quente">🔥 {tempCounts.quente} quentes</span>
+          <span className="admin-temp-pill admin-temp-morno">🌤 {tempCounts.morno} mornos</span>
+          <span className="admin-temp-pill admin-temp-frio">❄️ {tempCounts.frio} frios</span>
         </div>
       </div>
 
@@ -133,7 +162,12 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div className="admin-panel">
-          <h2>Leads recentes</h2>
+          <div className="admin-panel-head-row">
+            <h2>Leads recentes</h2>
+            <a href="/leads" className="admin-panel-link">
+              Ver todos →
+            </a>
+          </div>
           {leads.length === 0 ? (
             <p className="admin-hint">Nenhum lead ainda.</p>
           ) : (

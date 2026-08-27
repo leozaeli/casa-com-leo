@@ -30,11 +30,20 @@ const StudioIcon = (
     <path d="M4 14h16" />
   </svg>
 );
+const LeadsIcon = (
+  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="8" r="3.4" />
+    <path d="M5 21c1.5-4 4-6 7-6s5.5 2 7 6" />
+  </svg>
+);
 
 const GROUPS = [
   {
     label: 'Geral',
-    links: [{ href: '/', label: 'Dashboard', exact: true, icon: DashboardIcon }],
+    links: [
+      { href: '/', label: 'Dashboard', exact: true, icon: DashboardIcon },
+      { href: '/leads', label: 'Leads', exact: false, icon: LeadsIcon },
+    ],
   },
   {
     label: 'Imóveis',

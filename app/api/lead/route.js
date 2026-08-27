@@ -1,5 +1,12 @@
 import { createAdminClient } from '@/lib/supabase/server';
 
+function inferIntencao(mensagem) {
+  const text = (mensagem || '').toLowerCase();
+  if (text.includes('temporada') || text.includes('lista de espera')) return 'temporada';
+  if (text.includes('comprar') || text.includes('compra')) return 'venda';
+  return 'indefinido';
+}
+
 export async function POST(request) {
   let body;
   try {
@@ -16,7 +23,7 @@ export async function POST(request) {
   if (!nome) return new Response(null, { status: 400 });
 
   const admin = createAdminClient();
-  await admin.from('leads').insert({ nome, contato, mensagem, origem, canal });
+  await admin.from('leads').insert({ nome, contato, mensagem, origem, canal, intencao: inferIntencao(mensagem) });
 
   return new Response(null, { status: 204 });
 }

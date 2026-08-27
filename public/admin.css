@@ -216,6 +216,83 @@
 .admin-badge-canal-whatsapp { background: rgba(37, 211, 102, .14); color: #1c9950; width: fit-content; }
 .admin-badge-canal-lista_espera { background: rgba(182, 135, 58, .14); color: var(--warn); width: fit-content; }
 
+.admin-panel-head-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.admin-panel-head-row h2 { margin-bottom: 0; }
+.admin-panel-link { font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.admin-panel-link:hover { text-decoration: underline; }
+
+/* Funnel */
+.admin-funnel-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 18px; }
+.admin-funnel-step { background: var(--paper); border-radius: var(--radius-sm); padding: 14px 12px; display: flex; flex-direction: column; gap: 4px; text-align: center; }
+.admin-funnel-step strong { font-family: 'Poppins', sans-serif; font-size: 22px; }
+.admin-funnel-step span { font-size: 11px; color: var(--muted); }
+.admin-funnel-step-won strong { color: var(--ok); }
+.admin-funnel-step-lost strong { color: var(--off); }
+
+.admin-temp-strip { display: flex; gap: 10px; flex-wrap: wrap; }
+.admin-temp-pill { padding: 7px 14px; border-radius: 99px; font-size: 12.5px; font-weight: 600; }
+.admin-temp-pill.admin-temp-quente { background: rgba(182, 79, 58, .12); color: #b64f3a; }
+.admin-temp-pill.admin-temp-morno { background: rgba(182, 135, 58, .14); color: var(--warn); }
+.admin-temp-pill.admin-temp-frio { background: rgba(76, 122, 130, .12); color: #4c7a82; }
+
+.admin-temp-dot { padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+.admin-temp-dot.admin-temp-quente { background: rgba(182, 79, 58, .12); color: #b64f3a; }
+.admin-temp-dot.admin-temp-morno { background: rgba(182, 135, 58, .14); color: var(--warn); }
+.admin-temp-dot.admin-temp-frio { background: rgba(76, 122, 130, .12); color: #4c7a82; }
+.admin-temp-dot.admin-temp-fechado { background: rgba(24, 21, 15, .08); color: var(--muted); }
+
+/* Leads CRM */
+.admin-leads-filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.admin-leads-filters select, .admin-leads-filters input {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 10px 13px;
+  background: var(--white);
+  font-size: 13px;
+}
+.admin-leads-filters input[type="search"] { flex: 1; min-width: 220px; }
+
+.admin-lead-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.admin-lead-row {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 1px 0 var(--line);
+}
+.admin-lead-row-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.admin-lead-row-id { display: flex; align-items: center; gap: 8px; }
+.admin-lead-row-id strong { font-size: 14.5px; }
+.admin-lead-msg { font-size: 13px; color: var(--ink); background: var(--paper); border-radius: var(--radius-sm); padding: 10px 12px; }
+.admin-lead-row-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.admin-lead-row-fields label { display: flex; flex-direction: column; gap: 5px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
+.admin-lead-row-fields select {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 9px 10px;
+  font-size: 13px;
+  background: var(--paper);
+  font-weight: 400;
+  color: var(--ink);
+}
+.admin-lead-notas { display: flex; flex-direction: column; gap: 5px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
+.admin-lead-notas textarea {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 9px 10px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink);
+  min-height: 56px;
+  resize: vertical;
+  background: var(--paper);
+}
+.admin-lead-row-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; }
+.admin-lead-delete { background: none; border: none; padding: 0; color: var(--off); font-size: 12px; font-weight: 500; cursor: pointer; }
+.admin-lead-delete:hover { text-decoration: underline; }
+
 .admin-empty { padding: 80px 20px; text-align: center; background: var(--white); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .admin-empty h2 { font-size: 20px; margin-bottom: 4px; }
 .admin-empty p { color: var(--muted); font-size: 14px; margin-bottom: 22px; max-width: 360px; }

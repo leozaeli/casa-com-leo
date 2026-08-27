@@ -227,3 +227,33 @@ export async function deleteStudio(formData) {
   revalidatePath('/admin/studios');
   if (slug) revalidatePath(`/studios/${slug}`);
 }
+
+export async function updateLead(formData) {
+  await assertAdmin();
+  const id = formData.get('id')?.toString();
+  if (!id) return;
+
+  const updates = {};
+  if (formData.has('status')) updates.status = formData.get('status').toString();
+  if (formData.has('intencao')) updates.intencao = formData.get('intencao').toString();
+  if (formData.has('notas')) updates.notas = formData.get('notas').toString().slice(0, 2000);
+  if (Object.keys(updates).length === 0) return;
+
+  const admin = createAdminClient();
+  await admin.from('leads').update(updates).eq('id', id);
+
+  revalidatePath('/admin/leads');
+  revalidatePath('/admin');
+}
+
+export async function deleteLead(formData) {
+  await assertAdmin();
+  const id = formData.get('id')?.toString();
+  if (!id) return;
+
+  const admin = createAdminClient();
+  await admin.from('leads').delete().eq('id', id);
+
+  revalidatePath('/admin/leads');
+  revalidatePath('/admin');
+}
