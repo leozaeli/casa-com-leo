@@ -266,6 +266,21 @@
 .admin-lead-row-id { display: flex; align-items: center; gap: 8px; }
 .admin-lead-row-id strong { font-size: 14.5px; }
 .admin-lead-msg { font-size: 13px; color: var(--ink); background: var(--paper); border-radius: var(--radius-sm); padding: 10px 12px; }
+.admin-lead-whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #25d366;
+  color: #fff;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: filter .15s ease;
+}
+.admin-lead-whatsapp svg { width: 16px; height: 16px; flex-shrink: 0; }
+.admin-lead-whatsapp:hover { filter: brightness(1.05); }
 .admin-lead-row-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .admin-lead-row-fields label { display: flex; flex-direction: column; gap: 5px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
 .admin-lead-row-fields select {
