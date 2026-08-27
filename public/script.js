@@ -7,11 +7,11 @@ document.querySelectorAll('.menu-toggle').forEach((toggle) => {
   });
 });
 
-function sendLead({ nome, contato, mensagem }) {
+function sendLead({ nome, contato, mensagem, canal }) {
   fetch('/api/lead', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nome, contato, mensagem, origem: window.location.pathname }),
+    body: JSON.stringify({ nome, contato, mensagem, canal, origem: window.location.pathname }),
     keepalive: true,
   }).catch(() => {});
 }
@@ -34,7 +34,7 @@ const form = document.querySelector('#contact-form');
 if (form) {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    sendLead({ nome: form.nome.value.trim(), contato: form.email.value.trim(), mensagem: form.mensagem.value.trim() });
+    sendLead({ nome: form.nome.value.trim(), contato: form.email.value.trim(), mensagem: form.mensagem.value.trim(), canal: 'formulario' });
     form.reset();
     document.querySelector('.success')?.classList.add('show');
   });
@@ -188,7 +188,7 @@ function buildContactPopup() {
     const mensagemLead = isStudiosPage
       ? `Lista de espera Studios. Localização: ${form.local.value.trim() || 'não informada'}.`
       : form.mensagem.value.trim();
-    sendLead({ nome, contato: whatsapp, mensagem: mensagemLead });
+    sendLead({ nome, contato: whatsapp, mensagem: mensagemLead, canal: isStudiosPage ? 'lista_espera' : 'whatsapp' });
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
     closePopup();
     form.reset();

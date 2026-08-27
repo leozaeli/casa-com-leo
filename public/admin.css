@@ -188,6 +188,13 @@
 .admin-active-list li { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
 .admin-active-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); flex-shrink: 0; box-shadow: 0 0 0 3px rgba(76, 122, 82, .18); }
 
+.admin-panel-wide { margin-bottom: 20px; }
+.admin-trend-chart { display: flex; align-items: flex-end; gap: 6px; height: 140px; }
+.admin-trend-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 6px; }
+.admin-trend-bar { width: 100%; max-width: 26px; border-radius: 4px 4px 0 0; background: var(--accent); transition: filter .15s ease; }
+.admin-trend-bar-wrap:hover .admin-trend-bar { filter: brightness(1.1); }
+.admin-trend-bar-wrap span { font-size: 10.5px; color: var(--muted); }
+
 .admin-dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
 .admin-panel { background: var(--white); border-radius: var(--radius); padding: 26px 28px; box-shadow: 0 1px 0 var(--line); }
 .admin-panel h2 { font-size: 15px; margin-bottom: 16px; }
@@ -205,6 +212,9 @@
 .admin-lead-top span { font-size: 11.5px; color: var(--muted); flex-shrink: 0; }
 .admin-lead-contato { font-size: 12.5px; color: var(--muted); }
 .admin-leads-list p { font-size: 13px; margin-top: 2px; }
+.admin-badge-canal-formulario { background: rgba(76, 122, 82, .12); color: var(--ok); width: fit-content; }
+.admin-badge-canal-whatsapp { background: rgba(37, 211, 102, .14); color: #1c9950; width: fit-content; }
+.admin-badge-canal-lista_espera { background: rgba(182, 135, 58, .14); color: var(--warn); width: fit-content; }
 
 .admin-empty { padding: 80px 20px; text-align: center; background: var(--white); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .admin-empty h2 { font-size: 20px; margin-bottom: 4px; }

@@ -12,10 +12,11 @@ export async function POST(request) {
   const contato = body.contato?.toString().trim().slice(0, 200) || null;
   const mensagem = body.mensagem?.toString().trim().slice(0, 2000) || null;
   const origem = body.origem?.toString().trim().slice(0, 300) || '/';
+  const canal = body.canal?.toString().trim().slice(0, 50) || 'formulario';
   if (!nome) return new Response(null, { status: 400 });
 
   const admin = createAdminClient();
-  await admin.from('leads').insert({ nome, contato, mensagem, origem });
+  await admin.from('leads').insert({ nome, contato, mensagem, origem, canal });
 
   return new Response(null, { status: 204 });
 }
