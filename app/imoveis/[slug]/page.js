@@ -49,6 +49,7 @@ export default async function ImovelPage({ params }) {
             <span className="eyebrow-tag" style={{ background: 'rgba(255,255,255,.16)', color: '#fff', backdropFilter: 'blur(8px)' }}>
               {imovel.eyebrow}
             </span>
+            {imovel.vendido && <span className="property-tag property-tag-vendido detail-vendido-tag">Vendido</span>}
             <h1>{imovel.titulo}.</h1>
             <div className="detail-meta">
               <span>{imovel.localizacao}</span>
@@ -102,15 +103,21 @@ export default async function ImovelPage({ params }) {
             <span>{formatPrice(imovel.preco)}</span>
           </div>
           <div className="sticky-cta-actions">
-            <button
-              className="button"
-              type="button"
-              data-popup="interesse"
-              data-property={imovel.titulo}
-              data-modalities={modalidades.join(' ')}
-            >
-              Tenho Interesse
-            </button>
+            {imovel.vendido ? (
+              <span className="button" style={{ opacity: 0.6, cursor: 'default' }}>
+                Imóvel vendido
+              </span>
+            ) : (
+              <button
+                className="button"
+                type="button"
+                data-popup="interesse"
+                data-property={imovel.titulo}
+                data-modalities={modalidades.join(' ')}
+              >
+                Tenho Interesse
+              </button>
+            )}
           </div>
         </div>
       </div>

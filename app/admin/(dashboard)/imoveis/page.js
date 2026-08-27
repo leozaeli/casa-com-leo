@@ -1,5 +1,6 @@
 import { listImoveisAdmin, coverPhoto, formatPrice } from '@/lib/imoveis';
 import DeleteImovelForm from '@/components/admin/DeleteImovelForm';
+import ToggleVendidoForm from '@/components/admin/ToggleVendidoForm';
 
 const SITE_URL = 'https://www.casacomleo.com.br';
 
@@ -26,7 +27,7 @@ export default async function AdminDashboardPage() {
           <span className="admin-eyebrow">Catálogo vazio</span>
           <h2>Nenhum imóvel cadastrado ainda.</h2>
           <p>Publique o primeiro imóvel para ele aparecer aqui e no site.</p>
-          <a className="button" href="/novo">
+          <a className="button" href="/imoveis/novo">
             + Novo imóvel
           </a>
         </div>
@@ -57,12 +58,19 @@ export default async function AdminDashboardPage() {
                       <span className="dot"></span>
                       {imovel.destaque ? 'Publicado' : 'Oculto'}
                     </span>
+                    {imovel.vendido && (
+                      <span className="admin-badge admin-badge-off" style={{ marginLeft: '0.4rem' }}>
+                        <span className="dot"></span>
+                        Vendido
+                      </span>
+                    )}
                   </td>
                   <td>
                     <div className="admin-table-actions">
                       <a href={`${SITE_URL}/imoveis/${imovel.slug}`} target="_blank" rel="noreferrer">
                         Ver página
                       </a>
+                      <ToggleVendidoForm id={imovel.id} slug={imovel.slug} vendido={imovel.vendido} />
                       <DeleteImovelForm id={imovel.id} slug={imovel.slug} titulo={imovel.titulo} />
                     </div>
                   </td>

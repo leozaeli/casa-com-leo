@@ -127,6 +127,22 @@ export async function createImovel(prevState, formData) {
   redirect(`https://www.casacomleo.com.br/imoveis/${slug}`);
 }
 
+export async function toggleVendido(formData) {
+  await assertAdmin();
+  const id = formData.get('id')?.toString();
+  const slug = formData.get('slug')?.toString();
+  const vendido = formData.get('vendido') === 'true';
+  if (!id) return;
+
+  const admin = createAdminClient();
+  await admin.from('imoveis').update({ vendido }).eq('id', id);
+
+  revalidatePath('/imoveis');
+  revalidatePath('/');
+  revalidatePath('/admin/imoveis');
+  if (slug) revalidatePath(`/imoveis/${slug}`);
+}
+
 export async function deleteImovel(formData) {
   await assertAdmin();
   const id = formData.get('id')?.toString();

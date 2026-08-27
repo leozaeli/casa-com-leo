@@ -80,6 +80,8 @@ section { padding: 120px 0; }
 .property-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
 .property-tag.status-reservado .dot { background: var(--warn); }
 .property-tag.status-vendido .dot { background: var(--off); }
+.property-tag-vendido { background: #c0392b; color: #fff; font-weight: 700; letter-spacing: .02em; }
+.detail-vendido-tag { position: static; display: inline-flex; margin: 0 0 12px; }
 .modality-tag { position: absolute; top: 16px; right: 16px; border-radius: 99px; padding: 8px 13px; color: var(--white); background: var(--ink); font-size: 11px; font-weight: 600; }
 .modality-tag.modality-temporada { color: var(--ink); background: var(--accent); }
 .modality-tag.modality-ambos { color: var(--ink); background: linear-gradient(90deg, var(--white) 50%, var(--accent) 50%); }

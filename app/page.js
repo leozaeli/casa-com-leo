@@ -1,8 +1,14 @@
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
+import ListingCard from '@/components/ListingCard';
+import { listImoveis } from '@/lib/imoveis';
 
-export default function HomePage() {
+export const revalidate = 0;
+
+export default async function HomePage() {
+  const imoveis = (await listImoveis()).slice(0, 3);
+
   return (
     <>
       <Nav active="home" />
@@ -53,139 +59,17 @@ export default function HomePage() {
                 Coberturas
               </button>
             </div>
-            <div className="property-grid">
-              <a className="property-card" data-category="casa" data-modality="venda" href="/imoveis/casa-itacimirim">
-                <div className="property-image">
-                  <img
-                    src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85"
-                    alt="Sala de estar ampla em uma casa contemporânea"
-                  />
-                  <span className="property-tag">
-                    <span className="dot"></span>Disponível
-                  </span>
-                  <span className="modality-tag modality-venda">Venda</span>
-                </div>
-                <div className="property-info">
-                  <div className="property-info-top">
-                    <h3>Casa Itacimirim</h3>
-                    <span className="property-price">R$ 8,9 mi</span>
-                  </div>
-                  <p className="property-location">Itacimirim · Bahia</p>
-                  <div className="property-meta">
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6" />
-                        <path d="M3 18v2M21 18v2M5 10V7a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3" />
-                      </svg>
-                      4 suítes
-                    </span>
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M3 9V3h6M15 3h6v6M21 15v6h-6M9 21H3v-6" />
-                      </svg>
-                      420 m²
-                    </span>
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 17h14M6 17V9l2-4h8l2 4v8M4 17h1M19 17h1" />
-                        <circle cx="7.5" cy="17" r="1.2" />
-                        <circle cx="16.5" cy="17" r="1.2" />
-                      </svg>
-                      5 vagas
-                    </span>
-                  </div>
-                </div>
-              </a>
-              <a
-                className="property-card"
-                data-category="apartamento"
-                data-modality="venda temporada"
-                href="/imoveis/apartamento-praia-do-forte"
-              >
-                <div className="property-image">
-                  <img
-                    src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1200&q=85"
-                    alt="Interior elegante de apartamento em Praia do Forte"
-                  />
-                  <span className="property-tag">
-                    <span className="dot"></span>Disponível
-                  </span>
-                  <span className="modality-tag modality-ambos">Venda e temporada</span>
-                </div>
-                <div className="property-info">
-                  <div className="property-info-top">
-                    <h3>Praia do Forte 360</h3>
-                    <span className="property-price">R$ 6,4 mi</span>
-                  </div>
-                  <p className="property-location">Praia do Forte · Bahia</p>
-                  <div className="property-meta">
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6" />
-                        <path d="M3 18v2M21 18v2M5 10V7a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3" />
-                      </svg>
-                      3 suítes
-                    </span>
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M3 9V3h6M15 3h6v6M21 15v6h-6M9 21H3v-6" />
-                      </svg>
-                      198 m²
-                    </span>
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 17h14M6 17V9l2-4h8l2 4v8M4 17h1M19 17h1" />
-                        <circle cx="7.5" cy="17" r="1.2" />
-                        <circle cx="16.5" cy="17" r="1.2" />
-                      </svg>
-                      3 vagas
-                    </span>
-                  </div>
-                </div>
-              </a>
-              <a className="property-card" data-category="cobertura" data-modality="venda" href="/imoveis/cobertura-guarajuba">
-                <div className="property-image">
-                  <img
-                    src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85"
-                    alt="Cobertura sofisticada com vista para o litoral baiano"
-                  />
-                  <span className="property-tag">
-                    <span className="dot"></span>Disponível
-                  </span>
-                  <span className="modality-tag modality-venda">Venda</span>
-                </div>
-                <div className="property-info">
-                  <div className="property-info-top">
-                    <h3>Cobertura Guarajuba</h3>
-                    <span className="property-price">R$ 12,8 mi</span>
-                  </div>
-                  <p className="property-location">Guarajuba · Bahia</p>
-                  <div className="property-meta">
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6" />
-                        <path d="M3 18v2M21 18v2M5 10V7a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3" />
-                      </svg>
-                      4 suítes
-                    </span>
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M3 9V3h6M15 3h6v6M21 15v6h-6M9 21H3v-6" />
-                      </svg>
-                      365 m²
-                    </span>
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 17h14M6 17V9l2-4h8l2 4v8M4 17h1M19 17h1" />
-                        <circle cx="7.5" cy="17" r="1.2" />
-                        <circle cx="16.5" cy="17" r="1.2" />
-                      </svg>
-                      5 vagas
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </div>
+            {imoveis.length > 0 ? (
+              <div className="property-grid">
+                {imoveis.map((imovel) => (
+                  <ListingCard key={imovel.id} imovel={imovel} />
+                ))}
+              </div>
+            ) : (
+              <div className="admin-empty">
+                <p>Novidades a caminho. Fale comigo para saber mais sobre os próximos imóveis.</p>
+              </div>
+            )}
           </div>
         </section>
 
