@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/server';
+import { enhanceImage } from '@/lib/image-enhance';
 
 const LOCATION_LABELS = {
   salvador: 'Salvador · Bahia',
@@ -82,10 +83,14 @@ export async function createImovel(prevState, formData) {
   const fotoUrls = [];
   for (let i = 0; i < photos.length; i += 1) {
     const file = photos[i];
-    const ext = file.name.split('.').pop() || 'jpg';
+    const originalBuffer = Buffer.from(await file.arrayBuffer());
+    const enhanced = await enhanceImage(originalBuffer);
+    const uploadBuffer = enhanced ? enhanced.buffer : originalBuffer;
+    const contentType = enhanced ? enhanced.contentType : file.type;
+    const ext = enhanced ? enhanced.extension : file.name.split('.').pop() || 'jpg';
     const path = `${slug}/${Date.now()}-${i}.${ext}`;
-    const { error: uploadError } = await admin.storage.from('imoveis-fotos').upload(path, file, {
-      contentType: file.type,
+    const { error: uploadError } = await admin.storage.from('imoveis-fotos').upload(path, uploadBuffer, {
+      contentType,
       upsert: false,
     });
     if (uploadError) return { error: `Erro ao enviar foto: ${uploadError.message}` };
@@ -180,10 +185,14 @@ export async function createStudio(prevState, formData) {
   const fotoUrls = [];
   for (let i = 0; i < photos.length; i += 1) {
     const file = photos[i];
-    const ext = file.name.split('.').pop() || 'jpg';
+    const originalBuffer = Buffer.from(await file.arrayBuffer());
+    const enhanced = await enhanceImage(originalBuffer);
+    const uploadBuffer = enhanced ? enhanced.buffer : originalBuffer;
+    const contentType = enhanced ? enhanced.contentType : file.type;
+    const ext = enhanced ? enhanced.extension : file.name.split('.').pop() || 'jpg';
     const path = `${slug}/${Date.now()}-${i}.${ext}`;
-    const { error: uploadError } = await admin.storage.from('studios-fotos').upload(path, file, {
-      contentType: file.type,
+    const { error: uploadError } = await admin.storage.from('studios-fotos').upload(path, uploadBuffer, {
+      contentType,
       upsert: false,
     });
     if (uploadError) return { error: `Erro ao enviar foto: ${uploadError.message}` };
