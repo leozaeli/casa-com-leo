@@ -33,12 +33,14 @@ export default async function ImovelPage({ params }) {
   const precoUsd = imovel.preco / rates.usdBrl;
   const precoEur = imovel.preco / rates.eurBrl;
 
-  const specs = [
-    { value: `📐 ${imovel.area_m2} m²`, label: imovel.area_label },
-    { value: `🛏️ ${imovel.suites}`, label: 'Suítes' },
-    { value: `🚗 ${imovel.vagas}`, label: 'Vagas' },
-    ...(imovel.specs_extra || []),
-  ];
+  const specs =
+    imovel.specs_extra && imovel.specs_extra.length > 0
+      ? imovel.specs_extra
+      : [
+          { value: `📐 ${imovel.area_m2} m²`, label: imovel.area_label },
+          { value: `🛏️ ${imovel.suites}`, label: 'Suítes' },
+          { value: `🚗 ${imovel.vagas}`, label: 'Vagas' },
+        ];
 
   return (
     <div className="property-page">

@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/server';
 import { enhanceImage } from '@/lib/image-enhance';
-import { generatePropertyCopy } from '@/lib/generate-copy';
+import { generatePropertyCopy, extractPropertyFromText } from '@/lib/generate-copy';
 
 const LOCATION_LABELS = {
   salvador: 'Salvador · Bahia',
@@ -57,62 +57,52 @@ export async function createUploadTickets(formData) {
 export async function createImovel(prevState, formData) {
   await assertAdmin();
 
-  const titulo = formData.get('titulo')?.toString().trim();
-  if (!titulo) return { error: 'Título é obrigatório.' };
-
-  let slug = formData.get('slug')?.toString().trim();
-  slug = slug ? slugify(slug) : slugify(titulo);
-  if (!slug) return { error: 'Não foi possível gerar um slug a partir do título.' };
-
-  const categoria = formData.get('categoria')?.toString();
-  const localizacaoFiltro = formData.get('localizacao_filtro')?.toString();
-  const localizacaoCustom = formData.get('localizacao_custom')?.toString().trim();
-  const localizacao = localizacaoCustom || LOCATION_LABELS[localizacaoFiltro] || localizacaoFiltro;
-
-  const modalidades = formData.getAll('modalidades');
-  if (modalidades.length === 0) return { error: 'Selecione ao menos uma modalidade (venda ou temporada).' };
-
   const preco = Number(formData.get('preco'));
-  const areaM2 = Number(formData.get('area_m2'));
-  const suites = Number(formData.get('suites') || 0);
-  const vagas = Number(formData.get('vagas') || 0);
-  if (!preco || !areaM2) return { error: 'Preço e área são obrigatórios.' };
+  if (!preco) return { error: 'Preço é obrigatório.' };
 
-  const ideiaCentral = formData.get('ideia_central')?.toString().trim();
-  if (!ideiaCentral) return { error: 'Descreva a ideia central do imóvel.' };
+  const textoBruto = formData.get('texto_bruto')?.toString().trim();
+  if (!textoBruto) return { error: 'Cole as informações do imóvel.' };
+
   const fraseDestaque = formData.get('frase_destaque')?.toString().trim() || undefined;
 
-  let manualSpecsExtra;
+  let extraido;
   try {
-    manualSpecsExtra = JSON.parse(formData.get('specs_extra')?.toString() || '[]');
-  } catch {
-    manualSpecsExtra = [];
-  }
-  if (!Array.isArray(manualSpecsExtra)) manualSpecsExtra = [];
-  manualSpecsExtra = manualSpecsExtra.filter((spec) => spec?.label && spec?.value);
-
-  let headline;
-  let paragrafo1;
-  let paragrafo2;
-  let specsExtra;
-  try {
-    const copy = await generatePropertyCopy({ ideiaCentral, fraseDestaque, titulo, localizacao, tipo: 'imóvel' });
-    headline = copy.headline;
-    paragrafo1 = copy.paragrafo_1;
-    paragrafo2 = copy.paragrafo_2 || null;
-    specsExtra = [...(copy.specs_extra || []), ...manualSpecsExtra];
+    extraido = await extractPropertyFromText({ textoBruto, preco, fraseDestaque, tipo: 'imóvel' });
   } catch (aiError) {
-    console.error('Erro ao gerar copy com IA:', aiError);
-    return { error: 'Não foi possível gerar o texto automático agora. Tente novamente em instantes.' };
+    console.error('Erro ao extrair dados do imóvel com IA:', aiError);
+    return { error: 'Não foi possível interpretar o texto automaticamente agora. Tente novamente em instantes.' };
   }
-  const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Imóvel · Exclusivo';
-  const areaLabel = formData.get('area_label')?.toString() || 'Área construída';
+
+  const titulo = extraido.titulo?.trim();
+  if (!titulo) return { error: 'Não foi possível identificar um título a partir do texto enviado.' };
+
+  const categoria = extraido.categoria;
+  const localizacaoFiltro = extraido.localizacao_filtro;
+  const localizacao = extraido.localizacao;
+  const modalidades = extraido.modalidades && extraido.modalidades.length > 0 ? extraido.modalidades : ['venda'];
+  const areaM2 = extraido.area_m2;
+  const suites = extraido.suites || 0;
+  const vagas = extraido.vagas || 0;
+  const areaLabel = extraido.area_label || 'Área construída';
+  const eyebrow = extraido.eyebrow || 'Imóvel · Exclusivo';
+  const headline = extraido.headline;
+  const paragrafo1 = extraido.paragrafo_1;
+  const paragrafo2 = extraido.paragrafo_2 || null;
+  const specsExtra = extraido.specs || [];
   const destaque = formData.get('destaque') === 'on';
 
   const admin = createAdminClient();
 
-  const { data: existing } = await admin.from('imoveis').select('id').eq('slug', slug).maybeSingle();
-  if (existing) return { error: `Já existe um imóvel com o endereço /imoveis/${slug}. Escolha outro.` };
+  const baseSlug = slugify(titulo);
+  if (!baseSlug) return { error: 'Não foi possível gerar um endereço de página a partir do título identificado.' };
+  let slug = baseSlug;
+  let suffix = 2;
+  for (;;) {
+    const { data: existing } = await admin.from('imoveis').select('id').eq('slug', slug).maybeSingle();
+    if (!existing) break;
+    slug = `${baseSlug}-${suffix}`;
+    suffix += 1;
+  }
 
   let fotoPaths;
   try {
@@ -201,22 +191,35 @@ export async function updateImovel(formData) {
   if (!preco || !areaM2) return { error: 'Preço e área são obrigatórios.' };
 
   const headline = formData.get('headline')?.toString().trim();
-  const paragrafo1 = formData.get('paragrafo_1')?.toString().trim();
-  if (!headline || !paragrafo1) return { error: 'Preencha o texto de apresentação do imóvel.' };
-  const paragrafo2 = formData.get('paragrafo_2')?.toString().trim() || null;
+  if (!headline) return { error: 'Preencha a frase de destaque.' };
+  const descricao = formData.get('descricao')?.toString().trim();
+  if (!descricao) return { error: 'Descreva o imóvel.' };
   const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Imóvel · Exclusivo';
   const areaLabel = formData.get('area_label')?.toString() || 'Área construída';
   const destaque = formData.get('destaque') === 'on';
   const vendido = formData.get('vendido') === 'on';
 
+  let manualSpecsExtra;
+  try {
+    manualSpecsExtra = JSON.parse(formData.get('specs_extra')?.toString() || '[]');
+  } catch {
+    manualSpecsExtra = [];
+  }
+  if (!Array.isArray(manualSpecsExtra)) manualSpecsExtra = [];
+  manualSpecsExtra = manualSpecsExtra.filter((spec) => spec?.label && spec?.value);
+
+  let paragrafo1;
+  let paragrafo2;
   let specsExtra;
   try {
-    specsExtra = JSON.parse(formData.get('specs_extra')?.toString() || '[]');
-  } catch {
-    specsExtra = [];
+    const copy = await generatePropertyCopy({ ideiaCentral: descricao, fraseDestaque: headline, titulo, localizacao, tipo: 'imóvel' });
+    paragrafo1 = copy.paragrafo_1;
+    paragrafo2 = copy.paragrafo_2 || null;
+    specsExtra = [...(copy.specs_extra || []), ...manualSpecsExtra];
+  } catch (aiError) {
+    console.error('Erro ao gerar copy com IA:', aiError);
+    return { error: 'Não foi possível gerar o texto automático agora. Tente novamente em instantes.' };
   }
-  if (!Array.isArray(specsExtra)) specsExtra = [];
-  specsExtra = specsExtra.filter((spec) => spec?.label && spec?.value);
 
   let fotos;
   try {

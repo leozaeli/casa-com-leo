@@ -170,14 +170,19 @@ export default function EditImovelForm({ imovel }) {
         <label>
           Frase de destaque
           <input name="headline" required defaultValue={imovel.headline} />
+          <span className="admin-hint">Usada exatamente como está escrita — a IA não altera essa frase.</span>
         </label>
         <label>
-          Primeiro parágrafo
-          <textarea name="paragrafo_1" required defaultValue={imovel.paragrafo_1}></textarea>
-        </label>
-        <label>
-          Segundo parágrafo (opcional)
-          <textarea name="paragrafo_2" defaultValue={imovel.paragrafo_2 || ''}></textarea>
+          Descrição
+          <textarea
+            name="descricao"
+            required
+            defaultValue={[imovel.paragrafo_1, imovel.paragrafo_2].filter(Boolean).join(' ')}
+          ></textarea>
+          <span className="admin-hint">
+            A IA transforma essa descrição no texto de apresentação da página a cada vez que você salva, e também
+            atualiza os destaques identificados nela.
+          </span>
         </label>
       </div>
 
