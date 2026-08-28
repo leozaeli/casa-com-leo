@@ -370,6 +370,7 @@
   box-shadow: 0 -4px 24px rgba(24, 21, 15, .06), 0 1px 0 var(--line);
 }
 .admin-form-error { color: var(--off); font-size: 13px; }
+.admin-form-success { color: var(--ok); font-size: 13px; }
 .admin-spec-row { align-items: end; }
 .admin-spec-remove { flex: 0 0 auto; align-self: end; width: 46px; height: 46px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); color: var(--muted); font-size: 12px; cursor: pointer; }
 .admin-spec-remove:hover { background: var(--card); color: var(--ink); }

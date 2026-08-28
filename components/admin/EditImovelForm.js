@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { updateImovel, createUploadTickets } from '@/app/admin/actions';
 import { uploadFilesWithProgress } from '@/lib/client-upload';
+import SpecsExtraEditor from '@/components/admin/SpecsExtraEditor';
 
 export default function EditImovelForm({ imovel }) {
   const [error, setError] = useState(null);
@@ -15,18 +16,6 @@ export default function EditImovelForm({ imovel }) {
 
   function removerFoto(url) {
     setFotosAtuais((atual) => atual.filter((foto) => foto !== url));
-  }
-
-  function atualizarSpec(index, campo, valor) {
-    setSpecsExtra((atual) => atual.map((spec, i) => (i === index ? { ...spec, [campo]: valor } : spec)));
-  }
-
-  function removerSpec(index) {
-    setSpecsExtra((atual) => atual.filter((_, i) => i !== index));
-  }
-
-  function adicionarSpec() {
-    setSpecsExtra((atual) => [...atual, { value: '', label: '' }]);
   }
 
   async function handleSubmit(event) {
@@ -191,36 +180,7 @@ export default function EditImovelForm({ imovel }) {
         </label>
       </div>
 
-      <div className="admin-form-section">
-        <h2>Detalhes extras (opcional)</h2>
-        <span className="admin-hint">Adicione quantos quiser. A IA já sugere alguns a partir das comodidades informadas na criação.</span>
-        {specsExtra.map((spec, index) => (
-          <div className="admin-form-row admin-spec-row" key={index}>
-            <label>
-              Valor
-              <input
-                value={spec.value}
-                onChange={(event) => atualizarSpec(index, 'value', event.target.value)}
-                placeholder="Ex: Rooftop"
-              />
-            </label>
-            <label>
-              Rótulo
-              <input
-                value={spec.label}
-                onChange={(event) => atualizarSpec(index, 'label', event.target.value)}
-                placeholder="Ex: Área externa"
-              />
-            </label>
-            <button type="button" className="admin-spec-remove" onClick={() => removerSpec(index)} aria-label="Remover detalhe">
-              ✕
-            </button>
-          </div>
-        ))}
-        <button type="button" className="button ghost admin-spec-add" onClick={adicionarSpec}>
-          + Adicionar detalhe
-        </button>
-      </div>
+      <SpecsExtraEditor specs={specsExtra} onChange={setSpecsExtra} />
 
       <div className="admin-form-section">
         <h2>Fotos</h2>

@@ -5,6 +5,7 @@ import WhatsAppFloat from '@/components/WhatsAppFloat';
 import HeroCarousel from '@/components/HeroCarousel';
 import MosaicGallery from '@/components/MosaicGallery';
 import { getImovelBySlug, formatPrice, formatPriceFull, coverPhoto } from '@/lib/imoveis';
+import { getExchangeRates, formatUSD, formatEUR } from '@/lib/currency';
 
 export const revalidate = 0;
 
@@ -28,6 +29,9 @@ export default async function ImovelPage({ params }) {
 
   const modalidades = imovel.modalidades && imovel.modalidades.length > 0 ? imovel.modalidades : ['venda'];
   const fotos = imovel.fotos && imovel.fotos.length > 0 ? imovel.fotos : [coverPhoto(imovel)];
+  const rates = await getExchangeRates();
+  const precoUsd = imovel.preco / rates.usdBrl;
+  const precoEur = imovel.preco / rates.eurBrl;
 
   const specs = [
     { value: `${imovel.area_m2} m²`, label: imovel.area_label },
@@ -77,6 +81,14 @@ export default async function ImovelPage({ params }) {
                   <span>{spec.label}</span>
                 </div>
               ))}
+            </div>
+            <div className="price-conversions">
+              <span>
+                ≈ {formatUSD(precoUsd)} <em>(valor aproximado)</em>
+              </span>
+              <span>
+                ≈ {formatEUR(precoEur)} <em>(valor aproximado)</em>
+              </span>
             </div>
           </div>
         </section>

@@ -5,6 +5,7 @@ import WhatsAppFloat from '@/components/WhatsAppFloat';
 import HeroCarousel from '@/components/HeroCarousel';
 import MosaicGallery from '@/components/MosaicGallery';
 import { getStudioBySlug, formatPrice, formatPriceFull, coverPhoto, TIPOLOGIA_LABEL } from '@/lib/studios';
+import { getExchangeRates, formatUSD, formatEUR } from '@/lib/currency';
 
 export const revalidate = 0;
 
@@ -25,6 +26,9 @@ export default async function StudioPage({ params }) {
   if (!studio) notFound();
 
   const fotos = studio.fotos && studio.fotos.length > 0 ? studio.fotos : [coverPhoto(studio)];
+  const rates = await getExchangeRates();
+  const precoUsd = studio.preco / rates.usdBrl;
+  const precoEur = studio.preco / rates.eurBrl;
 
   const specs = [
     { value: `${studio.area_m2} m²`, label: 'Área' },
@@ -69,6 +73,14 @@ export default async function StudioPage({ params }) {
                   <span>{spec.label}</span>
                 </div>
               ))}
+            </div>
+            <div className="price-conversions">
+              <span>
+                ≈ {formatUSD(precoUsd)} <em>(valor aproximado)</em>
+              </span>
+              <span>
+                ≈ {formatEUR(precoEur)} <em>(valor aproximado)</em>
+              </span>
             </div>
           </div>
         </section>

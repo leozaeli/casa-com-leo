@@ -3,15 +3,19 @@
 import { useState } from 'react';
 import { createImovel, createUploadTickets } from '@/app/admin/actions';
 import { uploadFilesWithProgress } from '@/lib/client-upload';
+import SpecsExtraEditor from '@/components/admin/SpecsExtraEditor';
 
 export default function NovoImovelPage() {
   const [error, setError] = useState(null);
   const [pending, setPending] = useState(false);
   const [progress, setProgress] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [specsExtra, setSpecsExtra] = useState([]);
 
   async function handleSubmit(event) {
     event.preventDefault();
     setError(null);
+    setSuccess(false);
 
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -50,13 +54,25 @@ export default function NovoImovelPage() {
 
     formData.delete('fotos');
     formData.set('foto_paths', JSON.stringify(ticketsResult.tickets.map((t) => t.path)));
+    formData.set('specs_extra', JSON.stringify(specsExtra.filter((spec) => spec.value?.trim() && spec.label?.trim())));
 
     const result = await createImovel(null, formData);
     if (result?.error) {
       setError(result.error);
       setPending(false);
       setProgress(null);
+      return;
     }
+
+    if (result?.url) {
+      window.open(result.url, '_blank', 'noopener,noreferrer');
+    }
+
+    form.reset();
+    setSpecsExtra([]);
+    setPending(false);
+    setProgress(null);
+    setSuccess(true);
   }
 
   return (
@@ -168,19 +184,7 @@ export default function NovoImovelPage() {
           </label>
         </div>
 
-        <div className="admin-form-section">
-          <h2>Comodidades e diferenciais (opcional)</h2>
-          <label>
-            Comodidades
-            <textarea
-              name="comodidades"
-              placeholder="Liste solto o que tiver, sem se preocupar com formato. Ex: 3 suítes, piscina, 2 vagas de garagem, escritório no térreo, área gourmet, churrasqueira, ambientes climatizados, espaço pet."
-            ></textarea>
-            <span className="admin-hint">
-              A IA escolhe os destaques mais relevantes dessa lista para mostrar na página do imóvel.
-            </span>
-          </label>
-        </div>
+        <SpecsExtraEditor specs={specsExtra} onChange={setSpecsExtra} />
 
         <div className="admin-form-section">
           <h2>Fotos</h2>
@@ -207,6 +211,7 @@ export default function NovoImovelPage() {
           </div>
         )}
 
+        {success && <p className="admin-form-success">Imóvel publicado — a página abriu em uma nova aba.</p>}
         {error && <p className="admin-form-error">{error}</p>}
 
         <div className="admin-submit-row">
