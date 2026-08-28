@@ -50,6 +50,8 @@ export default async function StudioPage({ params }) {
             <div className="detail-meta">
               <span>{studio.localizacao}</span>
               <span>A partir de {formatPriceFull(studio.preco)}</span>
+              <span title="Valor aproximado">{formatUSD(precoUsd)}</span>
+              <span title="Valor aproximado">{formatEUR(precoEur)}</span>
             </div>
           </div>
         </section>
@@ -73,14 +75,6 @@ export default async function StudioPage({ params }) {
                   <span>{spec.label}</span>
                 </div>
               ))}
-            </div>
-            <div className="price-conversions">
-              <span>
-                ≈ {formatUSD(precoUsd)} <em>(valor aproximado)</em>
-              </span>
-              <span>
-                ≈ {formatEUR(precoEur)} <em>(valor aproximado)</em>
-              </span>
             </div>
           </div>
         </section>

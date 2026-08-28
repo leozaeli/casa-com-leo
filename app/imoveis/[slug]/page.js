@@ -55,6 +55,8 @@ export default async function ImovelPage({ params }) {
             <div className="detail-meta">
               <span>{imovel.localizacao}</span>
               <span>{formatPriceFull(imovel.preco)}</span>
+              <span title="Valor aproximado">{formatUSD(precoUsd)}</span>
+              <span title="Valor aproximado">{formatEUR(precoEur)}</span>
               {modalidades.map((modalidade) => (
                 <span key={modalidade}>{MODALITY_LABEL[modalidade] || modalidade}</span>
               ))}
@@ -81,14 +83,6 @@ export default async function ImovelPage({ params }) {
                   <span>{spec.label}</span>
                 </div>
               ))}
-            </div>
-            <div className="price-conversions">
-              <span>
-                ≈ {formatUSD(precoUsd)} <em>(valor aproximado)</em>
-              </span>
-              <span>
-                ≈ {formatEUR(precoEur)} <em>(valor aproximado)</em>
-              </span>
             </div>
           </div>
         </section>
