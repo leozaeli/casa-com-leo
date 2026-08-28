@@ -31,7 +31,7 @@ export default async function StudioPage({ params }) {
   const precoEur = studio.preco / rates.eurBrl;
 
   const specs = [
-    { value: `📐 ${studio.area_m2} m²`, label: 'Área' },
+    { value: `${studio.area_m2} m²`, label: 'Área' },
     { value: TIPOLOGIA_LABEL[studio.tipologia] || studio.tipologia, label: 'Tipologia' },
     ...(studio.specs_extra || []),
   ];
