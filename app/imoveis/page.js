@@ -42,9 +42,14 @@ export default async function ImoveisPage() {
                   <span className="eyebrow-tag">Refine sua busca</span>
                   <h2>Do seu jeito.</h2>
                 </div>
-                <button className="clear-filters" type="button" id="clear-filters">
-                  Limpar filtros
-                </button>
+                <div className="filter-panel-actions">
+                  <a className="filter" href="/studios">
+                    Studios
+                  </a>
+                  <button className="clear-filters" type="button" id="clear-filters">
+                    Limpar filtros
+                  </button>
+                </div>
               </div>
               <div className="filter-fields">
                 <label>
@@ -64,6 +69,7 @@ export default async function ImoveisPage() {
                     <option value="casa">Casa</option>
                     <option value="apartamento">Apartamento</option>
                     <option value="cobertura">Cobertura</option>
+                    <option value="terreno">Terreno</option>
                   </select>
                 </label>
                 <label>

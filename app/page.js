@@ -58,6 +58,12 @@ export default async function HomePage() {
               <button className="filter" data-filter="cobertura">
                 Coberturas
               </button>
+              <button className="filter" data-filter="terreno">
+                Terrenos
+              </button>
+              <a className="filter" href="/studios">
+                Studios
+              </a>
             </div>
             {imoveis.length > 0 ? (
               <div className="property-grid">

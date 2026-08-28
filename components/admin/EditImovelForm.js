@@ -116,6 +116,7 @@ export default function EditImovelForm({ imovel }) {
               <option value="casa">Casa</option>
               <option value="apartamento">Apartamento</option>
               <option value="cobertura">Cobertura</option>
+              <option value="terreno">Terreno</option>
             </select>
           </label>
         </div>
