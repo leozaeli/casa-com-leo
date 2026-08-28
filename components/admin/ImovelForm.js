@@ -11,6 +11,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
   const [pending, setPending] = useState(false);
   const [progress, setProgress] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [savedUrl, setSavedUrl] = useState(null);
   const [fotosAtuais, setFotosAtuais] = useState(imovel?.fotos || []);
   const [specsExtra, setSpecsExtra] = useState(
     imovel?.specs_extra && imovel.specs_extra.length > 0 ? imovel.specs_extra : []
@@ -24,6 +25,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
     event.preventDefault();
     setError(null);
     setSuccess(false);
+    setSavedUrl(null);
 
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -47,7 +49,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         setProgress(null);
         return;
       }
-      if (result?.url) window.open(result.url, '_blank', 'noopener,noreferrer');
+      if (result?.url) setSavedUrl(result.url);
       if (!isEdit) {
         form.reset();
         setSpecsExtra([]);
@@ -266,7 +268,12 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
 
       {success && (
         <p className="admin-form-success">
-          {isEdit ? 'Alterações salvas — a página abriu em uma nova aba.' : 'Imóvel publicado — a página abriu em uma nova aba.'}
+          {isEdit ? 'Alterações salvas.' : 'Imóvel publicado.'}{' '}
+          {savedUrl && (
+            <a href={savedUrl} target="_blank" rel="noopener noreferrer">
+              Ver página →
+            </a>
+          )}
         </p>
       )}
       {error && <p className="admin-form-error">{error}</p>}

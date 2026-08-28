@@ -6,14 +6,6 @@ import { createAdminClient } from '@/lib/supabase/server';
 import { enhanceImage } from '@/lib/image-enhance';
 import { generatePropertyCopy } from '@/lib/generate-copy';
 
-function buildSpecsExtra({ areaM2, areaLabel, suites, vagas, manualSpecs }) {
-  const specs = [];
-  if (areaM2 > 0) specs.push({ value: `📐 ${areaM2} m²`, label: areaLabel });
-  if (suites > 0) specs.push({ value: `🛏️ ${suites}`, label: 'Suítes' });
-  if (vagas > 0) specs.push({ value: `🚗 ${vagas}`, label: 'Vagas' });
-  return [...specs, ...manualSpecs];
-}
-
 function slugify(text) {
   return text
     .normalize('NFD')
@@ -128,8 +120,6 @@ export async function createImovel(prevState, formData) {
     console.error('Erro ao gerar copy com IA:', aiError);
     return { error: 'Não foi possível gerar o texto automático agora. Tente novamente em instantes.' };
   }
-  const specsExtra = buildSpecsExtra({ areaM2, areaLabel, suites, vagas, manualSpecs: manualSpecsExtra });
-
   const baseSlug = slugify(titulo);
   if (!baseSlug) return { error: 'Não foi possível gerar um endereço de página a partir do título identificado.' };
   let slug = baseSlug;
@@ -186,7 +176,7 @@ export async function createImovel(prevState, formData) {
     headline,
     paragrafo_1: paragrafo1,
     paragrafo_2: paragrafo2,
-    specs_extra: specsExtra,
+    specs_extra: manualSpecsExtra,
     fotos: fotoUrls,
     destaque,
   });
@@ -257,8 +247,6 @@ export async function updateImovel(formData) {
     console.error('Erro ao gerar copy com IA:', aiError);
     return { error: 'Não foi possível gerar o texto automático agora. Tente novamente em instantes.' };
   }
-  const specsExtra = buildSpecsExtra({ areaM2, areaLabel, suites, vagas, manualSpecs: manualSpecsExtra });
-
   let fotos;
   try {
     fotos = JSON.parse(formData.get('fotos_atuais')?.toString() || '[]');
@@ -312,7 +300,7 @@ export async function updateImovel(formData) {
       headline,
       paragrafo_1: paragrafo1,
       paragrafo_2: paragrafo2,
-      specs_extra: specsExtra,
+      specs_extra: manualSpecsExtra,
       fotos,
       destaque,
       vendido,

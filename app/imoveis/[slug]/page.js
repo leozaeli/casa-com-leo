@@ -4,7 +4,7 @@ import { SimpleFooter } from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import HeroCarousel from '@/components/HeroCarousel';
 import MosaicGallery from '@/components/MosaicGallery';
-import { getImovelBySlug, formatPrice, formatPriceFull, coverPhoto } from '@/lib/imoveis';
+import { getImovelBySlug, formatPrice, formatPriceFull, coverPhoto, buildImovelSpecs } from '@/lib/imoveis';
 import { getExchangeRates, formatUSD, formatEUR } from '@/lib/currency';
 
 export const revalidate = 0;
@@ -33,14 +33,7 @@ export default async function ImovelPage({ params }) {
   const precoUsd = imovel.preco / rates.usdBrl;
   const precoEur = imovel.preco / rates.eurBrl;
 
-  const specs =
-    imovel.specs_extra && imovel.specs_extra.length > 0
-      ? imovel.specs_extra
-      : [
-          { value: `📐 ${imovel.area_m2} m²`, label: imovel.area_label },
-          { value: `🛏️ ${imovel.suites}`, label: 'Suítes' },
-          { value: `🚗 ${imovel.vagas}`, label: 'Vagas' },
-        ];
+  const specs = buildImovelSpecs(imovel);
 
   return (
     <div className="property-page">
