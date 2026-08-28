@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import { createImovel, createUploadTickets } from '@/app/admin/actions';
 import { uploadFilesWithProgress } from '@/lib/client-upload';
+import SpecsExtraEditor from '@/components/admin/SpecsExtraEditor';
 
 export default function NovoImovelPage() {
   const [error, setError] = useState(null);
   const [pending, setPending] = useState(false);
   const [progress, setProgress] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [specsExtra, setSpecsExtra] = useState([]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -52,6 +54,7 @@ export default function NovoImovelPage() {
 
     formData.delete('fotos');
     formData.set('foto_paths', JSON.stringify(ticketsResult.tickets.map((t) => t.path)));
+    formData.set('specs_extra', JSON.stringify(specsExtra.filter((spec) => spec.value?.trim() && spec.label?.trim())));
 
     const result = await createImovel(null, formData);
     if (result?.error) {
@@ -66,6 +69,7 @@ export default function NovoImovelPage() {
     }
 
     form.reset();
+    setSpecsExtra([]);
     setPending(false);
     setProgress(null);
     setSuccess(true);
@@ -78,8 +82,9 @@ export default function NovoImovelPage() {
           <span className="admin-eyebrow">Cadastro</span>
           <h1>Novo imóvel</h1>
           <p className="admin-page-subtitle">
-            Preencha o valor, cole as informações do imóvel e envie as fotos — a IA identifica o resto (título,
-            localização, tipo, área, suítes, vagas e os destaques) e cria a página automaticamente ao publicar.
+            Preencha o valor e os números, cole as informações do imóvel e envie as fotos — a página é criada
+            automaticamente ao publicar. Tudo que você preencher em Números e Informações técnicas vira um label na
+            página; a IA cuida do título, da localização, do tipo e do texto de apresentação.
           </p>
         </div>
       </div>
@@ -94,17 +99,46 @@ export default function NovoImovelPage() {
         </div>
 
         <div className="admin-form-section">
+          <h2>Números</h2>
+          <div className="admin-form-row">
+            <label>
+              Área (m²)
+              <input name="area_m2" type="number" min="0" step="1" required placeholder="420" />
+            </label>
+            <label>
+              Rótulo da área
+              <select name="area_label" defaultValue="Área construída">
+                <option value="Área construída">Área construída</option>
+                <option value="Área privativa">Área privativa</option>
+                <option value="Área do terreno">Área do terreno</option>
+              </select>
+            </label>
+            <label>
+              Suítes
+              <input name="suites" type="number" min="0" defaultValue="0" />
+            </label>
+            <label>
+              Vagas
+              <input name="vagas" type="number" min="0" defaultValue="0" />
+            </label>
+          </div>
+          <span className="admin-hint">Tudo que for preenchido aqui vira um label na página do imóvel.</span>
+        </div>
+
+        <SpecsExtraEditor specs={specsExtra} onChange={setSpecsExtra} />
+
+        <div className="admin-form-section">
           <h2>Informações do imóvel</h2>
           <label>
             Cole aqui as informações do imóvel
             <textarea
               name="texto_bruto"
               required
-              placeholder="Cole a descrição, anúncio ou mensagem com os detalhes do imóvel: nome/apelido, localização, tipo (casa, apartamento, cobertura, terreno), área, suítes, vagas, comodidades (piscina, churrasqueira, vista etc.), venda e/ou temporada..."
+              placeholder="Cole a descrição, anúncio ou mensagem com os detalhes do imóvel: nome/apelido, localização, tipo (casa, apartamento, cobertura, terreno), venda e/ou temporada, e tudo que ajude a IA a escrever uma apresentação robusta (história do imóvel, entorno, rotina de quem mora lá)..."
             ></textarea>
             <span className="admin-hint">
-              A IA lê esse texto e identifica sozinha o título, a localização, o tipo, a área, as suítes, as vagas, a
-              modalidade e os destaques mais importantes para mostrar na página.
+              A IA lê esse texto e identifica o título, a localização, o tipo e a modalidade, e escreve o texto de
+              apresentação completo da página. Área, suítes, vagas e as informações técnicas ficam por sua conta acima.
             </span>
           </label>
           <label>

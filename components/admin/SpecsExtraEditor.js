@@ -15,8 +15,11 @@ export default function SpecsExtraEditor({ specs, onChange }) {
 
   return (
     <div className="admin-form-section">
-      <h2>Detalhes extras (opcional)</h2>
-      <span className="admin-hint">Adicione quantos quiser. Ex: &quot;3&quot; / &quot;Suítes&quot;, &quot;Sim&quot; / &quot;Piscina&quot;.</span>
+      <h2>Informações técnicas</h2>
+      <span className="admin-hint">
+        Tudo que você preencher aqui vira um label na página do imóvel. Adicione quantos quiser. Ex: &quot;Sim&quot; /
+        &quot;Piscina&quot;, &quot;2&quot; / &quot;Banheiros&quot;.
+      </span>
       {specs.map((spec, index) => (
         <div className="admin-form-row admin-spec-row" key={index}>
           <label>

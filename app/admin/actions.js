@@ -14,6 +14,14 @@ const LOCATION_LABELS = {
   guarajuba: 'Guarajuba · Bahia',
 };
 
+function buildSpecsExtra({ areaM2, areaLabel, suites, vagas, manualSpecs }) {
+  const specs = [];
+  if (areaM2 > 0) specs.push({ value: `📐 ${areaM2} m²`, label: areaLabel });
+  if (suites > 0) specs.push({ value: `🛏️ ${suites}`, label: 'Suítes' });
+  if (vagas > 0) specs.push({ value: `🚗 ${vagas}`, label: 'Vagas' });
+  return [...specs, ...manualSpecs];
+}
+
 function slugify(text) {
   return text
     .normalize('NFD')
@@ -63,6 +71,21 @@ export async function createImovel(prevState, formData) {
   const textoBruto = formData.get('texto_bruto')?.toString().trim();
   if (!textoBruto) return { error: 'Cole as informações do imóvel.' };
 
+  const areaM2 = Number(formData.get('area_m2'));
+  if (!areaM2) return { error: 'Área é obrigatória.' };
+  const areaLabel = formData.get('area_label')?.toString() || 'Área construída';
+  const suites = Number(formData.get('suites') || 0);
+  const vagas = Number(formData.get('vagas') || 0);
+
+  let manualSpecsExtra;
+  try {
+    manualSpecsExtra = JSON.parse(formData.get('specs_extra')?.toString() || '[]');
+  } catch {
+    manualSpecsExtra = [];
+  }
+  if (!Array.isArray(manualSpecsExtra)) manualSpecsExtra = [];
+  manualSpecsExtra = manualSpecsExtra.filter((spec) => spec?.label && spec?.value);
+
   const fraseDestaque = formData.get('frase_destaque')?.toString().trim() || undefined;
 
   let extraido;
@@ -80,15 +103,11 @@ export async function createImovel(prevState, formData) {
   const localizacaoFiltro = extraido.localizacao_filtro;
   const localizacao = extraido.localizacao;
   const modalidades = extraido.modalidades && extraido.modalidades.length > 0 ? extraido.modalidades : ['venda'];
-  const areaM2 = extraido.area_m2;
-  const suites = extraido.suites || 0;
-  const vagas = extraido.vagas || 0;
-  const areaLabel = extraido.area_label || 'Área construída';
   const eyebrow = extraido.eyebrow || 'Imóvel · Exclusivo';
   const headline = extraido.headline;
   const paragrafo1 = extraido.paragrafo_1;
   const paragrafo2 = extraido.paragrafo_2 || null;
-  const specsExtra = extraido.specs || [];
+  const specsExtra = buildSpecsExtra({ areaM2, areaLabel, suites, vagas, manualSpecs: manualSpecsExtra });
   const destaque = formData.get('destaque') === 'on';
 
   const admin = createAdminClient();
@@ -210,16 +229,15 @@ export async function updateImovel(formData) {
 
   let paragrafo1;
   let paragrafo2;
-  let specsExtra;
   try {
     const copy = await generatePropertyCopy({ ideiaCentral: descricao, fraseDestaque: headline, titulo, localizacao, tipo: 'imóvel' });
     paragrafo1 = copy.paragrafo_1;
     paragrafo2 = copy.paragrafo_2 || null;
-    specsExtra = [...(copy.specs_extra || []), ...manualSpecsExtra];
   } catch (aiError) {
     console.error('Erro ao gerar copy com IA:', aiError);
     return { error: 'Não foi possível gerar o texto automático agora. Tente novamente em instantes.' };
   }
+  const specsExtra = buildSpecsExtra({ areaM2, areaLabel, suites, vagas, manualSpecs: manualSpecsExtra });
 
   let fotos;
   try {
