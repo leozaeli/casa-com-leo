@@ -40,17 +40,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
     formData.set('specs_extra', JSON.stringify(specsExtra.filter((spec) => spec.value?.trim() && spec.label?.trim())));
 
     async function submit() {
-      if (isEdit) {
-        const result = await updateImovel(formData);
-        if (result?.error) {
-          setError(result.error);
-          setPending(false);
-          setProgress(null);
-        }
-        return;
-      }
-
-      const result = await createImovel(null, formData);
+      const result = isEdit ? await updateImovel(formData) : await createImovel(null, formData);
       if (result?.error) {
         setError(result.error);
         setPending(false);
@@ -58,8 +48,10 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         return;
       }
       if (result?.url) window.open(result.url, '_blank', 'noopener,noreferrer');
-      form.reset();
-      setSpecsExtra([]);
+      if (!isEdit) {
+        form.reset();
+        setSpecsExtra([]);
+      }
       setPending(false);
       setProgress(null);
       setSuccess(true);
@@ -272,7 +264,11 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         </div>
       )}
 
-      {!isEdit && success && <p className="admin-form-success">Imóvel publicado — a página abriu em uma nova aba.</p>}
+      {success && (
+        <p className="admin-form-success">
+          {isEdit ? 'Alterações salvas — a página abriu em uma nova aba.' : 'Imóvel publicado — a página abriu em uma nova aba.'}
+        </p>
+      )}
       {error && <p className="admin-form-error">{error}</p>}
 
       <div className="admin-submit-row">

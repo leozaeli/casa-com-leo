@@ -1,7 +1,6 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/server';
 import { enhanceImage } from '@/lib/image-enhance';
@@ -326,7 +325,7 @@ export async function updateImovel(formData) {
   revalidatePath('/');
   revalidatePath('/admin/imoveis');
   revalidatePath(`/imoveis/${slug}`);
-  redirect(`https://www.casacomleo.com.br/imoveis/${slug}`);
+  return { success: true, slug, url: `https://www.casacomleo.com.br/imoveis/${slug}` };
 }
 
 export async function toggleVendido(formData) {
