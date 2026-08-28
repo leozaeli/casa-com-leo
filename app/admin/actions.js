@@ -5,14 +5,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/server';
 import { enhanceImage } from '@/lib/image-enhance';
-import { generatePropertyCopy, extractPropertyFromText } from '@/lib/generate-copy';
-
-const LOCATION_LABELS = {
-  salvador: 'Salvador · Bahia',
-  'praia-do-forte': 'Praia do Forte · Bahia',
-  itacimirim: 'Itacimirim · Bahia',
-  guarajuba: 'Guarajuba · Bahia',
-};
+import { generatePropertyCopy } from '@/lib/generate-copy';
 
 function buildSpecsExtra({ areaM2, areaLabel, suites, vagas, manualSpecs }) {
   const specs = [];
@@ -62,20 +55,54 @@ export async function createUploadTickets(formData) {
   return { tickets };
 }
 
+export async function createLocalizacao(prevState, formData) {
+  await assertAdmin();
+
+  const nome = formData.get('nome')?.toString().trim();
+  if (!nome) return { error: 'Nome é obrigatório.' };
+
+  const slug = slugify(nome);
+  if (!slug) return { error: 'Não foi possível gerar um identificador a partir do nome.' };
+
+  const admin = createAdminClient();
+  const { data: existing } = await admin.from('localizacoes').select('id').eq('slug', slug).maybeSingle();
+  if (existing) return { error: 'Essa localização já existe.' };
+
+  const { error: insertError } = await admin.from('localizacoes').insert({ nome, slug });
+  if (insertError) return { error: `Erro ao salvar localização: ${insertError.message}` };
+
+  revalidatePath('/admin/imoveis/localizacoes');
+  revalidatePath('/admin/imoveis/novo');
+  revalidatePath('/imoveis');
+  return { success: true };
+}
+
 export async function createImovel(prevState, formData) {
   await assertAdmin();
 
+  const titulo = formData.get('titulo')?.toString().trim();
+  if (!titulo) return { error: 'Título é obrigatório.' };
+
+  const categoria = formData.get('categoria')?.toString();
+  const localizacaoFiltro = formData.get('localizacao_filtro')?.toString();
+  if (!localizacaoFiltro) return { error: 'Selecione a localização.' };
+
+  const modalidades = formData.getAll('modalidades');
+  if (modalidades.length === 0) return { error: 'Selecione ao menos uma modalidade (venda ou temporada).' };
+
   const preco = Number(formData.get('preco'));
-  if (!preco) return { error: 'Preço é obrigatório.' };
-
-  const textoBruto = formData.get('texto_bruto')?.toString().trim();
-  if (!textoBruto) return { error: 'Cole as informações do imóvel.' };
-
   const areaM2 = Number(formData.get('area_m2'));
-  if (!areaM2) return { error: 'Área é obrigatória.' };
-  const areaLabel = formData.get('area_label')?.toString() || 'Área construída';
   const suites = Number(formData.get('suites') || 0);
   const vagas = Number(formData.get('vagas') || 0);
+  if (!preco || !areaM2) return { error: 'Preço e área são obrigatórios.' };
+
+  const headline = formData.get('headline')?.toString().trim();
+  if (!headline) return { error: 'Preencha a frase de destaque.' };
+  const descricao = formData.get('descricao')?.toString().trim();
+  if (!descricao) return { error: 'Descreva o imóvel.' };
+  const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Imóvel · Exclusivo';
+  const areaLabel = formData.get('area_label')?.toString() || 'Área construída';
+  const destaque = formData.get('destaque') === 'on';
 
   let manualSpecsExtra;
   try {
@@ -86,31 +113,23 @@ export async function createImovel(prevState, formData) {
   if (!Array.isArray(manualSpecsExtra)) manualSpecsExtra = [];
   manualSpecsExtra = manualSpecsExtra.filter((spec) => spec?.label && spec?.value);
 
-  const fraseDestaque = formData.get('frase_destaque')?.toString().trim() || undefined;
-
-  let extraido;
-  try {
-    extraido = await extractPropertyFromText({ textoBruto, preco, fraseDestaque, tipo: 'imóvel' });
-  } catch (aiError) {
-    console.error('Erro ao extrair dados do imóvel com IA:', aiError);
-    return { error: 'Não foi possível interpretar o texto automaticamente agora. Tente novamente em instantes.' };
-  }
-
-  const titulo = extraido.titulo?.trim();
-  if (!titulo) return { error: 'Não foi possível identificar um título a partir do texto enviado.' };
-
-  const categoria = extraido.categoria;
-  const localizacaoFiltro = extraido.localizacao_filtro;
-  const localizacao = extraido.localizacao;
-  const modalidades = extraido.modalidades && extraido.modalidades.length > 0 ? extraido.modalidades : ['venda'];
-  const eyebrow = extraido.eyebrow || 'Imóvel · Exclusivo';
-  const headline = extraido.headline;
-  const paragrafo1 = extraido.paragrafo_1;
-  const paragrafo2 = extraido.paragrafo_2 || null;
-  const specsExtra = buildSpecsExtra({ areaM2, areaLabel, suites, vagas, manualSpecs: manualSpecsExtra });
-  const destaque = formData.get('destaque') === 'on';
-
   const admin = createAdminClient();
+
+  const { data: localizacaoRow } = await admin.from('localizacoes').select('nome').eq('slug', localizacaoFiltro).maybeSingle();
+  if (!localizacaoRow) return { error: 'Localização inválida.' };
+  const localizacao = `${localizacaoRow.nome} · Bahia`;
+
+  let paragrafo1;
+  let paragrafo2;
+  try {
+    const copy = await generatePropertyCopy({ ideiaCentral: descricao, fraseDestaque: headline, titulo, localizacao, tipo: 'imóvel' });
+    paragrafo1 = copy.paragrafo_1;
+    paragrafo2 = copy.paragrafo_2 || null;
+  } catch (aiError) {
+    console.error('Erro ao gerar copy com IA:', aiError);
+    return { error: 'Não foi possível gerar o texto automático agora. Tente novamente em instantes.' };
+  }
+  const specsExtra = buildSpecsExtra({ areaM2, areaLabel, suites, vagas, manualSpecs: manualSpecsExtra });
 
   const baseSlug = slugify(titulo);
   if (!baseSlug) return { error: 'Não foi possível gerar um endereço de página a partir do título identificado.' };
@@ -197,8 +216,10 @@ export async function updateImovel(formData) {
 
   const categoria = formData.get('categoria')?.toString();
   const localizacaoFiltro = formData.get('localizacao_filtro')?.toString();
-  const localizacaoCustom = formData.get('localizacao_custom')?.toString().trim();
-  const localizacao = localizacaoCustom || LOCATION_LABELS[localizacaoFiltro] || localizacaoFiltro;
+  if (!localizacaoFiltro) return { error: 'Selecione a localização.' };
+  const { data: localizacaoRow } = await admin.from('localizacoes').select('nome').eq('slug', localizacaoFiltro).maybeSingle();
+  if (!localizacaoRow) return { error: 'Localização inválida.' };
+  const localizacao = `${localizacaoRow.nome} · Bahia`;
 
   const modalidades = formData.getAll('modalidades');
   if (modalidades.length === 0) return { error: 'Selecione ao menos uma modalidade (venda ou temporada).' };

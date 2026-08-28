@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation';
 import { getImovelById } from '@/lib/imoveis';
-import EditImovelForm from '@/components/admin/EditImovelForm';
+import { listLocalizacoes } from '@/lib/localizacoes';
+import ImovelForm from '@/components/admin/ImovelForm';
 
 export default async function EditarImovelPage({ params }) {
   const { id } = await params;
-  const imovel = await getImovelById(id);
+  const [imovel, localizacoes] = await Promise.all([getImovelById(id), listLocalizacoes()]);
   if (!imovel) notFound();
 
   return (
@@ -16,7 +17,7 @@ export default async function EditarImovelPage({ params }) {
           <p className="admin-page-subtitle">Atualize as informações de &quot;{imovel.titulo}&quot;.</p>
         </div>
       </div>
-      <EditImovelForm imovel={imovel} />
+      <ImovelForm mode="editar" imovel={imovel} localizacoes={localizacoes} />
     </div>
   );
 }

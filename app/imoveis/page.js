@@ -3,6 +3,7 @@ import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import ListingCard from '@/components/ListingCard';
 import { listImoveis } from '@/lib/imoveis';
+import { listLocalizacoes } from '@/lib/localizacoes';
 
 export const metadata = {
   title: 'Ver imóveis — Casa com Leo',
@@ -12,7 +13,7 @@ export const metadata = {
 export const revalidate = 0;
 
 export default async function ImoveisPage() {
-  const imoveis = await listImoveis();
+  const [imoveis, localizacoes] = await Promise.all([listImoveis(), listLocalizacoes()]);
 
   return (
     <>
@@ -56,10 +57,11 @@ export default async function ImoveisPage() {
                   Localização
                   <select id="location-filter">
                     <option value="todos">Todas as localizações</option>
-                    <option value="salvador">Salvador</option>
-                    <option value="praia-do-forte">Praia do Forte</option>
-                    <option value="itacimirim">Itacimirim</option>
-                    <option value="guarajuba">Guarajuba</option>
+                    {localizacoes.map((loc) => (
+                      <option key={loc.slug} value={loc.slug}>
+                        {loc.nome}
+                      </option>
+                    ))}
                   </select>
                 </label>
                 <label>

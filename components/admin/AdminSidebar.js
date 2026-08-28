@@ -36,6 +36,12 @@ const LeadsIcon = (
     <path d="M5 21c1.5-4 4-6 7-6s5.5 2 7 6" />
   </svg>
 );
+const LocationIcon = (
+  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 21s7-6.5 7-11.5a7 7 0 1 0-14 0C5 14.5 12 21 12 21z" />
+    <circle cx="12" cy="9.5" r="2.4" />
+  </svg>
+);
 
 const GROUPS = [
   {
@@ -50,6 +56,7 @@ const GROUPS = [
     links: [
       { href: '/imoveis', label: 'Imóveis', exact: true, icon: HomeIcon },
       { href: '/imoveis/novo', label: 'Novo imóvel', exact: false, icon: PlusIcon },
+      { href: '/imoveis/localizacoes', label: 'Localizações', exact: false, icon: LocationIcon },
     ],
   },
   {
