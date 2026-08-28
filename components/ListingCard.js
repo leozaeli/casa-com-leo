@@ -25,13 +25,17 @@ export default function ListingCard({ imovel }) {
       <div className="property-image">
         <img src={coverPhoto(imovel)} alt={imovel.titulo} />
         {imovel.vendido ? (
-          <span className="property-tag property-tag-vendido">Vendido</span>
+          <div className="property-sold-overlay">
+            <span>Vendido</span>
+          </div>
         ) : (
-          <span className="property-tag">
-            <span className="dot"></span>Disponível
-          </span>
+          <>
+            <span className="property-tag">
+              <span className="dot"></span>Disponível
+            </span>
+            <span className={`modality-tag modality-${modalityKey}`}>{MODALITY_LABEL[modalityKey]}</span>
+          </>
         )}
-        <span className={`modality-tag modality-${modalityKey}`}>{MODALITY_LABEL[modalityKey]}</span>
       </div>
       <div className="property-info">
         <div className="property-info-top">

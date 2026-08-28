@@ -70,6 +70,7 @@ export default async function AdminDashboardPage() {
                       <a href={`${SITE_URL}/imoveis/${imovel.slug}`} target="_blank" rel="noreferrer">
                         Ver página
                       </a>
+                      <a href={`/imoveis/${imovel.id}/editar`}>Editar</a>
                       <ToggleVendidoForm id={imovel.id} slug={imovel.slug} vendido={imovel.vendido} />
                       <DeleteImovelForm id={imovel.id} slug={imovel.slug} titulo={imovel.titulo} />
                     </div>

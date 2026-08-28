@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import Nav from '@/components/Nav';
 import { SimpleFooter } from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
+import HeroCarousel from '@/components/HeroCarousel';
+import MosaicGallery from '@/components/MosaicGallery';
 import { getImovelBySlug, formatPrice, formatPriceFull, coverPhoto } from '@/lib/imoveis';
 
 export const revalidate = 0;
@@ -26,7 +28,6 @@ export default async function ImovelPage({ params }) {
 
   const modalidades = imovel.modalidades && imovel.modalidades.length > 0 ? imovel.modalidades : ['venda'];
   const fotos = imovel.fotos && imovel.fotos.length > 0 ? imovel.fotos : [coverPhoto(imovel)];
-  const heroFoto = fotos[0];
 
   const specs = [
     { value: `${imovel.area_m2} m²`, label: imovel.area_label },
@@ -39,13 +40,9 @@ export default async function ImovelPage({ params }) {
     <div className="property-page">
       <Nav />
       <main>
-        <section
-          className="detail-hero"
-          style={{
-            backgroundImage: `linear-gradient(0deg, rgba(0,0,0,.58), rgba(0,0,0,.06) 60%), url('${heroFoto}')`,
-          }}
-        >
-          <div className="wrap">
+        <section className="detail-hero">
+          <HeroCarousel fotos={fotos} />
+          <div className="wrap detail-hero-content">
             <span className="eyebrow-tag" style={{ background: 'rgba(255,255,255,.16)', color: '#fff', backdropFilter: 'blur(8px)' }}>
               {imovel.eyebrow}
             </span>
@@ -87,11 +84,7 @@ export default async function ImovelPage({ params }) {
         <section className="catalog">
           <div className="wrap">
             <span className="eyebrow-tag">Um olhar por dentro</span>
-            <div className="gallery">
-              {fotos.map((foto, index) => (
-                <img key={foto} src={foto} alt={`${imovel.titulo} — foto ${index + 1}`} />
-              ))}
-            </div>
+            <MosaicGallery fotos={fotos} alt={imovel.titulo} />
           </div>
         </section>
       </main>

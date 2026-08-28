@@ -167,6 +167,119 @@ export async function createImovel(prevState, formData) {
   redirect(`https://www.casacomleo.com.br/imoveis/${slug}`);
 }
 
+export async function updateImovel(formData) {
+  await assertAdmin();
+
+  const id = formData.get('id')?.toString();
+  if (!id) return { error: 'Imóvel não encontrado.' };
+
+  const admin = createAdminClient();
+  const { data: existing } = await admin.from('imoveis').select('slug').eq('id', id).maybeSingle();
+  if (!existing) return { error: 'Imóvel não encontrado.' };
+  const slug = existing.slug;
+
+  const titulo = formData.get('titulo')?.toString().trim();
+  if (!titulo) return { error: 'Título é obrigatório.' };
+
+  const categoria = formData.get('categoria')?.toString();
+  const localizacaoFiltro = formData.get('localizacao_filtro')?.toString();
+  const localizacaoCustom = formData.get('localizacao_custom')?.toString().trim();
+  const localizacao = localizacaoCustom || LOCATION_LABELS[localizacaoFiltro] || localizacaoFiltro;
+
+  const modalidades = formData.getAll('modalidades');
+  if (modalidades.length === 0) return { error: 'Selecione ao menos uma modalidade (venda ou temporada).' };
+
+  const preco = Number(formData.get('preco'));
+  const areaM2 = Number(formData.get('area_m2'));
+  const suites = Number(formData.get('suites') || 0);
+  const vagas = Number(formData.get('vagas') || 0);
+  if (!preco || !areaM2) return { error: 'Preço e área são obrigatórios.' };
+
+  const headline = formData.get('headline')?.toString().trim();
+  const paragrafo1 = formData.get('paragrafo_1')?.toString().trim();
+  if (!headline || !paragrafo1) return { error: 'Preencha o texto de apresentação do imóvel.' };
+  const paragrafo2 = formData.get('paragrafo_2')?.toString().trim() || null;
+  const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Imóvel · Exclusivo';
+  const areaLabel = formData.get('area_label')?.toString() || 'Área construída';
+  const destaque = formData.get('destaque') === 'on';
+  const vendido = formData.get('vendido') === 'on';
+
+  const specsExtra = [1, 2, 3]
+    .map((i) => ({
+      label: formData.get(`spec_${i}_label`)?.toString().trim(),
+      value: formData.get(`spec_${i}_value`)?.toString().trim(),
+    }))
+    .filter((spec) => spec.label && spec.value);
+
+  let fotos;
+  try {
+    fotos = JSON.parse(formData.get('fotos_atuais')?.toString() || '[]');
+  } catch {
+    fotos = [];
+  }
+
+  let novoFotoPaths;
+  try {
+    novoFotoPaths = JSON.parse(formData.get('foto_paths')?.toString() || '[]');
+  } catch {
+    novoFotoPaths = [];
+  }
+
+  for (let i = 0; i < novoFotoPaths.length; i += 1) {
+    const tempPath = novoFotoPaths[i];
+    const { data: downloaded, error: downloadError } = await admin.storage.from('imoveis-fotos').download(tempPath);
+    if (downloadError) return { error: `Erro ao processar foto: ${downloadError.message}` };
+    const originalBuffer = Buffer.from(await downloaded.arrayBuffer());
+    const enhanced = await enhanceImage(originalBuffer);
+    const uploadBuffer = enhanced ? enhanced.buffer : originalBuffer;
+    const contentType = enhanced ? enhanced.contentType : downloaded.type;
+    const ext = enhanced ? enhanced.extension : 'jpg';
+    const path = `${slug}/${Date.now()}-${i}.${ext}`;
+    const { error: uploadError } = await admin.storage.from('imoveis-fotos').upload(path, uploadBuffer, {
+      contentType,
+      upsert: false,
+    });
+    if (uploadError) return { error: `Erro ao enviar foto: ${uploadError.message}` };
+    const { data: publicUrl } = admin.storage.from('imoveis-fotos').getPublicUrl(path);
+    fotos.push(publicUrl.publicUrl);
+    await admin.storage.from('imoveis-fotos').remove([tempPath]);
+  }
+
+  if (fotos.length === 0) return { error: 'O imóvel precisa de ao menos uma foto.' };
+
+  const { error: updateError } = await admin
+    .from('imoveis')
+    .update({
+      titulo,
+      eyebrow,
+      localizacao,
+      localizacao_filtro: localizacaoFiltro,
+      categoria,
+      modalidades,
+      preco,
+      area_m2: areaM2,
+      area_label: areaLabel,
+      suites,
+      vagas,
+      headline,
+      paragrafo_1: paragrafo1,
+      paragrafo_2: paragrafo2,
+      specs_extra: specsExtra,
+      fotos,
+      destaque,
+      vendido,
+    })
+    .eq('id', id);
+
+  if (updateError) return { error: `Erro ao salvar alterações: ${updateError.message}` };
+
+  revalidatePath('/imoveis');
+  revalidatePath('/');
+  revalidatePath('/admin/imoveis');
+  revalidatePath(`/imoveis/${slug}`);
+  redirect(`https://www.casacomleo.com.br/imoveis/${slug}`);
+}
+
 export async function toggleVendido(formData) {
   await assertAdmin();
   const id = formData.get('id')?.toString();

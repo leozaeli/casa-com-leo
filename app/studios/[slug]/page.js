@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import Nav from '@/components/Nav';
 import { SimpleFooter } from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
+import HeroCarousel from '@/components/HeroCarousel';
+import MosaicGallery from '@/components/MosaicGallery';
 import { getStudioBySlug, formatPrice, formatPriceFull, coverPhoto, TIPOLOGIA_LABEL } from '@/lib/studios';
 
 export const revalidate = 0;
@@ -23,7 +25,6 @@ export default async function StudioPage({ params }) {
   if (!studio) notFound();
 
   const fotos = studio.fotos && studio.fotos.length > 0 ? studio.fotos : [coverPhoto(studio)];
-  const heroFoto = fotos[0];
 
   const specs = [
     { value: `${studio.area_m2} m²`, label: 'Área' },
@@ -35,13 +36,9 @@ export default async function StudioPage({ params }) {
     <div className="property-page">
       <Nav active="studios" />
       <main>
-        <section
-          className="detail-hero"
-          style={{
-            backgroundImage: `linear-gradient(0deg, rgba(0,0,0,.58), rgba(0,0,0,.06) 60%), url('${heroFoto}')`,
-          }}
-        >
-          <div className="wrap">
+        <section className="detail-hero">
+          <HeroCarousel fotos={fotos} />
+          <div className="wrap detail-hero-content">
             <span className="eyebrow-tag" style={{ background: 'rgba(255,255,255,.16)', color: '#fff', backdropFilter: 'blur(8px)' }}>
               {studio.eyebrow}
             </span>
@@ -79,11 +76,7 @@ export default async function StudioPage({ params }) {
         <section className="catalog">
           <div className="wrap">
             <span className="eyebrow-tag">Um olhar por dentro</span>
-            <div className="gallery">
-              {fotos.map((foto, index) => (
-                <img key={foto} src={foto} alt={`${studio.titulo} — foto ${index + 1}`} />
-              ))}
-            </div>
+            <MosaicGallery fotos={fotos} alt={studio.titulo} />
           </div>
         </section>
       </main>

@@ -370,6 +370,11 @@
   box-shadow: 0 -4px 24px rgba(24, 21, 15, .06), 0 1px 0 var(--line);
 }
 .admin-form-error { color: var(--off); font-size: 13px; }
+.admin-photo-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.admin-photo-thumb { position: relative; width: 96px; height: 96px; border-radius: 10px; overflow: hidden; }
+.admin-photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.admin-photo-thumb button { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border: 0; border-radius: 50%; background: rgba(24,21,15,.75); color: #fff; font-size: 11px; line-height: 1; cursor: pointer; }
+.admin-photo-thumb button:hover { background: rgba(24,21,15,.95); }
 .admin-upload-progress { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
 .admin-upload-progress-track { width: 100%; height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
 .admin-upload-progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width .2s ease; }
