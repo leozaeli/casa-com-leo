@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   serverExternalPackages: ['sharp'],
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '25mb',
+    },
+  },
   async headers() {
     return [
       {
