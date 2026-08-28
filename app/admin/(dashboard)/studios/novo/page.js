@@ -136,20 +136,17 @@ export default function NovoStudioPage() {
         </div>
 
         <div className="admin-form-section">
-          <h2>Detalhes extras (opcional)</h2>
-          <span className="admin-hint">Até 3 pares de rótulo/valor, ex: &quot;2027&quot; / &quot;Entrega prevista&quot;.</span>
-          {[1, 2, 3].map((i) => (
-            <div className="admin-form-row" key={i}>
-              <label>
-                Valor {i}
-                <input name={`spec_${i}_value`} placeholder="Ex: 2027" />
-              </label>
-              <label>
-                Rótulo {i}
-                <input name={`spec_${i}_label`} placeholder="Ex: Entrega prevista" />
-              </label>
-            </div>
-          ))}
+          <h2>Comodidades e diferenciais (opcional)</h2>
+          <label>
+            Comodidades
+            <textarea
+              name="comodidades"
+              placeholder="Liste solto o que tiver, sem se preocupar com formato. Ex: entrega prevista 2027, varanda gourmet, piscina no rooftop, ambientes climatizados, mobiliado."
+            ></textarea>
+            <span className="admin-hint">
+              A IA escolhe os destaques mais relevantes dessa lista para mostrar na página da unidade.
+            </span>
+          </label>
         </div>
 
         <div className="admin-form-section">

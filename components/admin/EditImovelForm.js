@@ -9,9 +9,24 @@ export default function EditImovelForm({ imovel }) {
   const [pending, setPending] = useState(false);
   const [progress, setProgress] = useState(null);
   const [fotosAtuais, setFotosAtuais] = useState(imovel.fotos || []);
+  const [specsExtra, setSpecsExtra] = useState(
+    imovel.specs_extra && imovel.specs_extra.length > 0 ? imovel.specs_extra : []
+  );
 
   function removerFoto(url) {
     setFotosAtuais((atual) => atual.filter((foto) => foto !== url));
+  }
+
+  function atualizarSpec(index, campo, valor) {
+    setSpecsExtra((atual) => atual.map((spec, i) => (i === index ? { ...spec, [campo]: valor } : spec)));
+  }
+
+  function removerSpec(index) {
+    setSpecsExtra((atual) => atual.filter((_, i) => i !== index));
+  }
+
+  function adicionarSpec() {
+    setSpecsExtra((atual) => [...atual, { value: '', label: '' }]);
   }
 
   async function handleSubmit(event) {
@@ -24,6 +39,7 @@ export default function EditImovelForm({ imovel }) {
 
     formData.set('id', imovel.id);
     formData.set('fotos_atuais', JSON.stringify(fotosAtuais));
+    formData.set('specs_extra', JSON.stringify(specsExtra.filter((spec) => spec.value?.trim() && spec.label?.trim())));
 
     if (files.length === 0) {
       formData.set('foto_paths', '[]');
@@ -177,19 +193,33 @@ export default function EditImovelForm({ imovel }) {
 
       <div className="admin-form-section">
         <h2>Detalhes extras (opcional)</h2>
-        <span className="admin-hint">Até 3 pares de rótulo/valor, ex: &quot;Rooftop&quot; / &quot;Área externa&quot;.</span>
-        {[0, 1, 2].map((i) => (
-          <div className="admin-form-row" key={i}>
+        <span className="admin-hint">Adicione quantos quiser. A IA já sugere alguns a partir das comodidades informadas na criação.</span>
+        {specsExtra.map((spec, index) => (
+          <div className="admin-form-row admin-spec-row" key={index}>
             <label>
-              Valor {i + 1}
-              <input name={`spec_${i + 1}_value`} defaultValue={imovel.specs_extra?.[i]?.value || ''} />
+              Valor
+              <input
+                value={spec.value}
+                onChange={(event) => atualizarSpec(index, 'value', event.target.value)}
+                placeholder="Ex: Rooftop"
+              />
             </label>
             <label>
-              Rótulo {i + 1}
-              <input name={`spec_${i + 1}_label`} defaultValue={imovel.specs_extra?.[i]?.label || ''} />
+              Rótulo
+              <input
+                value={spec.label}
+                onChange={(event) => atualizarSpec(index, 'label', event.target.value)}
+                placeholder="Ex: Área externa"
+              />
             </label>
+            <button type="button" className="admin-spec-remove" onClick={() => removerSpec(index)} aria-label="Remover detalhe">
+              ✕
+            </button>
           </div>
         ))}
+        <button type="button" className="button ghost admin-spec-add" onClick={adicionarSpec}>
+          + Adicionar detalhe
+        </button>
       </div>
 
       <div className="admin-form-section">

@@ -169,20 +169,17 @@ export default function NovoImovelPage() {
         </div>
 
         <div className="admin-form-section">
-          <h2>Detalhes extras (opcional)</h2>
-          <span className="admin-hint">Até 3 pares de rótulo/valor, ex: &quot;Rooftop&quot; / &quot;Área externa&quot;.</span>
-          {[1, 2, 3].map((i) => (
-            <div className="admin-form-row" key={i}>
-              <label>
-                Valor {i}
-                <input name={`spec_${i}_value`} placeholder="Ex: Rooftop" />
-              </label>
-              <label>
-                Rótulo {i}
-                <input name={`spec_${i}_label`} placeholder="Ex: Área externa" />
-              </label>
-            </div>
-          ))}
+          <h2>Comodidades e diferenciais (opcional)</h2>
+          <label>
+            Comodidades
+            <textarea
+              name="comodidades"
+              placeholder="Liste solto o que tiver, sem se preocupar com formato. Ex: 3 suítes, piscina, 2 vagas de garagem, escritório no térreo, área gourmet, churrasqueira, ambientes climatizados, espaço pet."
+            ></textarea>
+            <span className="admin-hint">
+              A IA escolhe os destaques mais relevantes dessa lista para mostrar na página do imóvel.
+            </span>
+          </label>
         </div>
 
         <div className="admin-form-section">
