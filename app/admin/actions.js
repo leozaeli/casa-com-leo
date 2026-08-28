@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/server';
 import { enhanceImage } from '@/lib/image-enhance';
+import { generatePropertyCopy } from '@/lib/generate-copy';
 
 const LOCATION_LABELS = {
   salvador: 'Salvador · Bahia',
@@ -33,6 +34,26 @@ async function assertAdmin() {
   }
 }
 
+export async function createUploadTickets(formData) {
+  await assertAdmin();
+
+  const bucket = formData.get('bucket')?.toString();
+  const count = Number(formData.get('count') || 0);
+  if (bucket !== 'imoveis-fotos' && bucket !== 'studios-fotos') return { error: 'Bucket inválido.' };
+  if (!count || count < 1 || count > 30) return { error: 'Quantidade de fotos inválida.' };
+
+  const admin = createAdminClient();
+  const sessionId = crypto.randomUUID();
+  const tickets = [];
+  for (let i = 0; i < count; i += 1) {
+    const path = `tmp/${sessionId}/${i}`;
+    const { data, error } = await admin.storage.from(bucket).createSignedUploadUrl(path);
+    if (error) return { error: `Erro ao preparar upload: ${error.message}` };
+    tickets.push({ path: data.path, signedUrl: data.signedUrl, token: data.token });
+  }
+  return { tickets };
+}
+
 export async function createImovel(prevState, formData) {
   await assertAdmin();
 
@@ -57,10 +78,21 @@ export async function createImovel(prevState, formData) {
   const vagas = Number(formData.get('vagas') || 0);
   if (!preco || !areaM2) return { error: 'Preço e área são obrigatórios.' };
 
-  const headline = formData.get('headline')?.toString().trim();
-  const paragrafo1 = formData.get('paragrafo_1')?.toString().trim();
-  if (!headline || !paragrafo1) return { error: 'Preencha o texto de apresentação do imóvel.' };
-  const paragrafo2 = formData.get('paragrafo_2')?.toString().trim() || null;
+  const ideiaCentral = formData.get('ideia_central')?.toString().trim();
+  if (!ideiaCentral) return { error: 'Descreva a ideia central do imóvel.' };
+
+  let headline;
+  let paragrafo1;
+  let paragrafo2;
+  try {
+    const copy = await generatePropertyCopy({ ideiaCentral, titulo, localizacao, tipo: 'imóvel' });
+    headline = copy.headline;
+    paragrafo1 = copy.paragrafo_1;
+    paragrafo2 = copy.paragrafo_2 || null;
+  } catch (aiError) {
+    console.error('Erro ao gerar copy com IA:', aiError);
+    return { error: 'Não foi possível gerar o texto automático agora. Tente novamente em instantes.' };
+  }
   const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Imóvel · Exclusivo';
   const areaLabel = formData.get('area_label')?.toString() || 'Área construída';
   const destaque = formData.get('destaque') === 'on';
@@ -77,17 +109,24 @@ export async function createImovel(prevState, formData) {
   const { data: existing } = await admin.from('imoveis').select('id').eq('slug', slug).maybeSingle();
   if (existing) return { error: `Já existe um imóvel com o endereço /imoveis/${slug}. Escolha outro.` };
 
-  const photos = formData.getAll('fotos').filter((file) => file instanceof File && file.size > 0);
-  if (photos.length === 0) return { error: 'Envie ao menos uma foto.' };
+  let fotoPaths;
+  try {
+    fotoPaths = JSON.parse(formData.get('foto_paths')?.toString() || '[]');
+  } catch {
+    fotoPaths = [];
+  }
+  if (!Array.isArray(fotoPaths) || fotoPaths.length === 0) return { error: 'Envie ao menos uma foto.' };
 
   const fotoUrls = [];
-  for (let i = 0; i < photos.length; i += 1) {
-    const file = photos[i];
-    const originalBuffer = Buffer.from(await file.arrayBuffer());
+  for (let i = 0; i < fotoPaths.length; i += 1) {
+    const tempPath = fotoPaths[i];
+    const { data: downloaded, error: downloadError } = await admin.storage.from('imoveis-fotos').download(tempPath);
+    if (downloadError) return { error: `Erro ao processar foto: ${downloadError.message}` };
+    const originalBuffer = Buffer.from(await downloaded.arrayBuffer());
     const enhanced = await enhanceImage(originalBuffer);
     const uploadBuffer = enhanced ? enhanced.buffer : originalBuffer;
-    const contentType = enhanced ? enhanced.contentType : file.type;
-    const ext = enhanced ? enhanced.extension : file.name.split('.').pop() || 'jpg';
+    const contentType = enhanced ? enhanced.contentType : downloaded.type;
+    const ext = enhanced ? enhanced.extension : 'jpg';
     const path = `${slug}/${Date.now()}-${i}.${ext}`;
     const { error: uploadError } = await admin.storage.from('imoveis-fotos').upload(path, uploadBuffer, {
       contentType,
@@ -96,6 +135,7 @@ export async function createImovel(prevState, formData) {
     if (uploadError) return { error: `Erro ao enviar foto: ${uploadError.message}` };
     const { data: publicUrl } = admin.storage.from('imoveis-fotos').getPublicUrl(path);
     fotoUrls.push(publicUrl.publicUrl);
+    await admin.storage.from('imoveis-fotos').remove([tempPath]);
   }
 
   const { error: insertError } = await admin.from('imoveis').insert({
@@ -176,10 +216,21 @@ export async function createStudio(prevState, formData) {
   const areaM2 = Number(formData.get('area_m2'));
   if (!preco || !areaM2) return { error: 'Preço e área são obrigatórios.' };
 
-  const headline = formData.get('headline')?.toString().trim();
-  const paragrafo1 = formData.get('paragrafo_1')?.toString().trim();
-  if (!headline || !paragrafo1) return { error: 'Preencha o texto de apresentação da unidade.' };
-  const paragrafo2 = formData.get('paragrafo_2')?.toString().trim() || null;
+  const ideiaCentral = formData.get('ideia_central')?.toString().trim();
+  if (!ideiaCentral) return { error: 'Descreva a ideia central da unidade.' };
+
+  let headline;
+  let paragrafo1;
+  let paragrafo2;
+  try {
+    const copy = await generatePropertyCopy({ ideiaCentral, titulo, localizacao, tipo: 'studio' });
+    headline = copy.headline;
+    paragrafo1 = copy.paragrafo_1;
+    paragrafo2 = copy.paragrafo_2 || null;
+  } catch (aiError) {
+    console.error('Erro ao gerar copy com IA:', aiError);
+    return { error: 'Não foi possível gerar o texto automático agora. Tente novamente em instantes.' };
+  }
   const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Studio · StudioHUB';
   const destaque = formData.get('destaque') === 'on';
 
@@ -195,17 +246,24 @@ export async function createStudio(prevState, formData) {
   const { data: existing } = await admin.from('studios').select('id').eq('slug', slug).maybeSingle();
   if (existing) return { error: `Já existe uma unidade com o endereço /studios/${slug}. Escolha outro.` };
 
-  const photos = formData.getAll('fotos').filter((file) => file instanceof File && file.size > 0);
-  if (photos.length === 0) return { error: 'Envie ao menos uma foto.' };
+  let fotoPaths;
+  try {
+    fotoPaths = JSON.parse(formData.get('foto_paths')?.toString() || '[]');
+  } catch {
+    fotoPaths = [];
+  }
+  if (!Array.isArray(fotoPaths) || fotoPaths.length === 0) return { error: 'Envie ao menos uma foto.' };
 
   const fotoUrls = [];
-  for (let i = 0; i < photos.length; i += 1) {
-    const file = photos[i];
-    const originalBuffer = Buffer.from(await file.arrayBuffer());
+  for (let i = 0; i < fotoPaths.length; i += 1) {
+    const tempPath = fotoPaths[i];
+    const { data: downloaded, error: downloadError } = await admin.storage.from('studios-fotos').download(tempPath);
+    if (downloadError) return { error: `Erro ao processar foto: ${downloadError.message}` };
+    const originalBuffer = Buffer.from(await downloaded.arrayBuffer());
     const enhanced = await enhanceImage(originalBuffer);
     const uploadBuffer = enhanced ? enhanced.buffer : originalBuffer;
-    const contentType = enhanced ? enhanced.contentType : file.type;
-    const ext = enhanced ? enhanced.extension : file.name.split('.').pop() || 'jpg';
+    const contentType = enhanced ? enhanced.contentType : downloaded.type;
+    const ext = enhanced ? enhanced.extension : 'jpg';
     const path = `${slug}/${Date.now()}-${i}.${ext}`;
     const { error: uploadError } = await admin.storage.from('studios-fotos').upload(path, uploadBuffer, {
       contentType,
@@ -214,6 +272,7 @@ export async function createStudio(prevState, formData) {
     if (uploadError) return { error: `Erro ao enviar foto: ${uploadError.message}` };
     const { data: publicUrl } = admin.storage.from('studios-fotos').getPublicUrl(path);
     fotoUrls.push(publicUrl.publicUrl);
+    await admin.storage.from('studios-fotos').remove([tempPath]);
   }
 
   const { error: insertError } = await admin.from('studios').insert({

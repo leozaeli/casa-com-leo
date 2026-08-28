@@ -3,3 +3,5 @@
 imoveis/refvisu/
 node_modules
 .next
+
+.env*

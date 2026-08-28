@@ -1,12 +1,63 @@
 'use client';
 
-import { useActionState } from 'react';
-import { createStudio } from '@/app/admin/actions';
-
-const initialState = { error: null };
+import { useState } from 'react';
+import { createStudio, createUploadTickets } from '@/app/admin/actions';
+import { uploadFilesWithProgress } from '@/lib/client-upload';
 
 export default function NovoStudioPage() {
-  const [state, formAction, pending] = useActionState(createStudio, initialState);
+  const [error, setError] = useState(null);
+  const [pending, setPending] = useState(false);
+  const [progress, setProgress] = useState(null);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setError(null);
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const files = formData.getAll('fotos').filter((file) => file instanceof File && file.size > 0);
+    if (files.length === 0) {
+      setError('Envie ao menos uma foto.');
+      return;
+    }
+
+    setPending(true);
+    setProgress({ phase: 'uploading', percent: 0 });
+
+    const ticketsFd = new FormData();
+    ticketsFd.set('bucket', 'studios-fotos');
+    ticketsFd.set('count', String(files.length));
+    const ticketsResult = await createUploadTickets(ticketsFd);
+    if (ticketsResult?.error) {
+      setError(ticketsResult.error);
+      setPending(false);
+      setProgress(null);
+      return;
+    }
+
+    try {
+      await uploadFilesWithProgress(ticketsResult.tickets, files, (percent) => {
+        setProgress({ phase: 'uploading', percent });
+      });
+    } catch {
+      setError('Falha ao enviar as fotos. Verifique sua conexão e tente novamente.');
+      setPending(false);
+      setProgress(null);
+      return;
+    }
+
+    setProgress({ phase: 'processing', percent: 100 });
+
+    formData.delete('fotos');
+    formData.set('foto_paths', JSON.stringify(ticketsResult.tickets.map((t) => t.path)));
+
+    const result = await createStudio(null, formData);
+    if (result?.error) {
+      setError(result.error);
+      setPending(false);
+      setProgress(null);
+    }
+  }
 
   return (
     <div>
@@ -18,7 +69,7 @@ export default function NovoStudioPage() {
         </div>
       </div>
 
-      <form className="admin-form" action={formAction}>
+      <form className="admin-form" onSubmit={handleSubmit}>
         <div className="admin-form-section">
           <h2>Identificação</h2>
           <div className="admin-form-row">
@@ -72,16 +123,15 @@ export default function NovoStudioPage() {
         <div className="admin-form-section">
           <h2>Apresentação</h2>
           <label>
-            Frase de destaque
-            <input name="headline" required placeholder="Ex: Compacto por fora, completo por dentro." />
-          </label>
-          <label>
-            Primeiro parágrafo
-            <textarea name="paragrafo_1" required placeholder="Descreva a unidade..."></textarea>
-          </label>
-          <label>
-            Segundo parágrafo (opcional)
-            <textarea name="paragrafo_2" placeholder="Mais detalhes..."></textarea>
+            Ideia central
+            <textarea
+              name="ideia_central"
+              required
+              placeholder="Escreva em poucas palavras o que torna essa unidade especial. Ex: studio compacto pra quem quer morar perto da praia sem abrir mão de conforto."
+            ></textarea>
+            <span className="admin-hint">
+              A IA transforma essa ideia em um texto de apresentação emocional e simples ao publicar.
+            </span>
           </label>
         </div>
 
@@ -116,11 +166,22 @@ export default function NovoStudioPage() {
           </label>
         </div>
 
-        {state?.error && <p className="admin-form-error">{state.error}</p>}
+        {progress && (
+          <div className="admin-upload-progress">
+            <div className="admin-upload-progress-track">
+              <div className="admin-upload-progress-fill" style={{ width: `${progress.percent}%` }} />
+            </div>
+            <span>
+              {progress.phase === 'uploading' ? `Enviando fotos… ${progress.percent}%` : 'Gerando texto e publicando…'}
+            </span>
+          </div>
+        )}
+
+        {error && <p className="admin-form-error">{error}</p>}
 
         <div className="admin-submit-row">
           <button className="button" type="submit" disabled={pending}>
-            {pending ? 'Salvando…' : 'Publicar studio'}
+            {pending ? (progress?.phase === 'uploading' ? `Enviando… ${progress.percent}%` : 'Publicando…') : 'Publicar studio'}
           </button>
         </div>
       </form>
