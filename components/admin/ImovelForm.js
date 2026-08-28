@@ -214,7 +214,8 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
             placeholder="Escreva livremente sobre o imóvel: a história, o entorno, a rotina de quem mora ali, detalhes que fazem diferença..."
           ></textarea>
           <span className="admin-hint">
-            A IA transforma essa descrição no texto de apresentação da página, de forma robusta e completa.
+            A IA transforma essa descrição em um único parágrafo de apresentação, puxando o que há de mais legal
+            do que você escrever, sem enfeitar demais.
           </span>
         </label>
       </div>
