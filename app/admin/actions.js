@@ -80,15 +80,27 @@ export async function createImovel(prevState, formData) {
 
   const ideiaCentral = formData.get('ideia_central')?.toString().trim();
   if (!ideiaCentral) return { error: 'Descreva a ideia central do imóvel.' };
+  const fraseDestaque = formData.get('frase_destaque')?.toString().trim() || undefined;
+
+  let manualSpecsExtra;
+  try {
+    manualSpecsExtra = JSON.parse(formData.get('specs_extra')?.toString() || '[]');
+  } catch {
+    manualSpecsExtra = [];
+  }
+  if (!Array.isArray(manualSpecsExtra)) manualSpecsExtra = [];
+  manualSpecsExtra = manualSpecsExtra.filter((spec) => spec?.label && spec?.value);
 
   let headline;
   let paragrafo1;
   let paragrafo2;
+  let specsExtra;
   try {
-    const copy = await generatePropertyCopy({ ideiaCentral, titulo, localizacao, tipo: 'imóvel' });
+    const copy = await generatePropertyCopy({ ideiaCentral, fraseDestaque, titulo, localizacao, tipo: 'imóvel' });
     headline = copy.headline;
     paragrafo1 = copy.paragrafo_1;
     paragrafo2 = copy.paragrafo_2 || null;
+    specsExtra = [...(copy.specs_extra || []), ...manualSpecsExtra];
   } catch (aiError) {
     console.error('Erro ao gerar copy com IA:', aiError);
     return { error: 'Não foi possível gerar o texto automático agora. Tente novamente em instantes.' };
@@ -96,15 +108,6 @@ export async function createImovel(prevState, formData) {
   const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Imóvel · Exclusivo';
   const areaLabel = formData.get('area_label')?.toString() || 'Área construída';
   const destaque = formData.get('destaque') === 'on';
-
-  let specsExtra;
-  try {
-    specsExtra = JSON.parse(formData.get('specs_extra')?.toString() || '[]');
-  } catch {
-    specsExtra = [];
-  }
-  if (!Array.isArray(specsExtra)) specsExtra = [];
-  specsExtra = specsExtra.filter((spec) => spec?.label && spec?.value);
 
   const admin = createAdminClient();
 
@@ -335,30 +338,33 @@ export async function createStudio(prevState, formData) {
 
   const ideiaCentral = formData.get('ideia_central')?.toString().trim();
   if (!ideiaCentral) return { error: 'Descreva a ideia central da unidade.' };
+  const fraseDestaque = formData.get('frase_destaque')?.toString().trim() || undefined;
+
+  let manualSpecsExtra;
+  try {
+    manualSpecsExtra = JSON.parse(formData.get('specs_extra')?.toString() || '[]');
+  } catch {
+    manualSpecsExtra = [];
+  }
+  if (!Array.isArray(manualSpecsExtra)) manualSpecsExtra = [];
+  manualSpecsExtra = manualSpecsExtra.filter((spec) => spec?.label && spec?.value);
 
   let headline;
   let paragrafo1;
   let paragrafo2;
+  let specsExtra;
   try {
-    const copy = await generatePropertyCopy({ ideiaCentral, titulo, localizacao, tipo: 'studio' });
+    const copy = await generatePropertyCopy({ ideiaCentral, fraseDestaque, titulo, localizacao, tipo: 'studio' });
     headline = copy.headline;
     paragrafo1 = copy.paragrafo_1;
     paragrafo2 = copy.paragrafo_2 || null;
+    specsExtra = [...(copy.specs_extra || []), ...manualSpecsExtra];
   } catch (aiError) {
     console.error('Erro ao gerar copy com IA:', aiError);
     return { error: 'Não foi possível gerar o texto automático agora. Tente novamente em instantes.' };
   }
   const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Studio · StudioHUB';
   const destaque = formData.get('destaque') === 'on';
-
-  let specsExtra;
-  try {
-    specsExtra = JSON.parse(formData.get('specs_extra')?.toString() || '[]');
-  } catch {
-    specsExtra = [];
-  }
-  if (!Array.isArray(specsExtra)) specsExtra = [];
-  specsExtra = specsExtra.filter((spec) => spec?.label && spec?.value);
 
   const admin = createAdminClient();
 

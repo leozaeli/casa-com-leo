@@ -34,9 +34,9 @@ export default async function ImovelPage({ params }) {
   const precoEur = imovel.preco / rates.eurBrl;
 
   const specs = [
-    { value: `${imovel.area_m2} m²`, label: imovel.area_label },
-    { value: String(imovel.suites), label: 'Suítes' },
-    { value: String(imovel.vagas), label: 'Vagas' },
+    { value: `📐 ${imovel.area_m2} m²`, label: imovel.area_label },
+    { value: `🛏️ ${imovel.suites}`, label: 'Suítes' },
+    { value: `🚗 ${imovel.vagas}`, label: 'Vagas' },
     ...(imovel.specs_extra || []),
   ];
 
@@ -55,8 +55,8 @@ export default async function ImovelPage({ params }) {
             <div className="detail-meta">
               <span>{imovel.localizacao}</span>
               <span>{formatPriceFull(imovel.preco)}</span>
-              <span title="Valor aproximado">{formatUSD(precoUsd)}</span>
-              <span title="Valor aproximado">{formatEUR(precoEur)}</span>
+              <span title="Valor aproximado, convertido pela cotação atual">≈ {formatUSD(precoUsd)}</span>
+              <span title="Valor aproximado, convertido pela cotação atual">≈ {formatEUR(precoEur)}</span>
               {modalidades.map((modalidade) => (
                 <span key={modalidade}>{MODALITY_LABEL[modalidade] || modalidade}</span>
               ))}

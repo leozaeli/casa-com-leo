@@ -31,7 +31,7 @@ export default async function StudioPage({ params }) {
   const precoEur = studio.preco / rates.eurBrl;
 
   const specs = [
-    { value: `${studio.area_m2} m²`, label: 'Área' },
+    { value: `📐 ${studio.area_m2} m²`, label: 'Área' },
     { value: TIPOLOGIA_LABEL[studio.tipologia] || studio.tipologia, label: 'Tipologia' },
     ...(studio.specs_extra || []),
   ];
@@ -50,8 +50,8 @@ export default async function StudioPage({ params }) {
             <div className="detail-meta">
               <span>{studio.localizacao}</span>
               <span>A partir de {formatPriceFull(studio.preco)}</span>
-              <span title="Valor aproximado">{formatUSD(precoUsd)}</span>
-              <span title="Valor aproximado">{formatEUR(precoEur)}</span>
+              <span title="Valor aproximado, convertido pela cotação atual">≈ {formatUSD(precoUsd)}</span>
+              <span title="Valor aproximado, convertido pela cotação atual">≈ {formatEUR(precoEur)}</span>
             </div>
           </div>
         </section>

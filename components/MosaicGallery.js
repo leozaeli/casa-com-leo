@@ -1,9 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function MosaicGallery({ fotos, alt }) {
   const [openIndex, setOpenIndex] = useState(null);
+  const touchStartX = useRef(null);
 
   const close = useCallback(() => setOpenIndex(null), []);
   const prev = useCallback(
@@ -30,6 +31,20 @@ export default function MosaicGallery({ fotos, alt }) {
     };
   }, [openIndex, close, prev, next]);
 
+  function handleTouchStart(event) {
+    touchStartX.current = event.touches[0].clientX;
+  }
+
+  function handleTouchEnd(event) {
+    if (touchStartX.current === null) return;
+    const delta = event.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(delta) < 40) return;
+    event.preventDefault();
+    if (delta < 0) next();
+    else prev();
+  }
+
   return (
     <>
       <div className="mosaic-gallery">
@@ -41,7 +56,7 @@ export default function MosaicGallery({ fotos, alt }) {
       </div>
 
       {openIndex !== null && (
-        <div className="lightbox" onClick={close}>
+        <div className="lightbox" onClick={close} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
           <button type="button" className="lightbox-close" onClick={close} aria-label="Fechar">
             ✕
           </button>

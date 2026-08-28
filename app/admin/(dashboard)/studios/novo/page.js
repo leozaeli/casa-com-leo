@@ -139,6 +139,13 @@ export default function NovoStudioPage() {
         <div className="admin-form-section">
           <h2>Apresentação</h2>
           <label>
+            Frase de destaque (opcional)
+            <input name="frase_destaque" placeholder="Ex: Compacto por fora, completo por dentro." />
+            <span className="admin-hint">
+              Se preencher, essa frase é usada como está. Se deixar em branco, a IA cria uma pra você.
+            </span>
+          </label>
+          <label>
             Ideia central
             <textarea
               name="ideia_central"
@@ -146,7 +153,8 @@ export default function NovoStudioPage() {
               placeholder="Escreva em poucas palavras o que torna essa unidade especial. Ex: studio compacto pra quem quer morar perto da praia sem abrir mão de conforto."
             ></textarea>
             <span className="admin-hint">
-              A IA transforma essa ideia em um texto de apresentação emocional e simples ao publicar.
+              A IA transforma essa ideia em um texto de apresentação emocional e simples ao publicar, e também
+              identifica comodidades citadas (piscina, vagas, churrasqueira etc.) para destacar na página.
             </span>
           </label>
         </div>
