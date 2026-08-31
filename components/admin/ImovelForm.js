@@ -23,9 +23,17 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
   }
 
   function handleFilesChange(event) {
-    const files = Array.from(event.target.files || []);
+    const novos = Array.from(event.target.files || []);
     uploads.forEach((u) => URL.revokeObjectURL(u.url));
-    setUploads(files.map((file) => ({ name: file.name, url: URL.createObjectURL(file), status: 'pendente', error: null })));
+    setUploads(novos.map((file) => ({ file, name: file.name, url: URL.createObjectURL(file), status: 'pendente', error: null })));
+  }
+
+  function removerUpload(index) {
+    setUploads((atual) => {
+      const alvo = atual[index];
+      if (alvo) URL.revokeObjectURL(alvo.url);
+      return atual.filter((_, i) => i !== index);
+    });
   }
 
   async function handleSubmit(event) {
@@ -36,7 +44,8 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
 
     const form = event.currentTarget;
     const formData = new FormData(form);
-    const files = formData.getAll('fotos').filter((file) => file instanceof File && file.size > 0);
+    formData.delete('fotos');
+    const files = uploads.map((u) => u.file);
 
     if (isEdit) {
       formData.set('id', imovel.id);
@@ -116,7 +125,6 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
     }
 
     setProgress({ phase: 'processing', percent: 100 });
-    formData.delete('fotos');
     formData.set('foto_paths', JSON.stringify(pathsEnviados));
     await submit();
   }
@@ -260,13 +268,25 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         )}
         <label>
           {isEdit ? 'Adicionar novas fotos' : 'Fotos do imóvel (a primeira vira a capa)'}
-          <input type="file" name="fotos" accept="image/*" multiple required={!isEdit} onChange={handleFilesChange} />
+          <input
+            type="file"
+            name="fotos"
+            accept="image/*,.webp,.avif,.heic,.heif"
+            multiple
+            required={!isEdit}
+            onChange={handleFilesChange}
+          />
         </label>
         {uploads.length > 0 && (
           <div className="admin-photo-grid">
             {uploads.map((u, i) => (
               <div className={`admin-photo-thumb admin-photo-thumb-${u.status}`} key={`${u.name}-${i}`} title={u.error || u.name}>
                 <img src={u.url} alt="" />
+                {!pending && (
+                  <button type="button" onClick={() => removerUpload(i)} aria-label="Remover foto">
+                    ✕
+                  </button>
+                )}
                 {u.status === 'enviando' && <span className="admin-photo-status">Enviando…</span>}
                 {u.status === 'ok' && <span className="admin-photo-status admin-photo-status-ok">✓</span>}
                 {u.status === 'erro' && <span className="admin-photo-status admin-photo-status-erro">Falhou</span>}
