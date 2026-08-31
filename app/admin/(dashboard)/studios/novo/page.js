@@ -15,8 +15,11 @@ export default function NovoStudioPage() {
 
   function handleFilesChange(event) {
     const novos = Array.from(event.target.files || []);
-    uploads.forEach((u) => URL.revokeObjectURL(u.url));
-    setUploads(novos.map((file) => ({ file, name: file.name, url: URL.createObjectURL(file), status: 'pendente', error: null })));
+    setUploads((atual) => [
+      ...atual,
+      ...novos.map((file) => ({ file, name: file.name, url: URL.createObjectURL(file), status: 'pendente', error: null })),
+    ]);
+    event.target.value = '';
   }
 
   function removerUpload(index) {
@@ -197,14 +200,7 @@ export default function NovoStudioPage() {
           <h2>Fotos</h2>
           <label>
             Fotos da unidade (a primeira vira a capa)
-            <input
-              type="file"
-              name="fotos"
-              accept="image/*,.webp,.avif,.heic,.heif"
-              multiple
-              required
-              onChange={handleFilesChange}
-            />
+            <input type="file" name="fotos" accept="image/*" multiple required onChange={handleFilesChange} />
           </label>
           {uploads.length > 0 && (
             <div className="admin-photo-grid">

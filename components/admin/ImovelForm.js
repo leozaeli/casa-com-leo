@@ -24,8 +24,11 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
 
   function handleFilesChange(event) {
     const novos = Array.from(event.target.files || []);
-    uploads.forEach((u) => URL.revokeObjectURL(u.url));
-    setUploads(novos.map((file) => ({ file, name: file.name, url: URL.createObjectURL(file), status: 'pendente', error: null })));
+    setUploads((atual) => [
+      ...atual,
+      ...novos.map((file) => ({ file, name: file.name, url: URL.createObjectURL(file), status: 'pendente', error: null })),
+    ]);
+    event.target.value = '';
   }
 
   function removerUpload(index) {
@@ -268,14 +271,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         )}
         <label>
           {isEdit ? 'Adicionar novas fotos' : 'Fotos do imóvel (a primeira vira a capa)'}
-          <input
-            type="file"
-            name="fotos"
-            accept="image/*,.webp,.avif,.heic,.heif"
-            multiple
-            required={!isEdit}
-            onChange={handleFilesChange}
-          />
+          <input type="file" name="fotos" accept="image/*" multiple required={!isEdit} onChange={handleFilesChange} />
         </label>
         {uploads.length > 0 && (
           <div className="admin-photo-grid">
