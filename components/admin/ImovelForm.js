@@ -13,12 +13,19 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
   const [success, setSuccess] = useState(false);
   const [savedUrl, setSavedUrl] = useState(null);
   const [fotosAtuais, setFotosAtuais] = useState(imovel?.fotos || []);
+  const [uploads, setUploads] = useState([]);
   const [specsExtra, setSpecsExtra] = useState(
     imovel?.specs_extra && imovel.specs_extra.length > 0 ? imovel.specs_extra : []
   );
 
   function removerFoto(url) {
     setFotosAtuais((atual) => atual.filter((foto) => foto !== url));
+  }
+
+  function handleFilesChange(event) {
+    const files = Array.from(event.target.files || []);
+    uploads.forEach((u) => URL.revokeObjectURL(u.url));
+    setUploads(files.map((file) => ({ name: file.name, url: URL.createObjectURL(file), status: 'pendente', error: null })));
   }
 
   async function handleSubmit(event) {
@@ -53,6 +60,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
       if (!isEdit) {
         form.reset();
         setSpecsExtra([]);
+        setUploads([]);
       }
       setPending(false);
       setProgress(null);
@@ -80,20 +88,36 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
       return;
     }
 
-    try {
-      await uploadFilesWithProgress(ticketsResult.tickets, files, (percent) => {
-        setProgress({ phase: 'uploading', percent });
-      });
-    } catch {
-      setError('Falha ao enviar as fotos. Verifique sua conexão e tente novamente.');
+    setUploads((atual) => atual.map((u) => ({ ...u, status: 'enviando' })));
+
+    const results = await uploadFilesWithProgress(
+      ticketsResult.tickets,
+      files,
+      (percent) => setProgress({ phase: 'uploading', percent }),
+      (i, result) => {
+        setUploads((atual) =>
+          atual.map((u, idx) => (idx === i ? { ...u, status: result.ok ? 'ok' : 'erro', error: result.error } : u))
+        );
+      }
+    );
+
+    const nomesComFalha = results.map((r, i) => (!r.ok ? files[i].name : null)).filter(Boolean);
+    const pathsEnviados = results.filter((r) => r.ok).map((r) => r.path);
+
+    if (pathsEnviados.length === 0 && !isEdit) {
+      setError('Nenhuma foto foi enviada. Verifique sua conexão e tente novamente.');
       setPending(false);
       setProgress(null);
       return;
     }
 
+    if (nomesComFalha.length > 0) {
+      setError(`Falha ao enviar: ${nomesComFalha.join(', ')}. As demais fotos foram enviadas normalmente.`);
+    }
+
     setProgress({ phase: 'processing', percent: 100 });
     formData.delete('fotos');
-    formData.set('foto_paths', JSON.stringify(ticketsResult.tickets.map((t) => t.path)));
+    formData.set('foto_paths', JSON.stringify(pathsEnviados));
     await submit();
   }
 
@@ -236,8 +260,20 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         )}
         <label>
           {isEdit ? 'Adicionar novas fotos' : 'Fotos do imóvel (a primeira vira a capa)'}
-          <input type="file" name="fotos" accept="image/*" multiple required={!isEdit} />
+          <input type="file" name="fotos" accept="image/*" multiple required={!isEdit} onChange={handleFilesChange} />
         </label>
+        {uploads.length > 0 && (
+          <div className="admin-photo-grid">
+            {uploads.map((u, i) => (
+              <div className={`admin-photo-thumb admin-photo-thumb-${u.status}`} key={`${u.name}-${i}`} title={u.error || u.name}>
+                <img src={u.url} alt="" />
+                {u.status === 'enviando' && <span className="admin-photo-status">Enviando…</span>}
+                {u.status === 'ok' && <span className="admin-photo-status admin-photo-status-ok">✓</span>}
+                {u.status === 'erro' && <span className="admin-photo-status admin-photo-status-erro">Falhou</span>}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="admin-checkbox-row">

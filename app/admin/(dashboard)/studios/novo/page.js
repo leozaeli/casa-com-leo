@@ -11,6 +11,13 @@ export default function NovoStudioPage() {
   const [progress, setProgress] = useState(null);
   const [success, setSuccess] = useState(false);
   const [specsExtra, setSpecsExtra] = useState([]);
+  const [uploads, setUploads] = useState([]);
+
+  function handleFilesChange(event) {
+    const files = Array.from(event.target.files || []);
+    uploads.forEach((u) => URL.revokeObjectURL(u.url));
+    setUploads(files.map((file) => ({ name: file.name, url: URL.createObjectURL(file), status: 'pendente', error: null })));
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -39,21 +46,37 @@ export default function NovoStudioPage() {
       return;
     }
 
-    try {
-      await uploadFilesWithProgress(ticketsResult.tickets, files, (percent) => {
-        setProgress({ phase: 'uploading', percent });
-      });
-    } catch {
-      setError('Falha ao enviar as fotos. Verifique sua conexão e tente novamente.');
+    setUploads((atual) => atual.map((u) => ({ ...u, status: 'enviando' })));
+
+    const results = await uploadFilesWithProgress(
+      ticketsResult.tickets,
+      files,
+      (percent) => setProgress({ phase: 'uploading', percent }),
+      (i, result) => {
+        setUploads((atual) =>
+          atual.map((u, idx) => (idx === i ? { ...u, status: result.ok ? 'ok' : 'erro', error: result.error } : u))
+        );
+      }
+    );
+
+    const nomesComFalha = results.map((r, i) => (!r.ok ? files[i].name : null)).filter(Boolean);
+    const pathsEnviados = results.filter((r) => r.ok).map((r) => r.path);
+
+    if (pathsEnviados.length === 0) {
+      setError('Nenhuma foto foi enviada. Verifique sua conexão e tente novamente.');
       setPending(false);
       setProgress(null);
       return;
     }
 
+    if (nomesComFalha.length > 0) {
+      setError(`Falha ao enviar: ${nomesComFalha.join(', ')}. As demais fotos foram enviadas normalmente.`);
+    }
+
     setProgress({ phase: 'processing', percent: 100 });
 
     formData.delete('fotos');
-    formData.set('foto_paths', JSON.stringify(ticketsResult.tickets.map((t) => t.path)));
+    formData.set('foto_paths', JSON.stringify(pathsEnviados));
     formData.set('specs_extra', JSON.stringify(specsExtra.filter((spec) => spec.value?.trim() && spec.label?.trim())));
 
     const result = await createStudio(null, formData);
@@ -70,6 +93,7 @@ export default function NovoStudioPage() {
 
     form.reset();
     setSpecsExtra([]);
+    setUploads([]);
     setPending(false);
     setProgress(null);
     setSuccess(true);
@@ -165,8 +189,20 @@ export default function NovoStudioPage() {
           <h2>Fotos</h2>
           <label>
             Fotos da unidade (a primeira vira a capa)
-            <input type="file" name="fotos" accept="image/*" multiple required />
+            <input type="file" name="fotos" accept="image/*" multiple required onChange={handleFilesChange} />
           </label>
+          {uploads.length > 0 && (
+            <div className="admin-photo-grid">
+              {uploads.map((u, i) => (
+                <div className={`admin-photo-thumb admin-photo-thumb-${u.status}`} key={`${u.name}-${i}`} title={u.error || u.name}>
+                  <img src={u.url} alt="" />
+                  {u.status === 'enviando' && <span className="admin-photo-status">Enviando…</span>}
+                  {u.status === 'ok' && <span className="admin-photo-status admin-photo-status-ok">✓</span>}
+                  {u.status === 'erro' && <span className="admin-photo-status admin-photo-status-erro">Falhou</span>}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="admin-checkbox-row">
