@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { createImovel, updateImovel, createUploadTickets } from '@/app/admin/actions';
 import { uploadFilesWithProgress } from '@/lib/client-upload';
 import SpecsExtraEditor from '@/components/admin/SpecsExtraEditor';
+import LocationPicker from '@/components/admin/LocationPicker';
 
 export default function ImovelForm({ mode, imovel, localizacoes }) {
   const isEdit = mode === 'editar';
@@ -202,18 +203,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         <span className="admin-hint">
           Não achou a localização? <a href="/admin/imoveis/localizacoes">Adicionar localização →</a>
         </span>
-        <label>
-          Localização no mapa (Google Maps)
-          <input
-            name="mapa_url"
-            defaultValue={imovel?.mapa_url || ''}
-            placeholder="Cole o link do Google Maps ou digite o endereço"
-          />
-        </label>
-        <span className="admin-hint">
-          Cole um link do Google Maps (inclusive links curtos maps.app.goo.gl) ou apenas digite o endereço. O mapa
-          aparece na página do imóvel, logo abaixo das fotos.
-        </span>
+        <LocationPicker defaultValue={imovel?.mapa_url} />
       </div>
 
       <div className="admin-form-section">
