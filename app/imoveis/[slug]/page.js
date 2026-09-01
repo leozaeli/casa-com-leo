@@ -12,7 +12,7 @@ import {
   buildImovelSpecs,
   formatSpecItem,
   specSizeClass,
-  resolveMapEmbedSrc,
+  resolveMapEmbed,
 } from '@/lib/imoveis';
 import { getExchangeRates, formatUSD, formatEUR } from '@/lib/currency';
 
@@ -43,7 +43,7 @@ export default async function ImovelPage({ params }) {
   const precoEur = imovel.preco / rates.eurBrl;
 
   const specs = buildImovelSpecs(imovel);
-  const mapEmbedSrc = await resolveMapEmbedSrc(imovel.mapa_url);
+  const mapEmbed = await resolveMapEmbed(imovel.mapa_url);
 
   return (
     <div className="property-page">
@@ -103,18 +103,24 @@ export default async function ImovelPage({ params }) {
           </div>
         </section>
 
-        {mapEmbedSrc && (
+        {mapEmbed && (
           <section className="location-section">
-            <div className="wrap">
-              <span className="eyebrow-tag">Localização</span>
+            <div className="wrap location-grid">
+              <div className="location-info">
+                <span className="eyebrow-tag">Localização</span>
+                <h2>Onde fica.</h2>
+                <p>{imovel.localizacao}</p>
+              </div>
               <div className="location-map">
                 <iframe
-                  src={mapEmbedSrc}
+                  src={mapEmbed.embedSrc}
                   title={`Mapa de localização — ${imovel.titulo}`}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  allowFullScreen
                 />
+                <a className="location-map-link" href={mapEmbed.viewUrl} target="_blank" rel="noopener noreferrer">
+                  Ver mapa maior
+                </a>
               </div>
             </div>
           </section>
