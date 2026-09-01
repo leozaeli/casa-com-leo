@@ -107,7 +107,7 @@ export default async function ImovelPage({ params }) {
           <section className="location-section">
             <div className="wrap location-grid">
               <div className="location-info">
-                <span className="eyebrow-tag">Localização</span>
+                <span className="location-eyebrow">Localização</span>
                 <h2>Onde fica.</h2>
                 <p>{imovel.localizacao}</p>
               </div>

@@ -177,13 +177,13 @@ footer { padding: 34px 0; color: var(--muted); background: var(--paper); font-si
 .mosaic-item:hover img { transform: scale(1.06); }
 .mosaic-item:nth-child(6n+1) { grid-column: span 2; grid-row: span 2; }
 .mosaic-item:nth-child(6n+4) { grid-column: span 2; }
-.location-section .wrap { background: var(--card); border: 1px solid rgba(24, 21, 15, .04); border-radius: var(--radius); padding: 44px; }
-.location-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: center; }
-.location-info { display: flex; flex-direction: column; gap: 14px; }
-.location-info h2 { margin: 0; font-size: clamp(1.6rem, 2.6vw, 2.2rem); font-weight: 600; letter-spacing: -.01em; line-height: 1.2; }
+.location-section { background: var(--paper); }
+.location-eyebrow { display: block; margin: 0 0 18px; font-size: 11.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.location-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: center; }
+.location-info h2 { margin: 0 0 14px; font-size: clamp(1.6rem, 2.6vw, 2.2rem); font-weight: 600; letter-spacing: -.01em; line-height: 1.2; }
 .location-info p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
-.location-map { position: relative; border-radius: var(--radius-sm); overflow: hidden; background: var(--white); border: 1px solid rgba(24, 21, 15, .08); }
-.location-map iframe { display: block; width: 100%; height: 300px; border: 0; }
+.location-map { position: relative; border-radius: var(--radius-sm); overflow: hidden; }
+.location-map iframe { display: block; width: 100%; height: 360px; border: 0; }
 .location-map-link {
   position: absolute;
   left: 10px;
@@ -337,7 +337,6 @@ body.popup-open { overflow: hidden; }
   .spec strong { font-size: 15.5px; line-height: 1.22; }
   .spec span { font-size: 11px; margin-top: 3px; }
   .mosaic-gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; gap: 10px; }
-  .location-section .wrap { padding: 26px 22px; }
   .location-grid { grid-template-columns: 1fr; gap: 22px; }
   .location-map iframe { height: 240px; }
   .mosaic-item:nth-child(6n+1) { grid-column: span 2; grid-row: span 1; }
