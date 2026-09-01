@@ -5,6 +5,7 @@ import WhatsAppFloat from '@/components/WhatsAppFloat';
 import HeroCarousel from '@/components/HeroCarousel';
 import MosaicGallery from '@/components/MosaicGallery';
 import { getStudioBySlug, formatPrice, formatPriceFull, coverPhoto, TIPOLOGIA_LABEL } from '@/lib/studios';
+import { formatSpecItem, specSizeClass } from '@/lib/imoveis';
 import { getExchangeRates, formatUSD, formatEUR } from '@/lib/currency';
 
 export const revalidate = 0;
@@ -69,12 +70,16 @@ export default async function StudioPage({ params }) {
               </div>
             </div>
             <div className="specs">
-              {specs.map((spec, index) => (
-                <div className="spec" key={index}>
-                  <strong>{spec.value}</strong>
-                  <span>{spec.label}</span>
-                </div>
-              ))}
+              {specs.map((spec, index) => {
+                const item = formatSpecItem(spec);
+                if (!item) return null;
+                return (
+                  <div className={`spec ${specSizeClass(item)}`.trim()} key={index}>
+                    <strong>{item.title}</strong>
+                    {item.subtitle && <span>{item.subtitle}</span>}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
