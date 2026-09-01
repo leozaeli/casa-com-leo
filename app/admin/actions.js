@@ -94,6 +94,7 @@ export async function createImovel(prevState, formData) {
   const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Imóvel · Exclusivo';
   const areaLabel = formData.get('area_label')?.toString() || 'Área construída';
   const destaque = formData.get('destaque') === 'on';
+  const mapaUrl = formData.get('mapa_url')?.toString().trim() || null;
 
   let manualSpecsExtra;
   try {
@@ -102,7 +103,12 @@ export async function createImovel(prevState, formData) {
     manualSpecsExtra = [];
   }
   if (!Array.isArray(manualSpecsExtra)) manualSpecsExtra = [];
-  manualSpecsExtra = manualSpecsExtra.filter((spec) => spec?.label && spec?.value);
+  manualSpecsExtra = manualSpecsExtra
+    .map((spec) => ({
+      value: spec?.value?.toString().trim() || '',
+      label: spec?.label?.toString().trim() || '',
+    }))
+    .filter((spec) => spec.value || spec.label);
 
   const admin = createAdminClient();
 
@@ -179,6 +185,7 @@ export async function createImovel(prevState, formData) {
     specs_extra: manualSpecsExtra,
     fotos: fotoUrls,
     destaque,
+    mapa_url: mapaUrl,
   });
 
   if (insertError) return { error: `Erro ao salvar imóvel: ${insertError.message}` };
@@ -227,6 +234,7 @@ export async function updateImovel(formData) {
   const areaLabel = formData.get('area_label')?.toString() || 'Área construída';
   const destaque = formData.get('destaque') === 'on';
   const vendido = formData.get('vendido') === 'on';
+  const mapaUrl = formData.get('mapa_url')?.toString().trim() || null;
 
   let manualSpecsExtra;
   try {
@@ -235,7 +243,12 @@ export async function updateImovel(formData) {
     manualSpecsExtra = [];
   }
   if (!Array.isArray(manualSpecsExtra)) manualSpecsExtra = [];
-  manualSpecsExtra = manualSpecsExtra.filter((spec) => spec?.label && spec?.value);
+  manualSpecsExtra = manualSpecsExtra
+    .map((spec) => ({
+      value: spec?.value?.toString().trim() || '',
+      label: spec?.label?.toString().trim() || '',
+    }))
+    .filter((spec) => spec.value || spec.label);
 
   let paragrafo1;
   let paragrafo2;
@@ -304,6 +317,7 @@ export async function updateImovel(formData) {
       fotos,
       destaque,
       vendido,
+      mapa_url: mapaUrl,
     })
     .eq('id', id);
 
@@ -376,7 +390,12 @@ export async function createStudio(prevState, formData) {
     manualSpecsExtra = [];
   }
   if (!Array.isArray(manualSpecsExtra)) manualSpecsExtra = [];
-  manualSpecsExtra = manualSpecsExtra.filter((spec) => spec?.label && spec?.value);
+  manualSpecsExtra = manualSpecsExtra
+    .map((spec) => ({
+      value: spec?.value?.toString().trim() || '',
+      label: spec?.label?.toString().trim() || '',
+    }))
+    .filter((spec) => spec.value || spec.label);
 
   let headline;
   let paragrafo1;

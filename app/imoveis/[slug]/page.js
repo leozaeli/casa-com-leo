@@ -4,7 +4,16 @@ import { SimpleFooter } from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import HeroCarousel from '@/components/HeroCarousel';
 import MosaicGallery from '@/components/MosaicGallery';
-import { getImovelBySlug, formatPrice, formatPriceFull, coverPhoto, buildImovelSpecs, formatSpecItem, specSizeClass } from '@/lib/imoveis';
+import {
+  getImovelBySlug,
+  formatPrice,
+  formatPriceFull,
+  coverPhoto,
+  buildImovelSpecs,
+  formatSpecItem,
+  specSizeClass,
+  resolveMapEmbedSrc,
+} from '@/lib/imoveis';
 import { getExchangeRates, formatUSD, formatEUR } from '@/lib/currency';
 
 export const revalidate = 0;
@@ -34,6 +43,7 @@ export default async function ImovelPage({ params }) {
   const precoEur = imovel.preco / rates.eurBrl;
 
   const specs = buildImovelSpecs(imovel);
+  const mapEmbedSrc = await resolveMapEmbedSrc(imovel.mapa_url);
 
   return (
     <div className="property-page">
@@ -92,6 +102,23 @@ export default async function ImovelPage({ params }) {
             <MosaicGallery fotos={fotos} alt={imovel.titulo} />
           </div>
         </section>
+
+        {mapEmbedSrc && (
+          <section className="location-section">
+            <div className="wrap">
+              <span className="eyebrow-tag">Localização</span>
+              <div className="location-map">
+                <iframe
+                  src={mapEmbedSrc}
+                  title={`Mapa de localização — ${imovel.titulo}`}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          </section>
+        )}
       </main>
       <SimpleFooter />
       <div className="sticky-cta">

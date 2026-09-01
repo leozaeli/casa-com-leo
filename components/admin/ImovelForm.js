@@ -58,7 +58,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
       return;
     }
 
-    formData.set('specs_extra', JSON.stringify(specsExtra.filter((spec) => spec.value?.trim() && spec.label?.trim())));
+    formData.set('specs_extra', JSON.stringify(specsExtra.filter((spec) => spec.value?.trim() || spec.label?.trim())));
 
     async function submit() {
       const result = isEdit ? await updateImovel(formData) : await createImovel(null, formData);
@@ -201,6 +201,18 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         </div>
         <span className="admin-hint">
           Não achou a localização? <a href="/admin/imoveis/localizacoes">Adicionar localização →</a>
+        </span>
+        <label>
+          Localização no mapa (Google Maps)
+          <input
+            name="mapa_url"
+            defaultValue={imovel?.mapa_url || ''}
+            placeholder="Cole o link do Google Maps ou digite o endereço"
+          />
+        </label>
+        <span className="admin-hint">
+          Cole um link do Google Maps (inclusive links curtos maps.app.goo.gl) ou apenas digite o endereço. O mapa
+          aparece na página do imóvel, logo abaixo das fotos.
         </span>
       </div>
 
