@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { createImovel, updateImovel, createUploadTickets } from '@/app/admin/actions';
 import { uploadFilesWithProgress } from '@/lib/client-upload';
 import SpecsExtraEditor from '@/components/admin/SpecsExtraEditor';
-import LocationPicker from '@/components/admin/LocationPicker';
+
+const LocationPicker = dynamic(() => import('@/components/admin/LocationPicker'), { ssr: false });
 
 export default function ImovelForm({ mode, imovel, localizacoes }) {
   const isEdit = mode === 'editar';
