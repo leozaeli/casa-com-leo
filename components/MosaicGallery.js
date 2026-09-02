@@ -2,6 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+const SIZE_PATTERN = ['big', '', '', 'wide', '', 'tall', '', ''];
+
+function sizeClass(index) {
+  const size = SIZE_PATTERN[index % SIZE_PATTERN.length];
+  return size ? ` mosaic-item--${size}` : '';
+}
+
 export default function MosaicGallery({ fotos, alt }) {
   const [openIndex, setOpenIndex] = useState(null);
   const touchStartX = useRef(null);
@@ -49,7 +56,7 @@ export default function MosaicGallery({ fotos, alt }) {
     <>
       <div className="mosaic-gallery">
         {fotos.map((foto, index) => (
-          <button key={foto} type="button" className="mosaic-item" onClick={() => setOpenIndex(index)}>
+          <button key={foto} type="button" className={`mosaic-item${sizeClass(index)}`} onClick={() => setOpenIndex(index)}>
             <img src={foto} alt={`${alt} — foto ${index + 1}`} loading="lazy" />
           </button>
         ))}

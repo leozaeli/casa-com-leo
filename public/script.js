@@ -1,18 +1,27 @@
 (function autoHideNav() {
   const nav = document.querySelector('nav');
   if (!nav) return;
-  let lastScrollY = window.scrollY;
+  const THRESHOLD = 8;
+  let lastScrollY = Math.max(window.scrollY || document.documentElement.scrollTop || 0, 0);
+  let accumulated = 0;
   let ticking = false;
 
   function updateNav() {
-    const currentScrollY = window.scrollY;
-    const scrolledDown = currentScrollY > lastScrollY;
-    const pastThreshold = currentScrollY > nav.offsetHeight;
+    const currentScrollY = Math.max(window.scrollY || document.documentElement.scrollTop || 0, 0);
+    const delta = currentScrollY - lastScrollY;
 
-    if (scrolledDown && pastThreshold) {
-      nav.classList.add('nav-hidden');
-    } else {
+    if ((delta > 0 && accumulated < 0) || (delta < 0 && accumulated > 0)) accumulated = 0;
+    accumulated += delta;
+
+    if (currentScrollY <= nav.offsetHeight) {
       nav.classList.remove('nav-hidden');
+      accumulated = 0;
+    } else if (accumulated > THRESHOLD) {
+      nav.classList.add('nav-hidden');
+      accumulated = 0;
+    } else if (accumulated < -THRESHOLD) {
+      nav.classList.remove('nav-hidden');
+      accumulated = 0;
     }
 
     lastScrollY = currentScrollY;
@@ -20,6 +29,13 @@
   }
 
   window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateNav);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchmove', () => {
     if (!ticking) {
       window.requestAnimationFrame(updateNav);
       ticking = true;
