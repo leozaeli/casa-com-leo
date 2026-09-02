@@ -13,7 +13,6 @@ import {
   formatSpecItem,
   specSizeClass,
   resolveMapEmbed,
-  getNearbyHighlights,
 } from '@/lib/imoveis';
 import { getExchangeRates, formatUSD, formatEUR } from '@/lib/currency';
 
@@ -45,7 +44,6 @@ export default async function ImovelPage({ params }) {
 
   const specs = buildImovelSpecs(imovel);
   const mapEmbed = await resolveMapEmbed(imovel.mapa_url);
-  const nearbyHighlights = mapEmbed ? await getNearbyHighlights(mapEmbed.lat, mapEmbed.lon) : [];
 
   return (
     <div className="property-page">
@@ -112,18 +110,7 @@ export default async function ImovelPage({ params }) {
                 <span className="location-eyebrow">Localização</span>
                 <h2>Onde fica.</h2>
                 <p>{imovel.localizacao}</p>
-                {nearbyHighlights.length > 0 && (
-                  <div className="location-highlights">
-                    <span className="location-highlights-title">O que tem ao seu redor?</span>
-                    <div className="location-tags">
-                      {nearbyHighlights.map((tag) => (
-                        <span className="location-tag" key={tag}>
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                {imovel.entorno_texto && <p className="location-surroundings">{imovel.entorno_texto}</p>}
               </div>
               <div className="location-map">
                 <iframe

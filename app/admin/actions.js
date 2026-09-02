@@ -4,7 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/server';
 import { enhanceImage } from '@/lib/image-enhance';
-import { generatePropertyCopy } from '@/lib/generate-copy';
+import { generatePropertyCopy, generateSurroundingsCopy } from '@/lib/generate-copy';
+import { resolveMapEmbed, getNearbySurroundings, hasSurroundingsContent } from '@/lib/imoveis';
 
 function slugify(text) {
   return text
@@ -14,6 +15,21 @@ function slugify(text) {
     .trim()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
+}
+
+async function computeEntornoTexto({ mapaUrl, titulo, localizacao }) {
+  if (!mapaUrl) return null;
+  try {
+    const mapEmbed = await resolveMapEmbed(mapaUrl);
+    if (!mapEmbed) return null;
+    const surroundings = await getNearbySurroundings(mapEmbed.lat, mapEmbed.lon);
+    if (!hasSurroundingsContent(surroundings)) return null;
+    const { texto } = await generateSurroundingsCopy({ localizacao, titulo, surroundings });
+    return texto || null;
+  } catch (err) {
+    console.error('Erro ao gerar texto do entorno:', err);
+    return null;
+  }
 }
 
 async function assertAdmin() {
@@ -118,10 +134,15 @@ export async function createImovel(prevState, formData) {
 
   let paragrafo1;
   let paragrafo2;
+  let entornoTexto;
   try {
-    const copy = await generatePropertyCopy({ ideiaCentral: descricao, fraseDestaque: headline, titulo, localizacao, tipo: 'imóvel' });
+    const [copy, entorno] = await Promise.all([
+      generatePropertyCopy({ ideiaCentral: descricao, fraseDestaque: headline, titulo, localizacao, tipo: 'imóvel' }),
+      computeEntornoTexto({ mapaUrl, titulo, localizacao }),
+    ]);
     paragrafo1 = copy.paragrafo_1;
     paragrafo2 = copy.paragrafo_2 || null;
+    entornoTexto = entorno;
   } catch (aiError) {
     console.error('Erro ao gerar copy com IA:', aiError);
     return { error: 'Não foi possível gerar o texto automático agora. Tente novamente em instantes.' };
@@ -186,6 +207,7 @@ export async function createImovel(prevState, formData) {
     fotos: fotoUrls,
     destaque,
     mapa_url: mapaUrl,
+    entorno_texto: entornoTexto,
   });
 
   if (insertError) return { error: `Erro ao salvar imóvel: ${insertError.message}` };
@@ -203,7 +225,7 @@ export async function updateImovel(formData) {
   if (!id) return { error: 'Imóvel não encontrado.' };
 
   const admin = createAdminClient();
-  const { data: existing } = await admin.from('imoveis').select('slug').eq('id', id).maybeSingle();
+  const { data: existing } = await admin.from('imoveis').select('slug, mapa_url, entorno_texto').eq('id', id).maybeSingle();
   if (!existing) return { error: 'Imóvel não encontrado.' };
   const slug = existing.slug;
 
@@ -252,10 +274,15 @@ export async function updateImovel(formData) {
 
   let paragrafo1;
   let paragrafo2;
+  let entornoTexto = mapaUrl === existing.mapa_url ? existing.entorno_texto : undefined;
   try {
-    const copy = await generatePropertyCopy({ ideiaCentral: descricao, fraseDestaque: headline, titulo, localizacao, tipo: 'imóvel' });
+    const [copy, entorno] = await Promise.all([
+      generatePropertyCopy({ ideiaCentral: descricao, fraseDestaque: headline, titulo, localizacao, tipo: 'imóvel' }),
+      entornoTexto === undefined ? computeEntornoTexto({ mapaUrl, titulo, localizacao }) : Promise.resolve(entornoTexto),
+    ]);
     paragrafo1 = copy.paragrafo_1;
     paragrafo2 = copy.paragrafo_2 || null;
+    entornoTexto = entorno;
   } catch (aiError) {
     console.error('Erro ao gerar copy com IA:', aiError);
     return { error: 'Não foi possível gerar o texto automático agora. Tente novamente em instantes.' };
@@ -318,6 +345,7 @@ export async function updateImovel(formData) {
       destaque,
       vendido,
       mapa_url: mapaUrl,
+      entorno_texto: entornoTexto,
     })
     .eq('id', id);
 
