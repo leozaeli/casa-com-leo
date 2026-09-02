@@ -18,7 +18,7 @@
   align-items: center;
   gap: 11px;
   color: #fff;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Fraunces', serif;
   font-weight: 600;
   font-size: 15px;
   padding: 6px 8px 26px;
@@ -35,7 +35,7 @@
   border-radius: 50%;
   background: var(--accent);
   color: var(--ink);
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Fraunces', serif;
   font-size: 14px;
   font-weight: 700;
 }
@@ -183,7 +183,7 @@
   box-shadow: 0 1px 0 var(--line);
 }
 .admin-stat-card > span { font-size: 12.5px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
-.admin-stat-card > strong { font-family: 'Poppins', sans-serif; font-size: 32px; font-weight: 600; }
+.admin-stat-card > strong { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 600; }
 .admin-stat-card-live > strong { color: var(--ok); }
 .admin-active-list { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
 .admin-active-list li { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
@@ -203,7 +203,7 @@
 .admin-top-pages { display: flex; flex-direction: column; gap: 12px; }
 .admin-top-pages li { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; }
 .admin-top-pages li span { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.admin-top-pages li strong { font-family: 'Poppins', sans-serif; flex-shrink: 0; }
+.admin-top-pages li strong { font-family: 'Fraunces', serif; flex-shrink: 0; }
 
 .admin-leads-list { display: flex; flex-direction: column; gap: 16px; max-height: 420px; overflow-y: auto; }
 .admin-leads-list li { padding-bottom: 16px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
@@ -225,7 +225,7 @@
 /* Funnel */
 .admin-funnel-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 18px; }
 .admin-funnel-step { background: var(--paper); border-radius: var(--radius-sm); padding: 14px 12px; display: flex; flex-direction: column; gap: 4px; text-align: center; }
-.admin-funnel-step strong { font-family: 'Poppins', sans-serif; font-size: 22px; }
+.admin-funnel-step strong { font-family: 'Fraunces', serif; font-size: 22px; }
 .admin-funnel-step span { font-size: 11px; color: var(--muted); }
 .admin-funnel-step-won strong { color: var(--ok); }
 .admin-funnel-step-lost strong { color: var(--off); }

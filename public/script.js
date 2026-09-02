@@ -167,6 +167,19 @@ if (listingPage) {
   [locationFilter, typeFilter, modalityFilter, priceFilter, bedroomFilter, sortFilter].forEach((control) => control.addEventListener('change', applyListingFilters));
   document.querySelector('#clear-filters')?.addEventListener('click', clearListingFilters);
   document.querySelector('#empty-clear')?.addEventListener('click', clearListingFilters);
+
+  const params = new URLSearchParams(window.location.search);
+  const paramMap = {
+    localizacao: locationFilter,
+    tipo: typeFilter,
+    finalidade: modalityFilter,
+    preco: priceFilter,
+  };
+  Object.entries(paramMap).forEach(([param, control]) => {
+    const value = params.get(param);
+    if (value && [...control.options].some((option) => option.value === value)) control.value = value;
+  });
+
   applyListingFilters();
 }
 const rotatingWord = document.querySelector('#rotating-word');

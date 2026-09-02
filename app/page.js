@@ -3,38 +3,81 @@ import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import ListingCard from '@/components/ListingCard';
 import { listImoveis } from '@/lib/imoveis';
+import { listLocalizacoes } from '@/lib/localizacoes';
 
 export const revalidate = 0;
 
 export default async function HomePage() {
-  const imoveis = (await listImoveis()).slice(0, 3);
+  const [todosImoveis, localizacoes] = await Promise.all([listImoveis(), listLocalizacoes()]);
+  const imoveis = todosImoveis.slice(0, 3);
+  const cidades = localizacoes.map((loc) => ({
+    ...loc,
+    total: todosImoveis.filter((im) => im.localizacao_filtro === loc.slug).length,
+  }));
 
   return (
     <>
       <Nav active="home" />
       <main>
-        <section className="hero-section" id="inicio">
-          <div className="wrap">
+        <section className="hero-cover" id="inicio">
+          <div className="hero-cover-media">
+            <img
+              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2200&q=85"
+              alt="Sala de estar ampla em uma casa contemporânea"
+            />
+            <div className="hero-cover-scrim"></div>
+          </div>
+          <div className="wrap hero-cover-inner">
+            <span className="pill-badge" style={{ background: 'rgba(255,255,255,.14)', color: '#fff' }}>
+              <span className="dot"></span>Salvador · Litoral Norte Baiano
+            </span>
             <h1>
               Um caminho claro até o seu próximo <span className="rotating-word" id="rotating-word">endereço</span>.
             </h1>
-            <p className="hero-copy">
-              Veja imóveis selecionados e encontre o que realmente faz sentido para a sua próxima casa entre Salvador e o
-              Litoral Norte Baiano.
+            <p className="hero-copy" style={{ color: 'rgba(255,255,255,.82)' }}>
+              Veja imóveis selecionados e encontre o que realmente faz sentido para a sua próxima casa.
             </p>
-            <a className="button" href="/imoveis">
-              Explorar imóveis →
-            </a>
-            <div className="hero-figure">
-              <img
-                src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2200&q=85"
-                alt="Sala de estar ampla em uma casa contemporânea"
-              />
-            </div>
+          </div>
+          <div className="wrap hero-search-wrap">
+            <form className="hero-search" action="/imoveis" method="get">
+              <label>
+                Localização
+                <select name="localizacao" defaultValue="todos">
+                  <option value="todos">Todas</option>
+                  {localizacoes.map((loc) => (
+                    <option key={loc.slug} value={loc.slug}>
+                      {loc.nome}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Tipo de imóvel
+                <select name="tipo" defaultValue="todos">
+                  <option value="todos">Todos</option>
+                  <option value="casa">Casa</option>
+                  <option value="apartamento">Apartamento</option>
+                  <option value="cobertura">Cobertura</option>
+                  <option value="terreno">Terreno</option>
+                </select>
+              </label>
+              <label>
+                Faixa de valor
+                <select name="preco" defaultValue="todos">
+                  <option value="todos">Qualquer valor</option>
+                  <option value="ate-7">Até R$ 7 mi</option>
+                  <option value="7-10">R$ 7 a 10 mi</option>
+                  <option value="acima-10">Acima de R$ 10 mi</option>
+                </select>
+              </label>
+              <button className="button" type="submit">
+                Buscar →
+              </button>
+            </form>
           </div>
         </section>
 
-        <section className="catalog" id="catalogo">
+        <section className="catalog catalog-with-hero-search" id="catalogo">
           <div className="wrap">
             <div className="section-head">
               <div>
@@ -134,51 +177,60 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="services">
+        <section className="format-banner">
           <div className="wrap">
-            <div className="section-head">
-              <div>
-                <span className="eyebrow-tag">✦ Como posso ajudar</span>
-                <h2 className="section-title">Comprar ou vender, com a mesma atenção.</h2>
-              </div>
-              <a className="button ghost" href="/contato">
-                Falar sobre meu caso
-              </a>
-            </div>
-            <div className="services-grid">
-              <div className="service-card">
-                <img
-                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85"
-                  alt="Sala ampla com grandes janelas"
-                />
-                <div className="service-card-copy">
-                  <h3>Comprar</h3>
-                  <p>Imóveis alinhados ao que você procura, sem enrolação.</p>
+            <div className="format-banner-card">
+              <img
+                className="format-banner-image"
+                src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1800&q=85"
+                alt="Ambiente elegante com vista"
+              />
+              <div className="format-banner-overlay"></div>
+              <div className="format-banner-content">
+                <div>
+                  <span className="eyebrow-tag" style={{ background: 'rgba(255,255,255,.14)', color: '#fff' }}>
+                    ✦ Como posso ajudar
+                  </span>
+                  <h2 className="section-title">Escolha o seu formato.</h2>
+                  <p>Comprar, vender ou alugar por temporada — sempre com a mesma atenção aos detalhes.</p>
                 </div>
-              </div>
-              <div className="service-card">
-                <img
-                  src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1200&q=85"
-                  alt="Ambiente elegante com vista"
-                />
-                <div className="service-card-copy">
-                  <h3>Vender</h3>
-                  <p>Apresentação cuidadosa e negociação conduzida de perto.</p>
-                </div>
-              </div>
-              <div className="service-card">
-                <img
-                  src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=85"
-                  alt="Cozinha contemporânea com acabamento natural"
-                />
-                <div className="service-card-copy">
-                  <h3>Alugar</h3>
-                  <p>Temporada em endereços selecionados, com curadoria de perto.</p>
+                <div className="format-options">
+                  <a className="format-option" href="/imoveis?finalidade=venda">
+                    Comprar <span>→</span>
+                  </a>
+                  <a className="format-option" href="/contato">
+                    Vender <span>→</span>
+                  </a>
+                  <a className="format-option" href="/imoveis?finalidade=temporada">
+                    Alugar por temporada <span>→</span>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
         </section>
+
+        {cidades.length > 0 && (
+          <section className="cities">
+            <div className="wrap">
+              <div className="section-head">
+                <div>
+                  <span className="eyebrow-tag">📍 Onde buscar</span>
+                  <h2 className="section-title">Localizações Selecionadas.</h2>
+                </div>
+                <p className="section-note">Escolha uma região e veja os imóveis selecionados por lá.</p>
+              </div>
+              <div className="cities-grid">
+                {cidades.map((cidade) => (
+                  <a key={cidade.slug} className="city-chip" href={`/imoveis?localizacao=${cidade.slug}`}>
+                    <span>{cidade.nome}</span>
+                    <span className="city-chip-count">{cidade.total}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="statement" id="manifesto">
           <div className="wrap">
