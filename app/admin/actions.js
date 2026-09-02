@@ -99,6 +99,8 @@ export async function createImovel(prevState, formData) {
 
   const preco = Number(formData.get('preco'));
   const areaM2 = Number(formData.get('area_m2'));
+  const areaTotalM2 = Number(formData.get('area_total_m2') || 0);
+  const quartos = Number(formData.get('quartos') || 0);
   const suites = Number(formData.get('suites') || 0);
   const vagas = Number(formData.get('vagas') || 0);
   if (!preco || !areaM2) return { error: 'Preço e área são obrigatórios.' };
@@ -108,7 +110,6 @@ export async function createImovel(prevState, formData) {
   const descricao = formData.get('descricao')?.toString().trim();
   if (!descricao) return { error: 'Descreva o imóvel.' };
   const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Imóvel · Exclusivo';
-  const areaLabel = formData.get('area_label')?.toString() || 'Área construída';
   const destaque = formData.get('destaque') === 'on';
   const mapaUrl = formData.get('mapa_url')?.toString().trim() || null;
 
@@ -197,7 +198,8 @@ export async function createImovel(prevState, formData) {
     modalidades,
     preco,
     area_m2: areaM2,
-    area_label: areaLabel,
+    area_total_m2: areaTotalM2 || null,
+    quartos,
     suites,
     vagas,
     headline,
@@ -244,6 +246,8 @@ export async function updateImovel(formData) {
 
   const preco = Number(formData.get('preco'));
   const areaM2 = Number(formData.get('area_m2'));
+  const areaTotalM2 = Number(formData.get('area_total_m2') || 0);
+  const quartos = Number(formData.get('quartos') || 0);
   const suites = Number(formData.get('suites') || 0);
   const vagas = Number(formData.get('vagas') || 0);
   if (!preco || !areaM2) return { error: 'Preço e área são obrigatórios.' };
@@ -253,7 +257,6 @@ export async function updateImovel(formData) {
   const descricao = formData.get('descricao')?.toString().trim();
   if (!descricao) return { error: 'Descreva o imóvel.' };
   const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Imóvel · Exclusivo';
-  const areaLabel = formData.get('area_label')?.toString() || 'Área construída';
   const destaque = formData.get('destaque') === 'on';
   const vendido = formData.get('vendido') === 'on';
   const mapaUrl = formData.get('mapa_url')?.toString().trim() || null;
@@ -334,7 +337,8 @@ export async function updateImovel(formData) {
       modalidades,
       preco,
       area_m2: areaM2,
-      area_label: areaLabel,
+      area_total_m2: areaTotalM2 || null,
+      quartos,
       suites,
       vagas,
       headline,

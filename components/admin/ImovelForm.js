@@ -212,16 +212,16 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         <h2>Números</h2>
         <div className="admin-form-row">
           <label>
-            Área (m²)
+            Área total (m²)
+            <input name="area_total_m2" type="number" min="0" step="1" defaultValue={imovel?.area_total_m2 ?? ''} placeholder="1050" />
+          </label>
+          <label>
+            Área construída (m²)
             <input name="area_m2" type="number" min="0" step="1" required defaultValue={imovel?.area_m2} placeholder="420" />
           </label>
           <label>
-            Rótulo da área
-            <select name="area_label" defaultValue={imovel?.area_label || 'Área construída'}>
-              <option value="Área construída">Área construída</option>
-              <option value="Área privativa">Área privativa</option>
-              <option value="Área do terreno">Área do terreno</option>
-            </select>
+            Quartos
+            <input name="quartos" type="number" min="0" defaultValue={imovel?.quartos ?? 0} />
           </label>
           <label>
             Suítes
