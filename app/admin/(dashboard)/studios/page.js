@@ -46,7 +46,7 @@ export default async function AdminStudiosPage() {
             <tbody>
               {studios.map((studio) => (
                 <tr key={studio.id}>
-                  <td>
+                  <td className="admin-table-thumb-cell">
                     <img className="admin-table-thumb" src={coverPhoto(studio)} alt="" />
                   </td>
                   <td className="admin-table-title">{studio.titulo}</td>

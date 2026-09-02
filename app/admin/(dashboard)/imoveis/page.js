@@ -50,7 +50,7 @@ export default async function AdminDashboardPage() {
             <tbody>
               {imoveis.map((imovel) => (
                 <tr key={imovel.id}>
-                  <td>
+                  <td className="admin-table-thumb-cell">
                     <img className="admin-table-thumb" src={coverPhoto(imovel)} alt="" />
                   </td>
                   <td className="admin-table-title">{imovel.titulo}</td>

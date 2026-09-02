@@ -158,8 +158,9 @@
 .admin-table tbody tr:last-child td { border-bottom: none; }
 .admin-table tbody tr:hover td { background: rgba(24, 21, 15, .015); }
 .admin-table-title { font-weight: 600; }
-.admin-table-thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; display: block; border: 1px solid var(--line); }
-.admin-table-actions { display: flex; gap: 16px; }
+.admin-table-thumb-cell { width: 68px; min-width: 68px; }
+.admin-table-thumb { width: 52px; height: 52px; min-width: 52px; border-radius: 10px; object-fit: cover; display: block; border: 1px solid var(--line); }
+.admin-table-actions { display: flex; flex-wrap: wrap; gap: 8px 16px; }
 .admin-table-actions a { color: var(--ink); font-size: 13px; font-weight: 500; }
 .admin-table-actions a:hover { text-decoration: underline; }
 .admin-table-actions button { background: none; border: none; padding: 0; color: var(--off); font-size: 13px; font-weight: 500; cursor: pointer; }
