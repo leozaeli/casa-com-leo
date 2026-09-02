@@ -113,12 +113,15 @@ export default async function ImovelPage({ params }) {
                 <h2>Onde fica.</h2>
                 <p>{imovel.localizacao}</p>
                 {nearbyHighlights.length > 0 && (
-                  <div className="location-tags">
-                    {nearbyHighlights.map((tag) => (
-                      <span className="location-tag" key={tag}>
-                        {tag}
-                      </span>
-                    ))}
+                  <div className="location-highlights">
+                    <span className="location-highlights-title">O que tem ao seu redor?</span>
+                    <div className="location-tags">
+                      {nearbyHighlights.map((tag) => (
+                        <span className="location-tag" key={tag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
