@@ -33,7 +33,6 @@ export function SimpleFooter() {
     <footer>
       <div className="wrap footer-inner">
         <span>© 2026 Casa Com Leo</span>
-        <a href="/contato">Agendar uma visita →</a>
       </div>
     </footer>
   );
