@@ -182,21 +182,10 @@ footer { padding: 34px 0; color: var(--muted); background: var(--paper); font-si
 .location-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: center; }
 .location-info h2 { margin: 0 0 14px; font-size: clamp(1.6rem, 2.6vw, 2.2rem); font-weight: 600; letter-spacing: -.01em; line-height: 1.2; }
 .location-info p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+.location-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.location-tag { padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(24, 21, 15, .14); font-size: 12.5px; color: var(--muted); }
 .location-map { position: relative; border-radius: var(--radius-sm); overflow: hidden; }
 .location-map iframe { display: block; width: 100%; height: 360px; border: 0; }
-.location-map-link {
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  padding: 6px 12px;
-  border-radius: 99px;
-  background: rgba(255, 255, 255, .92);
-  color: var(--ink);
-  font-size: 11.5px;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(24, 21, 15, .12);
-}
-.location-map-link:hover { background: #fff; }
 
 .lightbox { position: fixed; inset: 0; z-index: 70; display: flex; align-items: center; justify-content: center; padding: 40px; background: rgba(10,8,5,.92); backdrop-filter: blur(6px); animation: lightbox-in .2s ease; }
 @keyframes lightbox-in { from { opacity: 0; } to { opacity: 1; } }
