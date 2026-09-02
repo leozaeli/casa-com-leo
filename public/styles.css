@@ -149,12 +149,8 @@ footer { padding: 34px 0; color: var(--muted); background: var(--paper); font-si
 .detail-hero { position: relative; min-height: 96svh; display: grid; align-items: end; padding: 150px 0 60px; color: #fff; overflow: hidden; background-position: center; background-size: cover; }
 .detail-hero-content { position: relative; z-index: 2; }
 .hero-carousel { position: absolute; inset: 0; z-index: 0; }
-.hero-carousel-track { display: flex; width: 100%; height: 100%; transition: transform 1.1s cubic-bezier(.65,0,.35,1); }
-.hero-carousel-slide { flex: 0 0 100%; height: 100%; background-position: center; background-size: cover; }
+.hero-carousel-slide { width: 100%; height: 100%; background-position: center; background-size: cover; }
 .hero-carousel-scrim { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,.58), rgba(0,0,0,.06) 60%); }
-.hero-carousel-dots { position: absolute; z-index: 3; bottom: 26px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
-.hero-carousel-dots button { width: 6px; height: 6px; padding: 0; border: 0; border-radius: 99px; background: rgba(255,255,255,.4); cursor: pointer; transition: width .3s ease, background .3s ease; }
-.hero-carousel-dots button.active { width: 20px; background: #fff; }
 .detail-hero.itacimirim { background-image: linear-gradient(0deg, rgba(0,0,0,.55), rgba(0,0,0,.05) 60%), url('https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90'); }
 .detail-hero.praia-do-forte { background-image: linear-gradient(0deg, rgba(0,0,0,.6), rgba(0,0,0,.08) 60%), url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2200&q=90'); }
 .detail-hero.guarajuba { background-image: linear-gradient(0deg, rgba(0,0,0,.62), rgba(0,0,0,.08) 60%), url('https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=2200&q=90'); }
@@ -172,12 +168,10 @@ footer { padding: 34px 0; color: var(--muted); background: var(--paper); font-si
 .spec--full { grid-column: 1 / -1; }
 .spec strong { display: block; font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 600; line-height: 1.25; color: var(--ink); overflow-wrap: break-word; word-break: break-word; }
 .spec span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.35; overflow-wrap: break-word; word-break: break-word; }
-.mosaic-gallery { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 180px; grid-auto-flow: dense; gap: 14px; }
-.mosaic-item { position: relative; display: block; overflow: hidden; border: 0; padding: 0; border-radius: var(--radius-sm); background: var(--card); cursor: pointer; }
-.mosaic-item img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .4s ease; }
+.mosaic-gallery { columns: 4; column-gap: 14px; }
+.mosaic-item { display: block; width: 100%; margin: 0 0 14px; break-inside: avoid; overflow: hidden; border: 0; padding: 0; border-radius: var(--radius-sm); background: var(--card); cursor: pointer; }
+.mosaic-item img { width: 100%; height: auto; display: block; object-fit: cover; transition: transform .4s ease; }
 .mosaic-item:hover img { transform: scale(1.06); }
-.mosaic-item--wide { grid-column: span 2; }
-.mosaic-item--tall { grid-row: span 2; }
 .location-section { background: var(--paper); }
 .location-eyebrow { display: block; margin: 0 0 18px; font-size: 11.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 .location-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: center; }
@@ -326,7 +320,8 @@ body.popup-open { overflow: hidden; }
   .spec--md, .spec--lg, .spec--full { grid-column: 1 / -1; }
   .spec strong { font-size: 15.5px; line-height: 1.22; }
   .spec span { font-size: 11px; margin-top: 3px; }
-  .mosaic-gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; gap: 10px; }
+  .mosaic-gallery { columns: 2; column-gap: 10px; }
+  .mosaic-item { margin-bottom: 10px; }
   .location-grid { grid-template-columns: 1fr; gap: 22px; }
   .location-map iframe { height: 240px; }
   .lightbox { padding: 16px; }
