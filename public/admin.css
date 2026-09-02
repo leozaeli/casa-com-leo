@@ -241,6 +241,21 @@
 .admin-temp-dot.admin-temp-frio { background: rgba(76, 122, 130, .12); color: #4c7a82; }
 .admin-temp-dot.admin-temp-fechado { background: rgba(24, 21, 15, .08); color: var(--muted); }
 
+.admin-thermo-wrap { display: inline-flex; align-items: center; gap: 8px; }
+.admin-thermo { display: flex; align-items: flex-end; gap: 3px; height: 16px; }
+.admin-thermo-seg { width: 5px; border-radius: 2px; background: rgba(24, 21, 15, .1); }
+.admin-thermo-seg:nth-child(1) { height: 6px; }
+.admin-thermo-seg:nth-child(2) { height: 11px; }
+.admin-thermo-seg:nth-child(3) { height: 16px; }
+.admin-thermo-frio .admin-thermo-seg:nth-child(1) { background: #4c7a82; }
+.admin-thermo-morno .admin-thermo-seg:nth-child(1),
+.admin-thermo-morno .admin-thermo-seg:nth-child(2) { background: var(--warn); }
+.admin-thermo-quente .admin-thermo-seg:nth-child(1),
+.admin-thermo-quente .admin-thermo-seg:nth-child(2),
+.admin-thermo-quente .admin-thermo-seg:nth-child(3) { background: #b64f3a; }
+.admin-thermo-fechado .admin-thermo-seg { background: rgba(24, 21, 15, .18); }
+.admin-thermo-label { font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+
 /* Leads CRM */
 .admin-leads-filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
 .admin-leads-filters select, .admin-leads-filters input {

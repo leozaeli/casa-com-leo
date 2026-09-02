@@ -1,11 +1,13 @@
 import { listImoveisAdmin, coverPhoto, formatPrice } from '@/lib/imoveis';
+import { getImovelTemperatures } from '@/lib/leads';
 import DeleteImovelForm from '@/components/admin/DeleteImovelForm';
 import ToggleVendidoForm from '@/components/admin/ToggleVendidoForm';
+import InterestThermometer from '@/components/admin/InterestThermometer';
 
 const SITE_URL = 'https://www.casacomleo.com.br';
 
 export default async function AdminDashboardPage() {
-  const imoveis = await listImoveisAdmin();
+  const [imoveis, temperaturas] = await Promise.all([listImoveisAdmin(), getImovelTemperatures()]);
 
   return (
     <div>
@@ -41,6 +43,7 @@ export default async function AdminDashboardPage() {
                 <th>Localização</th>
                 <th>Preço</th>
                 <th>Status</th>
+                <th>Interesse</th>
                 <th></th>
               </tr>
             </thead>
@@ -64,6 +67,12 @@ export default async function AdminDashboardPage() {
                         Vendido
                       </span>
                     )}
+                  </td>
+                  <td>
+                    <InterestThermometer
+                      temperatura={temperaturas[imovel.slug]?.temperatura}
+                      count={temperaturas[imovel.slug]?.count || 0}
+                    />
                   </td>
                   <td>
                     <div className="admin-table-actions">
