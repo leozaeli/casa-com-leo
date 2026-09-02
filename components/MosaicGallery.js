@@ -2,9 +2,28 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+function classifyOrientation(width, height) {
+  const ratio = width / height;
+  if (ratio >= 1.2) return 'wide';
+  if (ratio <= 0.85) return 'tall';
+  return 'normal';
+}
+
 export default function MosaicGallery({ fotos, alt }) {
   const [openIndex, setOpenIndex] = useState(null);
+  const [orientations, setOrientations] = useState({});
   const touchStartX = useRef(null);
+
+  function handleImageLoad(index, target) {
+    const { naturalWidth, naturalHeight } = target;
+    if (!naturalWidth || !naturalHeight) return;
+    const orientation = classifyOrientation(naturalWidth, naturalHeight);
+    setOrientations((current) => (current[index] === orientation ? current : { ...current, [index]: orientation }));
+  }
+
+  function registerImage(index, el) {
+    if (el && el.complete) handleImageLoad(index, el);
+  }
 
   const close = useCallback(() => setOpenIndex(null), []);
   const prev = useCallback(
@@ -49,8 +68,19 @@ export default function MosaicGallery({ fotos, alt }) {
     <>
       <div className="mosaic-gallery">
         {fotos.map((foto, index) => (
-          <button key={foto} type="button" className="mosaic-item" onClick={() => setOpenIndex(index)}>
-            <img src={foto} alt={`${alt} — foto ${index + 1}`} loading="lazy" />
+          <button
+            key={foto}
+            type="button"
+            className={`mosaic-item${orientations[index] ? ` mosaic-item--${orientations[index]}` : ''}`}
+            onClick={() => setOpenIndex(index)}
+          >
+            <img
+              src={foto}
+              alt={`${alt} — foto ${index + 1}`}
+              loading="lazy"
+              ref={(el) => registerImage(index, el)}
+              onLoad={(event) => handleImageLoad(index, event.target)}
+            />
           </button>
         ))}
       </div>

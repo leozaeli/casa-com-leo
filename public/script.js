@@ -1,3 +1,32 @@
+(function autoHideNav() {
+  const nav = document.querySelector('nav');
+  if (!nav) return;
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  function updateNav() {
+    const currentScrollY = window.scrollY;
+    const scrolledDown = currentScrollY > lastScrollY;
+    const pastThreshold = currentScrollY > nav.offsetHeight;
+
+    if (scrolledDown && pastThreshold) {
+      nav.classList.add('nav-hidden');
+    } else {
+      nav.classList.remove('nav-hidden');
+    }
+
+    lastScrollY = currentScrollY;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateNav);
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+
 document.querySelectorAll('.menu-toggle').forEach((toggle) => {
   toggle.addEventListener('click', () => {
     const isOpen = toggle.classList.toggle('open');
