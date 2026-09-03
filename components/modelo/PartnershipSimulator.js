@@ -10,11 +10,14 @@ function formatBRL(value) {
   });
 }
 
-export default function Simulator({ defaults }) {
+export default function PartnershipSimulator({ plans, defaults }) {
+  const [selectedPlanId, setSelectedPlanId] = useState(plans[0].id);
   const [unitValue, setUnitValue] = useState(defaults.unitValue);
   const [unitsSold, setUnitsSold] = useState(defaults.unitsSold);
   const [commissionPct, setCommissionPct] = useState(defaults.commissionPct);
-  const [participationPct, setParticipationPct] = useState(defaults.participationPct);
+
+  const selectedPlan = plans.find((plan) => plan.id === selectedPlanId) ?? plans[0];
+  const participationPct = selectedPlan.pct;
 
   const totalVGV = unitValue * unitsSold;
   const totalCommission = totalVGV * (commissionPct / 100);
@@ -22,6 +25,32 @@ export default function Simulator({ defaults }) {
 
   return (
     <div className="mp-simulator">
+      <div className="mp-plans-grid">
+        {plans.map((plan) => {
+          const isActive = plan.id === selectedPlanId;
+          return (
+            <button
+              key={plan.id}
+              type="button"
+              className={`mp-plan-card mp-plan-selectable${isActive ? ' active' : ''}`}
+              onClick={() => setSelectedPlanId(plan.id)}
+              aria-pressed={isActive}
+            >
+              <span className="mp-plan-label">{plan.label}</span>
+              <span className="mp-plan-pct">{plan.pct}%</span>
+              <p>{plan.description}</p>
+              {isActive && (
+                <ul className="mp-plan-benefits">
+                  {plan.benefits.map((benefit) => (
+                    <li key={benefit}>{benefit}</li>
+                  ))}
+                </ul>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
       <div className="mp-sim-grid">
         <div className="mp-sim-fields">
           <div className="mp-sim-field">
@@ -74,7 +103,7 @@ export default function Simulator({ defaults }) {
 
           <div className="mp-sim-field">
             <div className="mp-sim-field-value">
-              <label htmlFor="sim-participation">Sua participação</label>
+              <label htmlFor="sim-participation">Sua participação ({selectedPlan.label})</label>
               <strong>{participationPct}%</strong>
             </div>
             <input
@@ -84,7 +113,9 @@ export default function Simulator({ defaults }) {
               max="25"
               step="1"
               value={participationPct}
-              onChange={(event) => setParticipationPct(Number(event.target.value))}
+              disabled
+              readOnly
+              aria-label={`Participação travada em ${participationPct}% pelo plano ${selectedPlan.label}`}
             />
           </div>
         </div>

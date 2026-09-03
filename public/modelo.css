@@ -50,12 +50,18 @@
 .mp-remuneracao { background: var(--card); }
 .mp-remuneracao .mp-title { margin-bottom: 8px; }
 .mp-remuneracao .mp-support { max-width: 640px; margin-bottom: 46px; color: var(--muted); font-size: 15.5px; line-height: 1.6; }
-.mp-plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 60px; }
+.mp-plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
 .mp-plan-card { padding: 30px 28px; border-radius: var(--radius); background: var(--white); border: 1px solid var(--line); }
-.mp-plan-card.mp-plan-featured { border-color: var(--ink); box-shadow: 0 18px 40px rgba(29,22,15,.1); }
+.mp-plan-card.mp-plan-selectable { width: 100%; text-align: left; font: inherit; cursor: pointer; transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease; }
+.mp-plan-card.mp-plan-selectable:hover { border-color: var(--accent); transform: translateY(-2px); }
+.mp-plan-card.mp-plan-selectable.active { border-color: var(--ink); box-shadow: 0 18px 40px rgba(29,22,15,.1); }
 .mp-plan-label { display: block; margin-bottom: 14px; color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.mp-plan-card.active .mp-plan-label { color: var(--accent); }
 .mp-plan-pct { display: block; font-family: 'Fraunces', serif; font-size: 44px; font-weight: 600; color: var(--accent); line-height: 1; margin-bottom: 14px; }
 .mp-plan-card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.mp-plan-benefits { margin: 18px 0 0; padding: 16px 0 0; border-top: 1px solid var(--line); list-style: none; display: grid; gap: 10px; }
+.mp-plan-benefits li { display: flex; gap: 9px; color: var(--ink); font-size: 13.5px; line-height: 1.5; }
+.mp-plan-benefits li::before { content: '✓'; flex-shrink: 0; color: var(--accent); font-weight: 600; }
 
 /* Simulador */
 .mp-simulator { padding: 42px; border-radius: var(--radius); background: var(--white); }
@@ -63,6 +69,7 @@
 .mp-sim-fields { display: grid; gap: 18px; }
 .mp-sim-field label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 12px; font-weight: 500; }
 .mp-sim-field input[type="range"] { width: 100%; accent-color: var(--accent); }
+.mp-sim-field input[type="range"]:disabled { opacity: .55; cursor: not-allowed; }
 .mp-sim-field-value { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
 .mp-sim-field-value strong { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; color: var(--ink); }
 .mp-sim-output { display: flex; flex-direction: column; justify-content: center; gap: 26px; padding: 30px; border-radius: var(--radius-sm); background: var(--paper); }

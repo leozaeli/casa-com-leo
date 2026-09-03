@@ -1,4 +1,4 @@
-import Simulator from '@/components/modelo/Simulator';
+import PartnershipSimulator from '@/components/modelo/PartnershipSimulator';
 
 // Ajuste os números da proposta aqui — nada disso está espalhado no JSX abaixo.
 const CONFIG = {
@@ -50,6 +50,31 @@ const PAPEIS = {
     ],
   },
 };
+
+const PLANOS = [
+  {
+    id: 'originador',
+    label: 'Originador',
+    pct: CONFIG.pctOriginador,
+    description: `Traz o construtor → recebe ${CONFIG.pctOriginador}% da minha comissão líquida em cada unidade vendida daquele produto.`,
+    benefits: [
+      'Zero investimento adicional — só originação e curadoria',
+      'Você não compartilha o risco do investimento em mídia',
+      'Jeito mais simples de testar a parceria',
+    ],
+  },
+  {
+    id: 'originador-trafego',
+    label: 'Originador + Tráfego',
+    pct: CONFIG.pctOriginadorTrafego,
+    description: `Traz o construtor e coinveste em mídia → recebe ${CONFIG.pctOriginadorTrafego}% da comissão nas unidades daquele produto.`,
+    benefits: [
+      `Participação maior em cada unidade vendida (${CONFIG.pctOriginadorTrafego}% em vez de ${CONFIG.pctOriginador}%)`,
+      'Você acelera a velocidade de venda do produto que trouxe',
+      'Prioridade na fila de novos produtos e lançamentos',
+    ],
+  },
+];
 
 const REGRAS = [
   'Base de cálculo: comissão líquida efetivamente recebida do construtor, nunca VGV',
@@ -189,20 +214,7 @@ export default function ModeloStudiosPage() {
               trouxe, durante toda a comercialização.
             </p>
 
-            <div className="mp-plans-grid">
-              <div className="mp-plan-card">
-                <span className="mp-plan-label">Originador</span>
-                <span className="mp-plan-pct">{CONFIG.pctOriginador}%</span>
-                <p>Traz o construtor → recebe {CONFIG.pctOriginador}% da minha comissão líquida em cada unidade vendida daquele produto.</p>
-              </div>
-              <div className="mp-plan-card mp-plan-featured">
-                <span className="mp-plan-label">Originador + tráfego</span>
-                <span className="mp-plan-pct">{CONFIG.pctOriginadorTrafego}%</span>
-                <p>Traz o construtor e coinveste em mídia → recebe {CONFIG.pctOriginadorTrafego}% da comissão nas unidades daquele produto.</p>
-              </div>
-            </div>
-
-            <Simulator defaults={CONFIG.simulador} />
+            <PartnershipSimulator plans={PLANOS} defaults={CONFIG.simulador} />
 
             <div className="mp-rules">
               <h4>Regras claras</h4>
