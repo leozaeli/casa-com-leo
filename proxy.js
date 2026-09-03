@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { updateSession } from '@/lib/supabase/middleware';
 
 const ADMIN_HOST = 'admin.casacomleo.com.br';
+const MODELO_HOST = 'modelo.casacomleo.com.br';
 
 export async function proxy(request) {
   const hostname = (request.headers.get('host') || '').split(':')[0];
@@ -10,6 +11,19 @@ export async function proxy(request) {
 
   if (hasExtension) {
     return NextResponse.next();
+  }
+
+  if (hostname === MODELO_HOST) {
+    const internalPath = pathname.startsWith('/modelo') ? pathname : `/modelo${pathname === '/' ? '' : pathname}`;
+    const rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = internalPath;
+    return NextResponse.rewrite(rewriteUrl);
+  }
+
+  if (pathname.startsWith('/modelo')) {
+    const notFoundUrl = request.nextUrl.clone();
+    notFoundUrl.pathname = `/nao-encontrado${pathname}`;
+    return NextResponse.rewrite(notFoundUrl);
   }
 
   if (hostname === ADMIN_HOST) {
