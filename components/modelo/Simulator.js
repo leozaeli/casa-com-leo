@@ -64,8 +64,8 @@ export default function Simulator({ defaults }) {
             <input
               id="sim-commission"
               type="range"
-              min="1"
-              max="10"
+              min="2"
+              max="6"
               step="0.5"
               value={commissionPct}
               onChange={(event) => setCommissionPct(Number(event.target.value))}
@@ -80,8 +80,8 @@ export default function Simulator({ defaults }) {
             <input
               id="sim-participation"
               type="range"
-              min="5"
-              max="30"
+              min="15"
+              max="25"
               step="1"
               value={participationPct}
               onChange={(event) => setParticipationPct(Number(event.target.value))}
