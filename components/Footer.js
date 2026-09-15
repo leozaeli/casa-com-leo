@@ -16,6 +16,7 @@ export default function Footer() {
     <footer>
       <div className="wrap footer-inner">
         <span>© 2026 Casa Com Leo</span>
+        <img className="footer-brand-accent" src="/brand/logo-4.png" alt="" aria-hidden="true" />
         <div className="locations-marquee">
           <div className="locations-track">
             {items.map((location, index) => (
@@ -33,6 +34,7 @@ export function SimpleFooter() {
     <footer>
       <div className="wrap footer-inner">
         <span>© 2026 Casa Com Leo</span>
+        <img className="footer-brand-accent" src="/brand/logo-4.png" alt="" aria-hidden="true" />
       </div>
     </footer>
   );
