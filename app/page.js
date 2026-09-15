@@ -102,7 +102,7 @@ export default async function HomePage() {
             {imoveis.length > 0 ? (
               <div className="property-grid">
                 {imoveis.map((imovel) => (
-                  <ListingCard key={imovel.id} imovel={imovel} />
+                  <ListingCard key={imovel.id} imovel={imovel} carousel />
                 ))}
               </div>
             ) : (
