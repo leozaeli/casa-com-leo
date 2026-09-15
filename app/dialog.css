@@ -1,0 +1,18 @@
+/* Contact dialogs are created by public/script.js and mounted directly in body. */
+.identity-popup.popup-overlay{background:rgba(5,10,6,.78);backdrop-filter:blur(14px)}
+.identity-popup .popup-card{width:min(100%,460px);border:1px solid rgba(208,239,137,.28);border-radius:4px;background:#171e13;color:#edf3e5;box-shadow:0 30px 80px rgba(0,0,0,.52)}
+.identity-popup .popup-card h2{font-family:'DM Sans',sans-serif;font-size:30px;font-weight:400;letter-spacing:-.04em}
+.identity-popup .popup-card .eyebrow-tag{margin-bottom:18px;padding:0;background:transparent;color:#d0ef89;font-size:10px;letter-spacing:1.7px}
+.identity-popup .popup-copy,.identity-popup .popup-form label{color:#b9c3ae}
+.identity-popup .popup-form{gap:11px}
+.identity-popup .popup-form input,.identity-popup .popup-form textarea{border:1px solid rgba(208,239,137,.22);border-radius:3px;background:#10140d;color:#f3f3ed}
+.identity-popup .popup-form input::placeholder,.identity-popup .popup-form textarea::placeholder{color:#899384}
+.identity-popup .popup-form input:focus,.identity-popup .popup-form textarea:focus{border-color:#d0ef89}
+.identity-popup .popup-close{border:1px solid rgba(208,239,137,.22);border-radius:3px;background:#20291b;color:#edf3e5}
+.identity-popup .popup-close:hover{background:#303d23;color:#d0ef89}
+.identity-popup .popup-form .button{border-radius:3px;background:#d0ef89;color:#18200f}
+.identity-popup .popup-form .button:hover{background:#e1ffad;color:#18200f}
+.identity-choice.choice-menu{border:1px solid rgba(208,239,137,.28);border-radius:4px;background:#171e13;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.identity-choice .choice-option{border-color:rgba(208,239,137,.22);border-radius:3px;background:#10140d;color:#edf3e5}
+.identity-choice .choice-option:hover,.identity-choice .choice-option:focus-visible{border-color:#d0ef89;background:rgba(208,239,137,.12);color:#d0ef89}
+.identity-popup :is(input,textarea,button):focus-visible,.identity-choice .choice-option:focus-visible{outline:2px solid #d0ef89;outline-offset:3px}
