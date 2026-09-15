@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { useRef, useState } from 'react';
 import LogoutButton from '@/components/admin/LogoutButton';
 
 const SITE_URL = 'https://www.casacomleo.com.br';
@@ -69,11 +70,19 @@ const GROUPS = [
 ];
 
 export default function AdminSidebar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuToggle = useRef(null);
   const rawPathname = usePathname();
   const pathname = rawPathname.startsWith('/admin') ? rawPathname.slice('/admin'.length) || '/' : rawPathname;
 
   return (
-    <aside className="admin-sidebar">
+    <aside className="admin-sidebar" data-menu-open={menuOpen} onKeyDown={(event) => {
+      if (event.key === 'Escape' && menuOpen) {
+        setMenuOpen(false);
+        menuToggle.current?.focus();
+      }
+    }}>
+      <div className="admin-sidebar-header">
       <a className="admin-brand" href="/">
         <span className="admin-brand-mark">L</span>
         <span>
@@ -81,6 +90,12 @@ export default function AdminSidebar() {
           <small>Admin</small>
         </span>
       </a>
+      <button ref={menuToggle} className="admin-menu-toggle" type="button" aria-controls="admin-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d={menuOpen ? 'm6 6 12 12M6 18 18 6' : 'M4 8h16M4 16h16'} /></svg>
+        {menuOpen ? 'Fechar' : 'Menu'}
+      </button>
+      </div>
+      <div className="admin-navigation" id="admin-navigation">
       <a href={SITE_URL} target="_blank" rel="noreferrer" className="admin-goto-site">
         <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M14 5h5v5M19 5l-9 9M6 5H5v14h14v-1" />
@@ -95,7 +110,7 @@ export default function AdminSidebar() {
               {group.links.map((link) => {
                 const active = link.exact ? pathname === link.href : pathname.startsWith(link.href);
                 return (
-                  <a key={link.href} href={link.href} className={active ? 'active' : undefined}>
+                  <a key={link.href} href={link.href} className={active ? 'active' : undefined} aria-current={active ? 'page' : undefined} onClick={() => setMenuOpen(false)}>
                     {link.icon}
                     {link.label}
                   </a>
@@ -107,6 +122,7 @@ export default function AdminSidebar() {
       </div>
       <div className="admin-sidebar-footer">
         <LogoutButton />
+      </div>
       </div>
     </aside>
   );

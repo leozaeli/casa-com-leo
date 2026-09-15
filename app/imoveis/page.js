@@ -4,6 +4,7 @@ import WhatsAppFloat from '@/components/WhatsAppFloat';
 import ListingCard from '@/components/ListingCard';
 import { listImoveis } from '@/lib/imoveis';
 import { listLocalizacoes } from '@/lib/localizacoes';
+import '../identity.css';
 
 export const metadata = {
   title: 'Ver imóveis — Casa com Leo',
@@ -16,7 +17,7 @@ export default async function ImoveisPage() {
   const [imoveis, localizacoes] = await Promise.all([listImoveis(), listLocalizacoes()]);
 
   return (
-    <>
+    <div className="site-identity">
       <Nav active="imoveis" />
       <main>
         <section className="listing-intro">
@@ -143,6 +144,6 @@ export default async function ImoveisPage() {
       </main>
       <Footer />
       <WhatsAppFloat />
-    </>
+    </div>
   );
 }

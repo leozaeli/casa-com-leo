@@ -88,7 +88,7 @@ export default function NovoStudioPage() {
     setProgress({ phase: 'processing', percent: 100 });
 
     formData.set('foto_paths', JSON.stringify(pathsEnviados));
-    formData.set('specs_extra', JSON.stringify(specsExtra.filter((spec) => spec.value?.trim() && spec.label?.trim())));
+    formData.set('specs_extra', JSON.stringify(specsExtra.filter((spec) => spec.value?.trim() || spec.label?.trim())));
 
     const result = await createStudio(null, formData);
     if (result?.error) {

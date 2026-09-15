@@ -1,0 +1,116 @@
+/* Home identity is scoped so catalog, property pages and admin keep their own styles. */
+.casa-experience{--ink:#f3f3ed;--muted:#a8aaa0;--paper:#11140f;--card:#1c2019;--white:#f3f3ed;--line:rgba(238,243,226,.16);--accent:#d0ef89;--accent-soft:#d0ef89;--radius:4px;--radius-sm:3px;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif}
+.casa-experience h1,.casa-experience h2,.casa-experience h3{font-family:'DM Sans',sans-serif}
+.casa-experience .wrap{width:min(calc(100% - 96px),1320px)}
+.casa-experience nav{background:rgba(17,20,15,.76);border-color:var(--line);color:var(--ink);height:86px}
+.casa-experience .nav-inner{width:calc(100% - 96px);grid-template-columns:1fr auto 1fr}
+.casa-experience .brand{grid-column:1;grid-row:1;justify-self:start;font-family:'DM Sans',sans-serif;font-size:18px;letter-spacing:-.8px}
+.casa-experience .brand-mark{background:var(--accent);color:#11140f;border-radius:3px;width:32px;height:32px;font-style:italic}
+.casa-experience .nav-links{grid-column:2;grid-row:1;color:#cbd0c5;gap:24px}
+.casa-experience .nav-links a.active,.casa-experience .nav-links a:hover{color:var(--accent)}
+.casa-experience .nav-cta{grid-column:3;border:1px solid #77816b;background:transparent;color:var(--ink);padding:12px 22px;font-weight:500}
+.casa-experience .nav-cta:hover{background:var(--accent);color:#11140f}
+.casa-experience :is(a,button,input,select,textarea):focus-visible{outline:2px solid var(--accent);outline-offset:5px}
+.casa-experience .immersive-journey{height:270svh;position:relative;padding:0;--journey:0;--zoom:1;--intro-opacity:1;--intro-y:0px;--scene-two:0;--scene-three:0;--chapter-two:0;--chapter-three:0}
+.immersive-stage{height:100svh;min-height:620px;position:sticky;top:0;overflow:hidden;background:#1a231a;isolation:isolate}
+.journey-images,.journey-shade{position:absolute;inset:0}
+.journey-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(var(--zoom));will-change:transform;filter:saturate(.68)}
+.journey-image-1{object-position:center 58%}
+.journey-image-2{opacity:var(--scene-two)}
+.journey-image-3{opacity:var(--scene-three)}
+.journey-shade{background:linear-gradient(90deg,rgba(7,14,10,.68),rgba(7,14,10,.1) 75%),linear-gradient(0deg,rgba(7,14,10,.83),transparent 40%,rgba(7,14,10,.23));z-index:1}
+.journey-orbit{position:absolute;left:57%;top:44%;width:54vw;height:54vw;max-width:860px;max-height:860px;transform:translate(-50%,-50%) rotate(calc(var(--journey)*30deg));z-index:2;pointer-events:none;opacity:.5}
+.journey-orbit>span{position:absolute;inset:0;border:1px solid rgba(234,246,218,.29);border-radius:50%;animation:orbit-enter 2.6s cubic-bezier(.16,1,.3,1) both}
+.journey-orbit>span+span{inset:-18%;border-style:dashed;border-color:rgba(234,246,218,.15);animation-delay:.12s}
+.journey-orbit:before,.journey-orbit:after{content:'+';position:absolute;color:#defaaa;font-size:25px;font-weight:300}
+.journey-orbit:before{left:14%;top:14%}.journey-orbit:after{right:14%;bottom:14%}
+.journey-coordinate{position:absolute;right:48px;top:125px;z-index:3;font:10px monospace;letter-spacing:1px;color:#d4dccb;text-align:right}
+.journey-coordinate span{display:block;margin-top:9px;font-size:9px;opacity:.7}
+.journey-intro{position:absolute;z-index:3;left:48px;right:48px;bottom:140px;opacity:var(--intro-opacity);transform:translateY(var(--intro-y));pointer-events:none}
+.experience-kicker{font-size:10px;letter-spacing:2.1px;font-weight:500;display:flex;align-items:center;gap:10px;line-height:1.6}
+.signal-dot{display:inline-block;width:6px;height:6px;flex-shrink:0;border-radius:50%;background:var(--accent);box-shadow:0 0 15px #b5ff6870}
+.journey-intro h1{font-size:clamp(70px,9.6vw,152px);font-weight:500;line-height:.97;letter-spacing:-.075em;margin:26px 0 32px}
+.title-mask{display:block;overflow:hidden;padding-bottom:.07em}
+.title-mask>span{display:block;animation:title-enter 1.4s cubic-bezier(.16,1,.3,1) both}
+.title-mask+ .title-mask>span{animation-delay:.14s}
+.lime-period{color:var(--accent)}
+.journey-intro-bottom{display:flex;align-items:center;gap:65px}
+.journey-intro-bottom p{font-size:14px;line-height:1.7;color:#d4d9d0}
+.experience-button{display:inline-flex;align-items:center;gap:32px;border:1px solid rgba(232,246,216,.55);border-radius:99px;padding:16px 22px;font-size:12px;background:rgba(13,23,14,.2);backdrop-filter:blur(12px);pointer-events:auto;transition:background .25s,color .25s}
+.experience-button span{font-size:22px;color:var(--accent)}
+.experience-button:hover{background:var(--accent);color:#11140f}.experience-button:hover span{color:#11140f}
+.journey-chapter{position:absolute;left:48px;bottom:180px;z-index:3;pointer-events:none;max-width:calc(100% - 96px)}
+.journey-chapter p{font-size:clamp(54px,7vw,110px);line-height:1.02;letter-spacing:-.06em;margin-top:25px}
+.journey-chapter em{font-style:normal;color:#d0ef89}
+.chapter-two{opacity:var(--chapter-two);transform:translateY(calc((1 - var(--chapter-two))*35px))}
+.chapter-three{opacity:var(--chapter-three);transform:translateY(calc((1 - var(--chapter-three))*35px))}
+[data-chapter='2'] .journey-intro,[data-chapter='3'] .journey-intro{visibility:hidden}
+.journey-bottom{position:absolute;bottom:34px;left:48px;right:48px;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.scroll-invitation{font-size:9px;letter-spacing:1.3px;display:flex;gap:14px;align-items:center;white-space:nowrap}
+.scroll-invitation>span{border:1px solid #ffffff4a;width:37px;height:48px;border-radius:30px;display:grid;place-items:center;font-size:18px;color:var(--accent)}
+.journey-index{display:flex;gap:28px}.journey-step{display:flex;align-items:center;gap:10px;color:#949d92;font-size:10px}.journey-step b{font:10px monospace}.journey-step.step-1{color:var(--accent)}
+[data-chapter='2'] .step-1,[data-chapter='3'] .step-1{color:#949d92}[data-chapter='2'] .step-2,[data-chapter='3'] .step-3{color:var(--accent)}
+.journey-photo-note{font-size:9px;color:#bfc7b8}.journey-progress{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(var(--journey));transform-origin:left;z-index:5}
+.casa-experience .experience-search{padding:36px 0 44px;background:#1a1f17;border-bottom:1px solid var(--line);scroll-margin-top:95px}
+.search-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;gap:18px}.search-heading .experience-kicker{color:#b4bba9}.search-heading a{font-size:11px;color:var(--accent)}
+.casa-experience .hero-search{max-width:none;width:100%;border:1px solid var(--line);border-radius:5px;background:#11170f;box-shadow:none;padding:8px}
+.casa-experience .hero-search label{color:#959f8a;padding:12px 24px;font-size:9px;letter-spacing:1px;gap:8px}
+.casa-experience .hero-search select{color:#f3f3ed;font-size:13px;color-scheme:dark;cursor:pointer}
+.casa-experience .button{background:var(--accent);color:#151c0e;border-radius:3px;font-size:12px;transition:background .25s,transform .25s}
+.casa-experience .button:hover{background:#e1ffad;transform:translateY(-2px)}
+.casa-experience section:not(.immersive-journey):not(.experience-search){padding:108px 0}
+.casa-experience .catalog{background:#11140f;scroll-margin-top:80px}
+.casa-experience .eyebrow-tag{background:transparent!important;color:var(--accent)!important;font-size:10px;padding:0;border-radius:0;letter-spacing:1.9px;font-weight:500;margin-bottom:24px}
+.casa-experience .section-title{font-weight:400;font-size:clamp(32px,4vw,62px);letter-spacing:-.055em;line-height:1.1;max-width:750px}
+.casa-experience .section-title em{font-style:normal;color:#91998b}
+.casa-experience .section-note{font-size:13px;color:#a4ac9f;line-height:1.8}
+.casa-experience .section-head{margin-bottom:46px}
+.casa-experience .filter-row{border-bottom:1px solid var(--line);padding-bottom:24px;gap:8px}
+.casa-experience .filter{border-radius:99px;font-size:11px;padding:10px 18px;border-color:transparent;color:#b5bbae}
+.casa-experience .filter.active,.casa-experience .filter:hover{border-color:#d0ef8955;background:#d0ef8912;color:var(--accent)}
+.casa-experience .property-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:26px}
+.casa-experience .property-card{min-width:0}.casa-experience .property-image{height:340px;border-radius:4px;background:#262e21}
+.casa-experience .property-card img{filter:saturate(.85);transition:transform .9s cubic-bezier(.2,.7,.2,1),filter .8s}
+.casa-experience .property-card:hover img{transform:scale(1.06);filter:saturate(1.1)}
+.casa-experience .property-tag{color:#17200f;background:#ebf2e5ee;font-size:10px;border-radius:3px}
+.casa-experience .property-info-top{display:flex;flex-direction:column;align-items:start;gap:14px}.casa-experience .property-info h3{font-size:20px;font-weight:400;letter-spacing:-.6px;color:var(--ink)}
+.casa-experience .property-price{color:var(--accent);font-size:16px;white-space:normal}.casa-experience .property-location{color:#a8b09f;font-size:12px}.casa-experience .property-meta{color:#a8b09f;border-top:1px solid var(--line);padding-top:15px;margin-top:18px}
+.casa-experience .benefits{background:#1a1e17;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.casa-experience .benefits-grid{gap:24px;grid-template-columns:1fr 1fr}.casa-experience .benefit-cards{gap:1px;background:var(--line);border:1px solid var(--line)}
+.casa-experience .benefit-card{background:#1a1e17;border-radius:0;padding:32px}.casa-experience .benefit-card svg{stroke:var(--accent);margin-bottom:46px}.casa-experience .benefit-card h3{font-size:17px;font-weight:400}.casa-experience .benefit-card p{color:#a4ac9f;font-size:12px;line-height:1.8}
+.casa-experience .benefits-image{border-radius:3px}.casa-experience .benefits-image img{filter:saturate(.6);transition:transform 1.2s}.casa-experience .benefits-image:hover img{transform:scale(1.04)}
+.casa-experience .format-banner{background:#11140f}.casa-experience .format-banner-card{min-height:490px;border-radius:4px;display:flex;align-items:center}.casa-experience .format-banner-content{width:100%;padding:64px}.casa-experience .format-banner-content>div:first-child{max-width:560px}.casa-experience .format-banner-overlay{background:linear-gradient(90deg,#10190eee,#10190e77)}.casa-experience .format-options{min-width:270px}.casa-experience .format-option{font-weight:400;padding:24px 0}
+.casa-experience .cities{background:#1a1e17}.casa-experience .city-chip{background:transparent;border-radius:3px;color:#e0e7d8;padding:22px;border-color:var(--line);font-weight:400}.casa-experience .city-chip:hover{border-color:var(--accent);color:var(--accent)}
+.casa-experience .statement{background:#d0ef89;color:#18200f;text-align:center;position:relative;overflow:hidden}
+.casa-experience .statement .eyebrow-tag{color:#3b4c28!important}.casa-experience .statement .section-title{color:#18200f;font-size:clamp(42px,6.5vw,100px);max-width:none;letter-spacing:-.06em}.casa-experience .statement-copy{color:#435433;font-size:16px;max-width:640px;margin:25px auto;line-height:1.8}.casa-experience .statement-link{color:#18200f;border-color:#18200f;font-size:14px}.casa-experience .manifesto{border-top:1px solid #18200f33;padding-top:32px;margin-top:64px}.casa-experience .manifesto strong{color:#18200f;font-family:'DM Sans',sans-serif;font-size:30px;font-weight:400}.casa-experience .manifesto span{color:#435433;font-size:11px}
+.casa-experience .contact{background:#11140f}.casa-experience .contact-form input,.casa-experience .contact-form textarea{border-radius:3px;background:#1a1e17;color:#f3f3ed}.casa-experience .contact-form label{color:#b2b9a9}.casa-experience .contact-form input:focus,.casa-experience .contact-form textarea:focus{border-color:var(--accent)}.casa-experience .success{color:var(--accent)}
+.casa-experience footer{background:#11140f;color:#9aa38f}.casa-experience .experience-reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .9s cubic-bezier(.16,1,.3,1)}.casa-experience .experience-visible{opacity:1;transform:translateY(0)}
+/* Vector strokes remain consistent on iOS, Android and desktop. */
+.casa-experience .experience-icon{display:inline-block;flex-shrink:0;vertical-align:middle;width:18px;height:18px}
+.casa-experience .search-heading a{display:inline-flex;align-items:center;gap:10px}
+.casa-experience .statement-link{display:inline-flex;align-items:center;gap:12px}
+.casa-experience .whatsapp-float-refined .contact-outline-icon{display:none}
+@media(max-width:760px){
+  .casa-experience .experience-icon{width:16px;height:16px;stroke-width:1.35}
+  .casa-experience .menu-toggle{position:relative;width:44px;height:44px;border:0;border-radius:0;padding:0}
+  .casa-experience .menu-toggle span{position:absolute;left:12px;top:18px;width:20px;height:1px;margin:0;background:#dce4d4;transform:none}
+  .casa-experience .menu-toggle span:nth-child(2){top:25px}
+  .casa-experience .menu-toggle span:nth-child(3){display:none}
+  .casa-experience .menu-toggle.open span:nth-child(1){transform:translateY(3.5px) rotate(45deg)}
+  .casa-experience .menu-toggle.open span:nth-child(2){opacity:1;transform:translateY(-3.5px) rotate(-45deg)}
+  .casa-experience .scroll-invitation{min-height:44px;gap:10px}
+  .casa-experience .scroll-invitation>span{width:20px;height:32px;border:0;border-radius:0}
+  .casa-experience .benefit-card svg{width:22px;height:22px;stroke-width:1.3}
+  .casa-experience .property-meta svg{width:14px;height:14px;stroke-width:1.35}
+  .casa-experience .hero-search select{appearance:none;-webkit-appearance:none;border-radius:0;padding-right:24px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23a8b09f' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right center;background-size:16px}
+  .casa-experience .whatsapp-float-refined{width:48px;height:48px;background:rgba(23,30,19,.94);color:#d0ef89;border:1px solid #d0ef894d;box-shadow:0 4px 18px #0002;backdrop-filter:blur(12px)}
+  .casa-experience .whatsapp-float-refined .contact-brand-icon{display:none}
+  .casa-experience .whatsapp-float-refined .contact-outline-icon{display:block;width:22px;height:22px}
+}
+@keyframes title-enter{from{transform:translateY(110%)}to{transform:translateY(0)}}
+@keyframes orbit-enter{from{transform:scale(1.8);opacity:0}to{transform:scale(1);opacity:1}}
+@media(min-width:1600px){.journey-intro,.journey-chapter{left:max(48px,calc((100vw - 1500px)/2))}}
+@media(max-width:1100px){.casa-experience .nav-links{gap:15px;font-size:12px}.casa-experience .nav-inner,.casa-experience .wrap{width:calc(100% - 56px)}.casa-experience .nav-cta{padding:11px 15px}.journey-intro,.journey-chapter{left:28px;right:28px}.journey-bottom{left:28px;right:28px}.journey-index{gap:18px}.journey-step>span{display:none}.casa-experience .property-image{height:270px}.casa-experience .format-banner-content{padding:40px}.casa-experience .format-options{min-width:240px}}
+@media(max-width:760px){.casa-experience .wrap,.casa-experience .nav-inner{width:calc(100% - 40px)}.casa-experience nav{height:72px}.casa-experience .nav-inner{grid-template-columns:1fr auto}.casa-experience .brand{font-size:17px}.casa-experience .menu-toggle{grid-column:2;grid-row:1;border-color:#ffffff44}.casa-experience .menu-toggle span{background:#eff5e9}.casa-experience .nav-links.open{background:#171e13;color:#eff5e9;border-color:#ffffff22;animation:title-enter .4s ease}.casa-experience .nav-links.open a{width:100%}.casa-experience .nav-links.open a:hover{background:#d0ef8912}.casa-experience .immersive-journey{height:230svh}.immersive-stage{min-height:600px}.journey-intro{left:20px;right:20px;bottom:140px}.journey-intro h1{font-size:clamp(60px,14.6vw,108px);margin:24px 0 26px}.journey-intro .experience-kicker{font-size:9px;letter-spacing:1.5px}.journey-intro-bottom{align-items:start;flex-direction:column;gap:22px}.journey-intro-bottom p{font-size:13px}.experience-button{padding:12px 18px;gap:24px}.journey-coordinate{right:20px;top:100px;font-size:9px}.journey-coordinate span{font-size:8px}.journey-orbit{width:110vw;height:110vw;left:65%;top:41%}.journey-image-1{object-position:62% center}.journey-shade{background:linear-gradient(0deg,#07100bec,rgba(7,16,11,.23) 85%)}.journey-bottom{left:20px;right:20px;bottom:25px;flex-wrap:wrap;gap:18px}.journey-index{margin-left:auto;gap:16px}.journey-photo-note{width:100%;font-size:8px}.scroll-invitation{font-size:8px}.scroll-invitation>span{height:38px;width:30px}.journey-chapter{left:20px;bottom:190px;max-width:calc(100% - 40px)}.journey-chapter p{font-size:clamp(48px,12vw,86px)}.journey-chapter .experience-kicker{font-size:8px;letter-spacing:1.3px}.casa-experience .experience-search{padding:30px 0;scroll-margin-top:80px}.search-heading{align-items:start;flex-direction:column;gap:12px}.search-heading .experience-kicker{font-size:9px}.casa-experience .hero-search{flex-direction:column}.casa-experience .hero-search label{padding:14px 16px}.casa-experience .hero-search .button{padding:17px;margin-top:8px}.casa-experience section:not(.immersive-journey):not(.experience-search){padding:68px 0}.casa-experience .section-title{font-size:36px}.casa-experience .section-note{margin-top:24px}.casa-experience .property-grid{grid-template-columns:1fr;gap:42px}.casa-experience .property-image{height:390px;max-height:105vw}.casa-experience .property-info-top{flex-direction:row;align-items:start;gap:16px}.casa-experience .property-info h3{font-size:19px}.casa-experience .property-price{font-size:14px;text-align:right;flex-shrink:0}.casa-experience .benefits-grid{grid-template-columns:1fr}.casa-experience .benefit-cards{grid-template-columns:1fr 1fr}.casa-experience .benefit-card{padding:24px 18px}.casa-experience .benefit-card svg{margin-bottom:30px}.casa-experience .benefits-image{height:380px}.casa-experience .format-banner-content{padding:30px 24px;gap:44px}.casa-experience .format-options{min-width:0;width:100%}.casa-experience .cities-grid{grid-template-columns:1fr 1fr;gap:10px}.casa-experience .city-chip{font-size:12px;padding:18px 14px}.casa-experience .statement .section-title{font-size:52px}.casa-experience .statement-copy{font-size:14px}.casa-experience .manifesto{gap:28px}.casa-experience .contact-grid{gap:36px}.casa-experience .eyebrow-tag{font-size:9px}}
+@media(max-height:700px) and (min-width:761px){.journey-intro{bottom:120px}.journey-intro h1{font-size:85px;margin:20px 0}.journey-intro-bottom{gap:30px}}
+@media(prefers-reduced-motion:reduce){.casa-experience .immersive-journey{height:auto}.immersive-stage{position:relative}.journey-image{transform:none!important}.journey-image-2,.journey-image-3,.journey-chapter{display:none}.casa-experience *,.casa-experience *:before,.casa-experience *:after{animation:none!important;transition:none!important}.casa-experience .experience-reveal{opacity:1;transform:none}.journey-intro{opacity:1;transform:none}.journey-index{display:none}}

@@ -20,7 +20,7 @@ export default async function LocalizacoesPage() {
       <NovaLocalizacaoForm />
 
       {localizacoes.length > 0 && (
-        <div className="admin-table-wrap">
+        <div className="admin-table-wrap" tabIndex={0} role="region" aria-label="Localizações cadastradas">
           <table className="admin-table">
             <thead>
               <tr>

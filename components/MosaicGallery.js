@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import ExperienceIcon from '@/components/ExperienceIcon';
 
 const SIZE_PATTERN = ['big', '', '', 'wide', '', 'tall', '', ''];
 
@@ -9,7 +10,7 @@ function sizeClass(index) {
   return size ? ` mosaic-item--${size}` : '';
 }
 
-export default function MosaicGallery({ fotos, alt }) {
+export default function MosaicGallery({ fotos, alt, refined = false }) {
   const [openIndex, setOpenIndex] = useState(null);
   const touchStartX = useRef(null);
 
@@ -65,7 +66,7 @@ export default function MosaicGallery({ fotos, alt }) {
       {openIndex !== null && (
         <div className="lightbox" onClick={close} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
           <button type="button" className="lightbox-close" onClick={close} aria-label="Fechar">
-            ✕
+            {refined ? <ExperienceIcon direction="close" /> : '✕'}
           </button>
           {fotos.length > 1 && (
             <button
@@ -77,7 +78,7 @@ export default function MosaicGallery({ fotos, alt }) {
               }}
               aria-label="Foto anterior"
             >
-              ‹
+              {refined ? <ExperienceIcon direction="left" /> : '‹'}
             </button>
           )}
           <img
@@ -96,7 +97,7 @@ export default function MosaicGallery({ fotos, alt }) {
               }}
               aria-label="Próxima foto"
             >
-              ›
+              {refined ? <ExperienceIcon direction="right" /> : '›'}
             </button>
           )}
           <span className="lightbox-counter">

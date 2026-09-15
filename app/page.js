@@ -1,6 +1,11 @@
+/* eslint-disable @next/next/no-html-link-for-pages -- Full page navigation initializes the existing public/script.js filters and contact handlers. */
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
+import ImmersiveHero from '@/components/ImmersiveHero';
+import HomeMotion from '@/components/HomeMotion';
+import ExperienceIcon from '@/components/ExperienceIcon';
+import './home.css';
 import ListingCard from '@/components/ListingCard';
 import { listImoveis } from '@/lib/imoveis';
 import { listLocalizacoes } from '@/lib/localizacoes';
@@ -16,29 +21,14 @@ export default async function HomePage() {
   }));
 
   return (
-    <>
+    <div className="casa-experience">
+      <HomeMotion />
       <Nav active="home" />
       <main>
-        <section className="hero-cover" id="inicio">
-          <div className="hero-cover-media">
-            <img
-              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2200&q=85"
-              alt="Sala de estar ampla em uma casa contemporânea"
-            />
-            <div className="hero-cover-scrim"></div>
-          </div>
-          <div className="wrap hero-cover-inner">
-            <span className="pill-badge" style={{ background: 'rgba(255,255,255,.14)', color: '#fff' }}>
-              <span className="dot"></span>Salvador · Litoral Norte Baiano
-            </span>
-            <h1>
-              Um caminho claro até o seu próximo <span className="rotating-word" id="rotating-word">endereço</span>.
-            </h1>
-            <p className="hero-copy" style={{ color: 'rgba(255,255,255,.82)' }}>
-              Veja imóveis selecionados e encontre o que realmente faz sentido para a sua próxima casa.
-            </p>
-          </div>
-          <div className="wrap hero-search-wrap">
+        <ImmersiveHero />
+        <section className="experience-search" id="busca" aria-label="Encontre seu imóvel">
+          <div className="wrap">
+            <div className="search-heading"><span className="experience-kicker">SEU PRÓXIMO ENDEREÇO COMEÇA AQUI</span><a href="/imoveis">Explorar todos os imóveis <ExperienceIcon /></a></div>
             <form className="hero-search" action="/imoveis" method="get">
               <label>
                 Localização
@@ -71,18 +61,18 @@ export default async function HomePage() {
                 </select>
               </label>
               <button className="button" type="submit">
-                Buscar →
+                Encontrar meu lugar <ExperienceIcon />
               </button>
             </form>
           </div>
         </section>
 
-        <section className="catalog catalog-with-hero-search" id="catalogo">
+        <section className="catalog" id="catalogo">
           <div className="wrap">
             <div className="section-head">
               <div>
-                <span className="eyebrow-tag">🏠 Imóveis</span>
-                <h2 className="section-title">Últimos imóveis selecionados.</h2>
+                <span className="eyebrow-tag">01 / A SELEÇÃO</span>
+                <h2 className="section-title">Endereços que<br /><em>abrem possibilidades.</em></h2>
               </div>
               <p className="section-note">
                 Cada endereço tem um ritmo, uma luz, uma história. Encontre o espaço que conversa com a sua.
@@ -126,8 +116,8 @@ export default async function HomePage() {
           <div className="wrap">
             <div className="section-head">
               <div>
-                <span className="eyebrow-tag">✓ Diferenciais</span>
-                <h2 className="section-title">Por que buscar seu imóvel com a Casa com Leo.</h2>
+                <span className="eyebrow-tag">02 / ALÉM DO ENDEREÇO</span>
+                <h2 className="section-title">Um olhar atento.<br /><em>Uma escolha sua.</em></h2>
               </div>
               <p className="section-note">
                 Curadoria sem ruído, atenção aos detalhes e acompanhamento próximo do início ao fim.
@@ -189,20 +179,20 @@ export default async function HomePage() {
               <div className="format-banner-content">
                 <div>
                   <span className="eyebrow-tag" style={{ background: 'rgba(255,255,255,.14)', color: '#fff' }}>
-                    ✦ Como posso ajudar
+                    03 / SEU PRÓXIMO MOVIMENTO
                   </span>
-                  <h2 className="section-title">Escolha o seu formato.</h2>
+                  <h2 className="section-title">Novos planos.<br />Novos espaços.</h2>
                   <p>Comprar, vender ou alugar por temporada — sempre com a mesma atenção aos detalhes.</p>
                 </div>
                 <div className="format-options">
                   <a className="format-option" href="/imoveis?finalidade=venda">
-                    Comprar <span>→</span>
+                    Comprar <span><ExperienceIcon direction="right" /></span>
                   </a>
                   <a className="format-option" href="/contato">
-                    Vender <span>→</span>
+                    Vender <span><ExperienceIcon direction="right" /></span>
                   </a>
                   <a className="format-option" href="/imoveis?finalidade=temporada">
-                    Alugar por temporada <span>→</span>
+                    Alugar por temporada <span><ExperienceIcon direction="right" /></span>
                   </a>
                 </div>
               </div>
@@ -215,7 +205,7 @@ export default async function HomePage() {
             <div className="wrap">
               <div className="section-head">
                 <div>
-                  <span className="eyebrow-tag">📍 Onde buscar</span>
+                  <span className="eyebrow-tag">04 / EXPLORE A BAHIA</span>
                   <h2 className="section-title">Localizações Selecionadas.</h2>
                 </div>
                 <p className="section-note">Escolha uma região e veja os imóveis selecionados por lá.</p>
@@ -243,7 +233,7 @@ export default async function HomePage() {
               bairro que faça sentido para a sua vida.
             </p>
             <a className="statement-link" href="/contato">
-              Vamos encontrar o seu →
+              Vamos encontrar o seu <ExperienceIcon direction="right" />
             </a>
             <div className="manifesto">
               <div>
@@ -269,7 +259,7 @@ export default async function HomePage() {
         <section className="contact" id="contato">
           <div className="wrap contact-grid">
             <div>
-              <span className="eyebrow-tag">✉ Seu próximo endereço</span>
+              <span className="eyebrow-tag">VAMOS DAR O PRÓXIMO PASSO?</span>
               <h2 className="section-title">Vamos conversar sobre sua casa?</h2>
             </div>
             <form className="contact-form" id="contact-form">
@@ -288,7 +278,7 @@ export default async function HomePage() {
         </section>
       </main>
       <Footer />
-      <WhatsAppFloat />
-    </>
+      <WhatsAppFloat minimalOnMobile />
+    </div>
   );
 }

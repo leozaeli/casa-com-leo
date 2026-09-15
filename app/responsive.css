@@ -1,0 +1,100 @@
+/* Shared layout constraints: content wraps, only data tables scroll sideways. */
+html{scroll-padding-top:92px}
+body{min-width:0}
+:where(main,section,form,.wrap,.nav-inner,.section-head,.property-info,.property-info-top,.detail-hero-content)>*{min-width:0}
+:where(input,select,textarea){min-width:0;max-width:100%}
+:where(h1,h2,h3,p,.property-price,.property-location,.spec strong,.spec span){overflow-wrap:anywhere}
+.property-meta,.detail-meta,.filter-panel-actions{flex-wrap:wrap}
+.property-info-top>*{min-width:0}
+.property-info-top .property-price{white-space:normal}
+.property-grid,.listing-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.benefits-grid,.contact-grid,.detail-intro,.location-grid,.listing-heading{min-width:0}
+.filter-fields{grid-template-columns:repeat(5,minmax(0,1fr))}
+.filter-fields label,.filter-fields select,.sort-field{min-width:0}
+.specs{grid-template-columns:repeat(6,minmax(0,1fr))}
+.spec{min-width:0}
+.popup-overlay{padding:20px;overflow-y:auto}
+.popup-card{max-height:calc(100dvh - 40px);overflow-y:auto;overscroll-behavior:contain}
+.choice-menu{max-width:calc(100vw - 24px)}
+.choice-option{white-space:normal}
+.lightbox-image{max-height:calc(100dvh - 100px)}
+body nav .nav-links.open{max-height:calc(100dvh - 100px);overflow-y:auto;overscroll-behavior:contain}
+@media(min-width:761px) and (max-width:1100px){
+  .property-grid,.listing-grid,.casa-experience .property-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .listing-heading{grid-template-columns:minmax(0,1fr) minmax(0,.8fr);gap:32px}
+  .filter-fields{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .contact-grid,.detail-intro,.location-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+  .benefits-grid{grid-template-columns:1fr}
+  .casa-experience .benefits-grid{grid-template-columns:1fr}
+  .benefits-image{max-height:520px}
+  .format-banner-content{padding:36px;gap:30px}.format-options{min-width:0;flex:1}
+  .cities-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+/* Switch navigation before its links collide with the centered brand. */
+@media(max-width:1024px){
+  body nav .nav-inner{grid-template-columns:1fr auto}
+  body nav .brand{grid-column:1;grid-row:1;justify-self:start}
+  body nav .nav-cta{display:none}
+  body nav .menu-toggle{display:block;grid-column:2;grid-row:1;width:44px;height:44px;margin-left:auto;padding:10px;border:0;background:transparent}
+  body nav .nav-links{display:none}
+  body nav .nav-links.open{position:absolute;top:calc(100% + 8px);left:20px;right:20px;display:flex;align-items:stretch;flex-direction:column;gap:0;padding:8px;background:var(--paper);border:1px solid var(--line);border-radius:8px;box-shadow:0 16px 36px #0002}
+  body nav .nav-links.open a{min-height:44px;display:flex;align-items:center;padding:12px 14px}
+  body nav .nav-links.open .nav-studios{margin:0;padding:12px 14px;border-left:0;border-top:1px solid var(--line)}
+  body .casa-experience nav .nav-links.open{background:#171e13;color:#eff5e9}
+  body .casa-experience nav .menu-toggle{position:relative}
+  body .casa-experience nav .menu-toggle span{position:absolute;top:18px;left:12px;width:20px;height:1px;margin:0;background:#eff5e9;transform:none}
+  body .casa-experience nav .menu-toggle span:nth-child(2){top:25px}
+  body .casa-experience nav .menu-toggle span:nth-child(3){display:none}
+  body .casa-experience nav .menu-toggle.open span:nth-child(1){transform:translateY(3.5px) rotate(45deg)}
+  body .casa-experience nav .menu-toggle.open span:nth-child(2){opacity:1;transform:translateY(-3.5px) rotate(-45deg)}
+}
+@media(max-width:760px){
+  .property-grid,.listing-grid{grid-template-columns:minmax(0,1fr)}
+  .filter-fields,.contact-grid,.detail-intro,.location-grid,.benefits-grid,.listing-heading{grid-template-columns:minmax(0,1fr)}
+  .filter-fields{gap:16px}
+  .sort-field{display:grid;grid-template-columns:auto minmax(0,1fr);width:100%}
+  .property-info-top{flex-wrap:wrap;gap:8px 16px}
+  .casa-experience .property-info-top{flex-wrap:wrap}
+  .casa-experience .property-info-top .property-price{flex-shrink:1;text-align:left}
+  .casa-experience .property-info-top h3{flex-basis:100%}
+  .property-meta{gap:10px 16px}
+  .format-options{min-width:0;width:100%}
+  .format-banner-content{padding:28px 22px}
+  .cities-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .city-chip{min-width:0;padding:15px 13px}
+  .city-chip span:first-child{overflow-wrap:anywhere}
+  .specs{grid-template-columns:repeat(4,minmax(0,1fr))}
+  body input:not([type='checkbox']):not([type='radio']):not([type='range']),body select,body textarea,body .casa-experience .hero-search select{font-size:16px}
+  body select,body .button,body .clear-filters,body .filter{min-height:44px}
+  .section-head .section-note{margin-top:20px}
+  .detail-hero{height:auto;min-height:90svh}
+  .detail-meta>span{max-width:100%;overflow-wrap:anywhere}
+  .sticky-cta-inner{min-width:0}
+  .sticky-cta-info{min-width:0;flex-wrap:wrap}
+  .sticky-cta-info span{white-space:normal}
+  .sticky-cta-actions{min-width:0}
+  .sticky-cta-actions .button{min-height:44px;white-space:normal}
+  .popup-overlay{padding:12px}
+  .popup-card{max-height:calc(100dvh - 24px);padding:30px 22px}
+  .locations-marquee{min-width:0;max-width:100%}
+  .footer-inner{min-width:0}
+  .lightbox{padding:64px 12px 100px}
+  .lightbox-image{max-height:calc(100dvh - 164px)}
+  .lightbox-nav{top:auto;bottom:22px;transform:none;min-width:44px;min-height:44px}
+  .lightbox-counter{bottom:38px}
+}
+@media(max-width:380px){
+  .casa-experience .benefit-cards{grid-template-columns:1fr}
+  .casa-experience .journey-intro h1{font-size:clamp(44px,14.6vw,56px)}
+  .casa-experience .journey-intro .experience-kicker{letter-spacing:.8px;font-size:8px}
+  .casa-experience .journey-bottom{gap:10px}
+  .casa-experience .journey-index{gap:9px}
+  .property-section-links>.wrap{gap:14px}
+}
+@media(max-height:620px) and (orientation:landscape){
+  .casa-experience .immersive-journey{height:auto}
+  .casa-experience .immersive-stage{position:relative;height:auto;min-height:600px}
+  .casa-experience .journey-intro{opacity:1;transform:none;visibility:visible}
+  .casa-experience .journey-chapter,.casa-experience .journey-image-2,.casa-experience .journey-image-3{display:none}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.locations-track{animation:none}}

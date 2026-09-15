@@ -147,3 +147,18 @@
   .mp-cycle-ring { grid-template-columns: 1fr 1fr; }
   .mp-fechamento { padding: 80px 0; }
 }
+
+.modelo-page :where(div,section,li){min-width:0}
+.mp-topbar .wrap{flex-wrap:wrap}
+.mp-sim-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mp-sim-output-row,.mp-sim-field-value{flex-wrap:wrap;gap:8px}
+.mp-sim-output-row strong,.mp-sim-highlight strong{overflow-wrap:anywhere}
+.mp-sim-field input[type='range']{min-height:44px}
+@media(max-width:900px){.mp-sim-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:480px){
+  .modelo-page .wrap-narrow{width:calc(100% - 32px)}
+  .mp-sim-output{padding:22px 16px}.mp-sim-highlight strong{font-size:32px}
+  .mp-role-card,.mp-plan-card,.mp-rules{padding:26px 20px}
+  .mp-cycle-ring{grid-template-columns:minmax(0,1fr)}
+  .mp-confidential{font-size:10px}
+}

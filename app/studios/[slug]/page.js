@@ -7,6 +7,9 @@ import MosaicGallery from '@/components/MosaicGallery';
 import { getStudioBySlug, formatPrice, formatPriceFull, coverPhoto, TIPOLOGIA_LABEL } from '@/lib/studios';
 import { formatSpecItem, specSizeClass } from '@/lib/imoveis';
 import { getExchangeRates, formatUSD, formatEUR } from '@/lib/currency';
+import '../../home.css';
+import '../../identity.css';
+import '../../imoveis/[slug]/property.css';
 
 export const revalidate = 0;
 
@@ -38,30 +41,31 @@ export default async function StudioPage({ params }) {
   ];
 
   return (
-    <div className="property-page">
+    <div className="casa-experience property-page property-experience studio-experience">
       <Nav active="studios" />
       <main>
         <section className="detail-hero">
           <HeroCarousel fotos={fotos} />
+          <div className="wrap property-hero-top"><a className="property-back" href="/studios">← Todos os studios</a><span>CASA COM LEO / STUDIOHUB</span></div>
           <div className="wrap detail-hero-content">
-            <span className="eyebrow-tag" style={{ background: 'rgba(255,255,255,.16)', color: '#fff', backdropFilter: 'blur(8px)' }}>
+              <span className="eyebrow-tag">
               {studio.eyebrow}
             </span>
-            <h1>{studio.titulo}.</h1>
+            <h1>{studio.titulo}</h1>
             <div className="detail-meta">
               <span>{studio.localizacao}</span>
               <span>A partir de {formatPriceFull(studio.preco)}</span>
               <span title="Valor aproximado, convertido pela cotação atual">≈ {formatUSD(precoUsd)}</span>
               <span title="Valor aproximado, convertido pela cotação atual">≈ {formatEUR(precoEur)}</span>
             </div>
+            <div className="property-hero-actions"><a className="experience-button" href="#galeria">Explorar {fotos.length} fotos <span>↗</span></a><button className="button" type="button" data-popup="fale-comigo" data-prefill={`Tenho interesse na unidade: ${studio.titulo}.`}>Quero conhecer <span>↗</span></button></div>
           </div>
         </section>
 
-        <section>
+        <div className="property-section-links"><div className="wrap"><a href="#sobre">01 / O studio</a><a href="#galeria">02 / Galeria</a></div></div>
+        <section id="sobre" className="property-overview">
           <div className="wrap">
-            <a className="back-link" href="/studios">
-              ← Voltar aos Studios
-            </a>
+            <span className="eyebrow-tag">01 / UM ESPAÇO PARA O SEU PRÓXIMO CAPÍTULO</span>
             <div className="detail-intro">
               <h2>{studio.headline}</h2>
               <div>
@@ -84,10 +88,10 @@ export default async function StudioPage({ params }) {
           </div>
         </section>
 
-        <section className="catalog">
+        <section className="catalog property-gallery" id="galeria">
           <div className="wrap">
-            <span className="eyebrow-tag">Um olhar por dentro</span>
-            <MosaicGallery fotos={fotos} alt={studio.titulo} />
+            <div className="section-head"><div><span className="eyebrow-tag">02 / UM OLHAR POR DENTRO</span><h2 className="section-title">Compacto no tamanho.<br /><em>Grande nas possibilidades.</em></h2></div><p className="section-note">Explore os ambientes e os detalhes do seu próximo investimento.</p></div>
+            <MosaicGallery fotos={fotos} alt={studio.titulo} refined />
           </div>
         </section>
       </main>
@@ -110,7 +114,7 @@ export default async function StudioPage({ params }) {
           </div>
         </div>
       </div>
-      <WhatsAppFloat />
+      <WhatsAppFloat minimalOnMobile />
     </div>
   );
 }

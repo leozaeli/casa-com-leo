@@ -3,6 +3,7 @@ import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import StudioCard from '@/components/StudioCard';
 import { listStudios } from '@/lib/studios';
+import '../identity.css';
 
 export const metadata = {
   title: 'Studios — Casa com Leo',
@@ -15,7 +16,7 @@ export default async function StudiosPage() {
   const studios = await listStudios();
 
   return (
-    <>
+    <div className="site-identity">
       <Nav active="studios" />
       <main>
         <section className="studios-hero">
@@ -91,6 +92,6 @@ export default async function StudiosPage() {
       </main>
       <Footer />
       <WhatsAppFloat />
-    </>
+    </div>
   );
 }

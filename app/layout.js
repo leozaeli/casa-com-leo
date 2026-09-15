@@ -1,5 +1,7 @@
 import { headers } from 'next/headers';
 import Analytics from '@/components/Analytics';
+import './responsive.css';
+import './identity.css';
 
 export const metadata = {
   title: 'Casa com Leo — Imóveis com intenção',

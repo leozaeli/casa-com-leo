@@ -31,7 +31,7 @@ export default async function AdminStudiosPage() {
           </a>
         </div>
       ) : (
-        <div className="admin-table-wrap">
+        <div className="admin-table-wrap" tabIndex={0} role="region" aria-label="Lista de studios; deslize para ver todas as colunas">
           <table className="admin-table">
             <thead>
               <tr>

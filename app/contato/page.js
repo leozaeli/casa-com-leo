@@ -1,6 +1,7 @@
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
+import '../identity.css';
 
 export const metadata = {
   title: 'Contato — Casa com Leo',
@@ -9,7 +10,7 @@ export const metadata = {
 
 export default function ContatoPage() {
   return (
-    <>
+    <div className="site-identity">
       <Nav active="contato" />
       <main className="contact-page-main">
         <section className="contact contact-page-section">
@@ -39,6 +40,6 @@ export default function ContatoPage() {
       </main>
       <Footer />
       <WhatsAppFloat />
-    </>
+    </div>
   );
 }
