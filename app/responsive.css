@@ -30,8 +30,8 @@ body nav .nav-links.open{max-height:calc(100dvh - 100px);overflow-y:auto;overscr
   .format-banner-content{padding:36px;gap:30px}.format-options{min-width:0;flex:1}
   .cities-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
-/* Switch navigation before its links collide with the centered brand. */
-@media(max-width:1024px){
+/* Switch navigation before its links collide with the brand. */
+@media(max-width:1160px){
   body nav .nav-inner{grid-template-columns:1fr auto}
   body nav .brand{grid-column:1;grid-row:1;justify-self:start}
   body nav .nav-cta{display:none}
