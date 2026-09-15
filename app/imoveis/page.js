@@ -125,7 +125,7 @@ export default async function ImoveisPage() {
             </div>
             <div className="property-grid listing-grid" id="property-results">
               {imoveis.map((imovel) => (
-                <ListingCard key={imovel.id} imovel={imovel} />
+                <ListingCard key={imovel.id} imovel={imovel} carousel />
               ))}
             </div>
             <div className="empty-results" id="empty-results" hidden={imoveis.length > 0}>

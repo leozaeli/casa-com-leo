@@ -1,5 +1,6 @@
 import { BedIcon, AreaIcon } from '@/components/PropertyIcons';
 import { formatPrice, coverPhoto } from '@/lib/imoveis';
+import ListingGallery from '@/components/ListingGallery';
 
 const MODALITY_LABEL = {
   venda: 'Venda',
@@ -7,12 +8,14 @@ const MODALITY_LABEL = {
   ambos: 'Venda e temporada',
 };
 
-export default function ListingCard({ imovel }) {
+export default function ListingCard({ imovel, carousel = false }) {
   const modalidades = imovel.modalidades || ['venda'];
   const modalityKey = modalidades.length > 1 ? 'ambos' : modalidades[0];
+  const href = `/imoveis/${imovel.slug}`;
+  const photos = imovel.fotos?.length ? imovel.fotos : [coverPhoto(imovel)];
 
   return (
-    <a
+    <article
       className="property-card listing-card"
       data-location={imovel.localizacao_filtro}
       data-category={imovel.categoria}
@@ -20,10 +23,9 @@ export default function ListingCard({ imovel }) {
       data-price={imovel.preco}
       data-bedrooms={imovel.suites}
       data-area={imovel.area_m2}
-      href={`/imoveis/${imovel.slug}`}
     >
       <div className="property-image">
-        <img src={coverPhoto(imovel)} alt={imovel.titulo} />
+        {carousel ? <ListingGallery photos={photos} title={imovel.titulo} href={href} /> : <img src={photos[0]} alt={imovel.titulo} />}
         {imovel.vendido ? (
           <div className="property-sold-overlay">
             <span>Vendido</span>
@@ -37,6 +39,7 @@ export default function ListingCard({ imovel }) {
           </>
         )}
       </div>
+      <a className="listing-card-link" href={href} aria-label={`Ver imóvel ${imovel.titulo}`}>
       <div className="property-info">
         <div className="property-info-top">
           <h3>{imovel.titulo}</h3>
@@ -54,6 +57,7 @@ export default function ListingCard({ imovel }) {
           </span>
         </div>
       </div>
-    </a>
+      </a>
+    </article>
   );
 }
