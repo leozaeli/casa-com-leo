@@ -36,13 +36,9 @@ nav.nav-hidden { transform: translateY(-100%); }
 .nav-links a.active { color: var(--ink); font-weight: 600; }
 .nav-links a.nav-studios { margin-left: 8px; padding-left: 20px; border-left: 1px solid var(--line); color: var(--accent); font-weight: 600; }
 .nav-links a.nav-studios:hover { color: #a08a5e; }
-.brand { justify-self: center; display: flex; align-items: center; width: 112px; height: 32px; overflow: hidden; gap: 9px; font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
+.brand { justify-self: center; display: flex; align-items: center; gap: 9px; font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
 .brand-mark { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--paper); font-family: 'Fraunces', serif; font-size: 13px; }
-.brand-logo { display: block; width: 112px; height: 42px; max-width: none; object-fit: contain; }
-@media (min-width: 1281px) {
-  .brand { width: 400px; height: 52px; }
-  .brand-logo { width: 400px; height: 150px; transform: translateY(-49px); }
-}
+.brand-logo { display: block; width: 146px; height: 42px; object-fit: contain; }
 .nav-cta { justify-self: end; cursor: pointer; border: 0; border-radius: 99px; padding: 12px 20px; color: var(--white); background: var(--ink); font-size: 12.5px; font-weight: 600; }
 .nav-cta:hover { background: #322c22; }
 
@@ -434,8 +430,7 @@ body.popup-open { overflow: hidden; }
   .nav-inner { grid-template-columns: auto 1fr; }
   .nav-links { display: none; }
   .brand { justify-self: start; }
-  .brand { width: 98px; height: 28px; }
-  .brand-logo { width: 98px; height: 36px; }
+  .brand-logo { width: 98px; height: 28px; }
   .nav-cta { display: none; }
   .menu-toggle { display: block; width: 42px; height: 42px; margin-left: auto; border: 1px solid var(--line); border-radius: 50%; }
   .nav-links.open { position: absolute; top: calc(100% + 10px); left: 16px; right: 16px; display: flex; flex-direction: column; gap: 0; padding: 8px; border: 1px solid var(--line); border-radius: 14px; background: rgba(242,237,227,.98); box-shadow: 0 18px 40px rgba(18,18,18,.12); }
