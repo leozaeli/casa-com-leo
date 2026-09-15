@@ -74,6 +74,9 @@
 .casa-experience .property-card img{filter:saturate(.85);transition:transform .9s cubic-bezier(.2,.7,.2,1),filter .8s}
 .casa-experience .property-card:hover img{transform:scale(1.06);filter:saturate(1.1)}
 .casa-experience .property-tag{color:#17200f;background:#ebf2e5ee;font-size:10px;border-radius:3px}
+.casa-experience .modality-tag{border:1px solid rgba(208,239,137,.42);border-radius:3px;background:#18200f;color:#f3f3ed;font-size:10px;letter-spacing:.03em}
+.casa-experience .modality-tag.modality-temporada{border-color:#d0ef89;background:#d0ef89;color:#18200f}
+.casa-experience .modality-tag.modality-ambos{border-color:#d0ef89;background:linear-gradient(135deg,#18200f,#2c3b20);color:#f3f3ed}
 .casa-experience .property-info-top{display:flex;flex-direction:column;align-items:start;gap:14px}.casa-experience .property-info h3{font-size:20px;font-weight:400;letter-spacing:-.6px;color:var(--ink)}
 .casa-experience .property-price{color:var(--accent);font-size:16px;white-space:normal}.casa-experience .property-location{color:#a8b09f;font-size:12px}.casa-experience .property-meta{color:#a8b09f;border-top:1px solid var(--line);padding-top:15px;margin-top:18px}
 .casa-experience .benefits{background:#1a1e17;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
