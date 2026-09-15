@@ -39,6 +39,9 @@ nav.nav-hidden { transform: translateY(-100%); }
 .brand { justify-self: center; display: flex; align-items: center; gap: 9px; font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
 .brand-mark { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--paper); font-family: 'Fraunces', serif; font-size: 13px; }
 .brand-logo { display: block; width: 146px; height: 42px; object-fit: contain; }
+@media (min-width: 1281px) {
+  .brand-logo { width: 292px; height: 84px; }
+}
 .nav-cta { justify-self: end; cursor: pointer; border: 0; border-radius: 99px; padding: 12px 20px; color: var(--white); background: var(--ink); font-size: 12.5px; font-weight: 600; }
 .nav-cta:hover { background: #322c22; }
 
