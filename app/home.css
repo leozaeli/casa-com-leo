@@ -14,7 +14,7 @@
 .casa-experience .immersive-journey{height:270svh;position:relative;padding:0;--journey:0;--zoom:1;--intro-opacity:1;--intro-y:0px;--scene-two:0;--scene-three:0;--chapter-two:0;--chapter-three:0}
 .immersive-stage{height:100svh;min-height:620px;position:sticky;top:0;overflow:hidden;background:#1a231a;isolation:isolate}
 .journey-images,.journey-shade{position:absolute;inset:0}
-.journey-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(var(--zoom));will-change:transform;filter:saturate(.68)}
+.journey-image{position:absolute;inset:0;width:100%;height:100%;transform:scale(var(--zoom));will-change:transform;filter:saturate(.68)}.journey-image img{width:100%;height:100%;object-fit:cover}
 .journey-image-1{object-position:center 58%}
 .journey-image-2{opacity:var(--scene-two)}
 .journey-image-3{opacity:var(--scene-three)}

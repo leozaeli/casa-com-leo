@@ -2,18 +2,19 @@
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
-import ImmersiveHero from '@/components/ImmersiveHero';
+import EditableImmersiveHero from '@/components/EditableImmersiveHero';
 import HomeMotion from '@/components/HomeMotion';
 import ExperienceIcon from '@/components/ExperienceIcon';
 import './home.css';
 import ListingCard from '@/components/ListingCard';
 import { listImoveis } from '@/lib/imoveis';
 import { listLocalizacoes } from '@/lib/localizacoes';
+import { getHomeHero } from '@/lib/home-hero';
 
 export const revalidate = 0;
 
 export default async function HomePage() {
-  const [todosImoveis, localizacoes] = await Promise.all([listImoveis(), listLocalizacoes()]);
+  const [todosImoveis, localizacoes, hero] = await Promise.all([listImoveis(), listLocalizacoes(), getHomeHero()]);
   const imoveis = todosImoveis.slice(0, 3);
   const cidades = localizacoes.map((loc) => ({
     ...loc,
@@ -25,7 +26,7 @@ export default async function HomePage() {
       <HomeMotion />
       <Nav active="home" />
       <main>
-        <ImmersiveHero />
+        <EditableImmersiveHero hero={hero} />
         <section className="experience-search" id="busca" aria-label="Encontre seu imóvel">
           <div className="wrap">
             <div className="search-heading"><span className="experience-kicker">SEU PRÓXIMO ENDEREÇO COMEÇA AQUI</span><a href="/imoveis">Explorar todos os imóveis <ExperienceIcon /></a></div>

@@ -43,12 +43,16 @@ const LocationIcon = (
     <circle cx="12" cy="9.5" r="2.4" />
   </svg>
 );
+const HomeEditorIcon = (
+  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="m6 16 4-4 3 3 2-2 3 3M8 8h.01" /></svg>
+);
 
 const GROUPS = [
   {
     label: 'Geral',
     links: [
       { href: '/', label: 'Dashboard', exact: true, icon: DashboardIcon },
+      { href: '/home', label: 'Home', exact: true, icon: HomeEditorIcon },
       { href: '/leads', label: 'Leads', exact: false, icon: LeadsIcon },
     ],
   },

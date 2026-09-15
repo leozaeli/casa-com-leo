@@ -6,6 +6,7 @@ import { createAdminClient } from '@/lib/supabase/server';
 import { enhanceImage } from '@/lib/image-enhance';
 import { generatePropertyCopy, generateSurroundingsCopy } from '@/lib/generate-copy';
 import { resolveMapEmbed, getNearbySurroundings, hasSurroundingsContent } from '@/lib/imoveis';
+import { DEFAULT_HOME_HERO } from '@/lib/home-hero';
 
 function slugify(text) {
   return text
@@ -60,6 +61,41 @@ export async function createUploadTickets(formData) {
     tickets.push({ path: data.path, signedUrl: data.signedUrl, token: data.token });
   }
   return { tickets };
+}
+
+export async function updateHomeHero(formData) {
+  await assertAdmin();
+  const required = ['kicker', 'titleLineOne', 'titleLineTwo', 'intro', 'ctaLabel'];
+  const copy = Object.fromEntries(required.map((key) => [key, formData.get(key)?.toString().trim() || '']));
+  if (Object.values(copy).some((value) => !value)) return { error: 'Preencha todos os textos da sessão.' };
+  let imagePaths = {};
+  try { imagePaths = JSON.parse(formData.get('image_paths')?.toString() || '{}'); } catch { return { error: 'Não foi possível ler as imagens enviadas.' }; }
+  const admin = createAdminClient();
+  const { data: current } = await admin.from('site_content').select('value').eq('key', 'home_hero').maybeSingle();
+  const existing = current?.value?.scenes || DEFAULT_HOME_HERO.scenes;
+  const scenes = [];
+  for (let index = 0; index < 3; index += 1) {
+    const number = index + 1;
+    const scene = { label: formData.get(`scene-${number}-label`)?.toString().trim(), alt: formData.get(`scene-${number}-alt`)?.toString().trim(), desktop: existing[index]?.desktop || '', mobile: existing[index]?.mobile || '' };
+    if (!scene.label || !scene.alt) return { error: `Preencha o rótulo e a descrição da cena ${number}.` };
+    for (const format of ['desktop', 'mobile']) {
+      const tempPath = imagePaths[`scene-${number}-${format}`];
+      if (!tempPath) continue;
+      const { data: downloaded, error: downloadError } = await admin.storage.from('imoveis-fotos').download(tempPath);
+      if (downloadError) return { error: `Erro ao processar a imagem: ${downloadError.message}` };
+      const original = Buffer.from(await downloaded.arrayBuffer()); const enhanced = await enhanceImage(original); const content = enhanced ? enhanced.buffer : original; const extension = enhanced ? enhanced.extension : 'jpg';
+      const path = `home-hero/${number}/${format}-${Date.now()}.${extension}`;
+      const { error: uploadError } = await admin.storage.from('imoveis-fotos').upload(path, content, { contentType: enhanced ? enhanced.contentType : downloaded.type, upsert: false });
+      if (uploadError) return { error: `Erro ao salvar a imagem: ${uploadError.message}` };
+      scene[format] = admin.storage.from('imoveis-fotos').getPublicUrl(path).data.publicUrl;
+      await admin.storage.from('imoveis-fotos').remove([tempPath]);
+    }
+    if (!scene.desktop) return { error: `Envie uma imagem desktop para a cena ${number}.` };
+    scenes.push(scene);
+  }
+  const { error } = await admin.from('site_content').upsert({ key: 'home_hero', value: { ...copy, scenes }, updated_at: new Date().toISOString() });
+  if (error) return { error: `Erro ao salvar a sessão: ${error.message}` };
+  revalidatePath('/'); revalidatePath('/admin/home'); return { success: true };
 }
 
 export async function createLocalizacao(prevState, formData) {
