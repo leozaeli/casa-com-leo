@@ -229,12 +229,13 @@ if (window.location.pathname.replace(/\/+$/, '') === '/contato') {
 const WHATSAPP_NUMBER = '5571984266363';
 
 const isStudiosPage = window.location.pathname.replace(/\/+$/, '') === '/studios';
+const usesSiteIdentity = Boolean(document.querySelector('.casa-experience, .site-identity'));
 
 function buildContactPopup() {
   if (document.querySelector('#contact-popup')) return document.querySelector('#contact-popup');
   const overlay = document.createElement('div');
   overlay.id = 'contact-popup';
-  overlay.className = 'popup-overlay';
+  overlay.className = `popup-overlay${usesSiteIdentity ? ' identity-popup' : ''}`;
   overlay.innerHTML = isStudiosPage ? `
     <div class="popup-card" role="dialog" aria-modal="true" aria-labelledby="popup-title">
       <button class="popup-close" type="button" aria-label="Fechar">&times;</button>
@@ -323,7 +324,7 @@ function buildChoiceMenu() {
   if (document.querySelector('#interesse-choice')) return document.querySelector('#interesse-choice');
   const menu = document.createElement('div');
   menu.id = 'interesse-choice';
-  menu.className = 'choice-menu';
+  menu.className = `choice-menu${usesSiteIdentity ? ' identity-choice' : ''}`;
   document.body.appendChild(menu);
   document.addEventListener('click', (event) => {
     if (menu.classList.contains('open') && !menu.contains(event.target) && !event.target.closest('[data-popup="interesse"]')) {

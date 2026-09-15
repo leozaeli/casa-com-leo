@@ -56,6 +56,7 @@
 .casa-experience .hero-search{max-width:none;width:100%;border:1px solid var(--line);border-radius:5px;background:#11170f;box-shadow:none;padding:8px}
 .casa-experience .hero-search label{color:#959f8a;padding:12px 24px;font-size:9px;letter-spacing:1px;gap:8px}
 .casa-experience .hero-search select{color:#f3f3ed;font-size:13px;color-scheme:dark;cursor:pointer}
+.casa-experience .hero-search select option{background:#11170f;color:#f3f3ed}
 .casa-experience .button{background:var(--accent);color:#151c0e;border-radius:3px;font-size:12px;transition:background .25s,transform .25s}
 .casa-experience .button:hover{background:#e1ffad;transform:translateY(-2px)}
 .casa-experience section:not(.immersive-journey):not(.experience-search){padding:108px 0}
