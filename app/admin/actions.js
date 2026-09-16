@@ -109,6 +109,13 @@ export async function updateLaunchSoldPercentage(propertySlug, percentage) {
   revalidatePath('/admin/lancamentos');
 }
 
+export async function toggleLaunchSold(formData) {
+  const id = formData.get('id')?.toString();
+  const sold = formData.get('sold') === 'true';
+  if (!id) return;
+  return updateLaunchSoldPercentage(id, sold ? 100 : 0);
+}
+
 export async function publishLaunch(id) {
   await assertAdmin();
   const admin = createAdminClient();

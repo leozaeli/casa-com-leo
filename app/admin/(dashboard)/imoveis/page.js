@@ -4,6 +4,8 @@ import DeleteImovelForm from '@/components/admin/DeleteImovelForm';
 import ToggleVendidoForm from '@/components/admin/ToggleVendidoForm';
 import InterestThermometer from '@/components/admin/InterestThermometer';
 import LaunchSalesForm from '@/components/admin/LaunchSalesForm';
+import ToggleLaunchSoldForm from '@/components/admin/ToggleLaunchSoldForm';
+import DeleteLaunchForm from '@/components/admin/DeleteLaunchForm';
 import { listLaunchBriefs } from '@/lib/launch-admin';
 import { getLaunchUrl } from '@/lib/launches';
 
@@ -113,7 +115,7 @@ export default async function AdminDashboardPage() {
                 <td className="admin-launch-cell"><span className="admin-badge admin-badge-on"><span className="dot"></span>Lançamento</span><LaunchSalesForm propertySlug={launch.id} percentage={launch.sold_percentage || 0} /></td>
                 <td><span className="admin-badge admin-badge-on"><span className="dot"></span>Publicado</span></td>
                 <td>—</td>
-                <td><div className="admin-table-actions"><a href={getLaunchUrl(launch.subdomain)} target="_blank" rel="noreferrer">Ver página</a><a href="/lancamentos">Editar</a></div></td>
+                <td><div className="admin-table-actions"><a href={getLaunchUrl(launch.subdomain)} target="_blank" rel="noreferrer">Ver página</a><a href="/lancamentos">Editar</a><ToggleLaunchSoldForm id={launch.id} sold={(launch.sold_percentage || 0) === 100} /><DeleteLaunchForm id={launch.id} title={launch.title} /></div></td>
               </tr>)}
             </tbody>
           </table>
