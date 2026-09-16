@@ -38,12 +38,13 @@ const AROUND = [
 
 export default async function LaunchPropertyPage({ imovel }) {
   const fotos = imovel.fotos || [];
+  const plantas = fotos.filter((foto) => /planta-tipo-\d/.test(foto));
   const map = await resolveMapEmbed(imovel.mapa_url);
   const hero = fotos[0];
   const cardPhoto = (index) => fotos[index] || hero;
 
   return (
-    <div className="launch-page">
+    <div className="launch-page site-identity">
       <HomeMotion />
       <Nav active="lancamentos" />
       <main>
@@ -73,9 +74,9 @@ export default async function LaunchPropertyPage({ imovel }) {
           <article><div><span>03</span><h3>Detalhes que sustentam a experiência.</h3><p>Arquitetura e interiores de Valença & Valença, engenharia BETA e incorporação Azinunes.</p></div><img src={cardPhoto(3)} alt="Detalhe do empreendimento Mont Blanc Hill" /></article>
         </div></section>
 
-        <section className="launch-residences" id="residencias"><div className="wrap launch-two-column"><div><span className="launch-kicker">02 / RESIDÊNCIAS</span><h2>Plantas amplas,<br /><em>versáteis e nascentes.</em></h2><p>Uma planta tipo de 133,81 m² que permite morar com conforto hoje e continuar fazendo sentido ao longo do tempo.</p></div><div className="launch-plan"><span>APARTAMENTO TIPO</span><strong>133,81 m²</strong><p>3 suítes · 2 vagas · nascente total</p><ul><li>Suítes com varanda gourmet</li><li>Home office ou dependência</li><li>Living amplo integrado</li><li>Cozinha e área de serviço</li><li>Lavabo social</li></ul><small>Cobertura duplex de 261,92 m² · esgotada</small></div></div></section>
+        <section className="launch-residences" id="residencias"><div className="wrap launch-two-column"><div><span className="launch-kicker">02 / RESIDÊNCIAS</span><h2>Plantas amplas,<br /><em>versáteis e nascentes.</em></h2><p>Uma planta tipo de 133,81 m² que permite morar com conforto hoje e continuar fazendo sentido ao longo do tempo.</p></div><div className="launch-plan"><span>APARTAMENTO TIPO</span><strong>133,81 m²</strong><p>3 suítes · 2 vagas · nascente total</p><ul><li>Suítes com varanda gourmet</li><li>Home office ou dependência</li><li>Living amplo integrado</li><li>Cozinha e área de serviço</li><li>Lavabo social</li></ul><small>Cobertura duplex de 261,92 m² · esgotada</small></div></div>{plantas.length > 0 && <div className="wrap launch-plan-gallery">{plantas.map((planta, index) => <figure key={planta}><a href={planta} target="_blank" rel="noreferrer"><img src={planta} alt={`Planta tipo ${String(index + 1).padStart(2, '0')} do Mont Blanc Hill`} /></a><figcaption>Planta tipo {String(index + 1).padStart(2, '0')} <span>Ampliar ↗</span></figcaption></figure>)}</div>}</section>
 
-        <section className="launch-leisure" id="lazer"><div className="wrap"><span className="launch-kicker">03 / LAZER & DIFERENCIAIS</span><div className="launch-leisure-head"><h2>Infraestrutura para<br /><em>o tempo que importa.</em></h2><p>Ambientes de encontro, movimento e pausa — para os dias que pedem companhia ou silêncio.</p></div><div className="launch-leisure-images"><img src={cardPhoto(7)} alt="Piscina de borda infinita" /><img src={cardPhoto(9)} alt="Espaço gourmet" /><img src={cardPhoto(11)} alt="Game room" /></div><div className="launch-leisure-list">{LEISURE.map(([title, text]) => <article key={title}><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
+        <section className="launch-leisure" id="lazer"><div className="wrap"><span className="launch-kicker">03 / LAZER & DIFERENCIAIS</span><div className="launch-leisure-head"><h2>Infraestrutura para<br /><em>o tempo que importa.</em></h2><p>Ambientes de encontro, movimento e pausa — para os dias que pedem companhia ou silêncio.</p></div><div className="launch-leisure-images"><figure><img src={cardPhoto(7)} alt="Piscina de borda infinita" /><figcaption><span>Lazer aquático</span>Piscina com borda infinita</figcaption></figure><figure><img src={cardPhoto(9)} alt="Espaço gourmet" /><figcaption><span>Social</span>Espaço gourmet</figcaption></figure><figure><img src={cardPhoto(11)} alt="Game room" /><figcaption><span>Convivência</span>Game room</figcaption></figure></div><div className="launch-leisure-list">{LEISURE.map(([title, text]) => <article key={title}><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
 
         <section className="launch-location" id="localizacao"><div className="wrap launch-location-grid"><div><span className="launch-kicker">04 / LOCALIZAÇÃO</span><h2>No coração do<br /><em>Caminho das Árvores.</em></h2><p>Alameda dos Sombreiros, 476. Uma rua arborizada, elegante e próxima do que faz parte da rotina: shoppings, escolas, restaurantes e centros empresariais.</p><div className="launch-around">{AROUND.map(([title, text]) => <div key={title}><b>{title}</b><span>{text}</span></div>)}</div></div>{map && <iframe src={map.embedSrc} title="Mapa do Mont Blanc Hill" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />}</div></section>
 

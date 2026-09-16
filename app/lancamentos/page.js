@@ -15,7 +15,7 @@ export default async function LancamentosPage() {
   const montBlanc = await getImovelBySlug('mont-blanc-hill');
 
   return (
-    <div className="launch-page launch-index">
+    <div className="launch-page launch-index site-identity">
       <Nav active="lancamentos" />
       <main>
         <section className="launch-index-hero">
