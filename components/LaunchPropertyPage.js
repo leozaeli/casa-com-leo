@@ -1,8 +1,8 @@
 import Nav from '@/components/Nav';
 import { SimpleFooter } from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
-import MosaicGallery from '@/components/MosaicGallery';
 import ExperienceIcon from '@/components/ExperienceIcon';
+import MosaicGallery from '@/components/MosaicGallery';
 import HomeMotion from '@/components/HomeMotion';
 import { resolveMapEmbed } from '@/lib/imoveis';
 
@@ -39,6 +39,7 @@ const AROUND = [
 export default async function LaunchPropertyPage({ imovel }) {
   const fotos = imovel.fotos || [];
   const plantas = fotos.filter((foto) => /planta-tipo-\d/.test(foto));
+  const fotosDaGaleria = fotos.filter((foto) => !/planta-tipo-\d/.test(foto));
   const map = await resolveMapEmbed(imovel.mapa_url);
   const hero = fotos[0];
   const cardPhoto = (index) => fotos[index] || hero;
@@ -74,13 +75,13 @@ export default async function LaunchPropertyPage({ imovel }) {
           <article><div><span>03</span><h3>Detalhes que sustentam a experiência.</h3><p>Arquitetura e interiores de Valença & Valença, engenharia BETA e incorporação Azinunes.</p></div><img src={cardPhoto(3)} alt="Detalhe do empreendimento Mont Blanc Hill" /></article>
         </div></section>
 
-        <section className="launch-residences" id="residencias"><div className="wrap launch-two-column"><div><span className="launch-kicker">02 / RESIDÊNCIAS</span><h2>Plantas amplas,<br /><em>versáteis e nascentes.</em></h2><p>Uma planta tipo de 133,81 m² que permite morar com conforto hoje e continuar fazendo sentido ao longo do tempo.</p></div><div className="launch-plan"><span>APARTAMENTO TIPO</span><strong>133,81 m²</strong><p>3 suítes · 2 vagas · nascente total</p><ul><li>Suítes com varanda gourmet</li><li>Home office ou dependência</li><li>Living amplo integrado</li><li>Cozinha e área de serviço</li><li>Lavabo social</li></ul><small>Cobertura duplex de 261,92 m² · esgotada</small></div></div>{plantas.length > 0 && <div className="wrap launch-plan-gallery">{plantas.map((planta, index) => <figure key={planta}><a href={planta} target="_blank" rel="noreferrer"><img src={planta} alt={`Planta tipo ${String(index + 1).padStart(2, '0')} do Mont Blanc Hill`} /></a><figcaption>Planta tipo {String(index + 1).padStart(2, '0')} <span>Ampliar ↗</span></figcaption></figure>)}</div>}</section>
+        <section className="launch-residences" id="residencias"><div className="wrap launch-two-column"><div><span className="launch-kicker">02 / RESIDÊNCIAS</span><h2>Plantas amplas,<br /><em>versáteis e nascentes.</em></h2><p>Uma planta tipo de 133,81 m² que permite morar com conforto hoje e continuar fazendo sentido ao longo do tempo.</p></div><div className="launch-plan"><span>APARTAMENTO TIPO</span><strong>133,81 m²</strong><p>3 suítes · 2 vagas · nascente total</p><ul><li>Suítes com varanda gourmet</li><li>Home office ou dependência</li><li>Living amplo integrado</li><li>Cozinha e área de serviço</li><li>Lavabo social</li></ul><small>Cobertura duplex de 261,92 m² · esgotada</small></div></div>{plantas.length > 0 && <div className="wrap launch-plan-gallery"><div className="launch-plan-gallery-intro"><span>Conheça as plantas</span><p>Quatro configurações para explorar com calma. Clique em qualquer planta para ampliar sem sair da página.</p></div><MosaicGallery fotos={plantas} alt="Planta tipo do Mont Blanc Hill" refined /></div>}</section>
 
         <section className="launch-leisure" id="lazer"><div className="wrap"><span className="launch-kicker">03 / LAZER & DIFERENCIAIS</span><div className="launch-leisure-head"><h2>Infraestrutura para<br /><em>o tempo que importa.</em></h2><p>Ambientes de encontro, movimento e pausa — para os dias que pedem companhia ou silêncio.</p></div><div className="launch-leisure-images"><figure><img src={cardPhoto(7)} alt="Piscina de borda infinita" /><figcaption><span>Lazer aquático</span>Piscina com borda infinita</figcaption></figure><figure><img src={cardPhoto(9)} alt="Espaço gourmet" /><figcaption><span>Social</span>Espaço gourmet</figcaption></figure><figure><img src={cardPhoto(11)} alt="Game room" /><figcaption><span>Convivência</span>Game room</figcaption></figure></div><div className="launch-leisure-list">{LEISURE.map(([title, text]) => <article key={title}><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
 
         <section className="launch-location" id="localizacao"><div className="wrap launch-location-grid"><div><span className="launch-kicker">04 / LOCALIZAÇÃO</span><h2>No coração do<br /><em>Caminho das Árvores.</em></h2><p>Alameda dos Sombreiros, 476. Uma rua arborizada, elegante e próxima do que faz parte da rotina: shoppings, escolas, restaurantes e centros empresariais.</p><div className="launch-around">{AROUND.map(([title, text]) => <div key={title}><b>{title}</b><span>{text}</span></div>)}</div></div>{map && <iframe src={map.embedSrc} title="Mapa do Mont Blanc Hill" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />}</div></section>
 
-        <section className="launch-gallery" id="galeria"><div className="wrap"><div className="launch-section-heading"><span className="launch-kicker">05 / GALERIA</span><h2>Perspectivas<br /><em>do projeto.</em></h2><p>Fachada, interiores e áreas de lazer para explorar no seu ritmo.</p></div><MosaicGallery fotos={fotos} alt="Mont Blanc Hill" refined /></div></section>
+        <section className="launch-gallery" id="galeria"><div className="wrap"><div className="launch-section-heading"><span className="launch-kicker">05 / GALERIA</span><h2>Perspectivas<br /><em>do projeto.</em></h2><p>Fachada, interiores e áreas de lazer para explorar no seu ritmo.</p></div><MosaicGallery fotos={fotosDaGaleria} alt="Mont Blanc Hill" refined /></div></section>
 
         <section className="launch-work" id="obra"><div className="wrap"><span className="launch-kicker">06 / ACOMPANHAMENTO DA OBRA</span><div className="launch-work-grid"><div><h2>Um projeto<br /><em>em movimento.</em></h2><p>Obras avançadas, com atualizações recentes de torre, fachadas, entorno e acabamentos internos.</p><button className="button" type="button" data-popup="interesse" data-property="Mont Blanc Hill" data-modalities="venda">Receber novidades <ExperienceIcon /></button></div><ol><li><span>01</span><div><b>26.08.2026</b><p>Vistas aéreas da torre, fachadas laterais e entorno.</p></div></li><li><span>02</span><div><b>24.08.2026</b><p>Fachada oeste, varandas e diferentes ângulos da torre.</p></div></li><li><span>03</span><div><b>20.08.2026</b><p>Ambientes internos, alvenaria, instalações e acabamentos.</p></div></li><li><span>04</span><div><b>31.07.2026</b><p>Revestimentos e serviços nos ambientes internos.</p></div></li></ol></div></div></section>
 
