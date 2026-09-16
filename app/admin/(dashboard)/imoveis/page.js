@@ -8,6 +8,8 @@ import { listLaunchBriefs } from '@/lib/launch-admin';
 import { getLaunchUrl } from '@/lib/launches';
 
 const SITE_URL = 'https://www.casacomleo.com.br';
+const CATEGORY_LABEL = { casa: 'Casa', apartamento: 'Apartamento', cobertura: 'Cobertura', terreno: 'Lote' };
+const MODALITY_LABEL = { venda: 'Venda', temporada: 'Aluguel' };
 
 export default async function AdminDashboardPage() {
   const [imoveis, temperaturas, launches] = await Promise.all([listImoveisAdmin(), getImovelTemperatures(), listLaunchBriefs()]);
@@ -46,6 +48,9 @@ export default async function AdminDashboardPage() {
                 <th>Título</th>
                 <th>Localização</th>
                 <th>Preço</th>
+                <th>Tipo</th>
+                <th>Modalidade</th>
+                <th>Lançamento</th>
                 <th>Status</th>
                 <th>Interesse</th>
                 <th></th>
@@ -60,6 +65,9 @@ export default async function AdminDashboardPage() {
                   </td>
                   <td className="admin-table-title">{imovel.titulo}</td>
                   <td>{imovel.localizacao}</td>
+                  <td>{CATEGORY_LABEL[imovel.categoria] || imovel.categoria || '—'}</td>
+                  <td>{(imovel.modalidades || []).map((modality) => MODALITY_LABEL[modality] || modality).join(' + ') || '—'}</td>
+                  <td className="admin-launch-cell">{launch ? <><span className="admin-badge admin-badge-on"><span className="dot"></span>Lançamento</span><LaunchSalesForm propertySlug={imovel.slug} percentage={launch.sold_percentage || 0} /></> : '—'}</td>
                   <td>{formatPrice(imovel.preco)}</td>
                   <td>
                     <span className={`admin-badge ${imovel.destaque ? 'admin-badge-on' : 'admin-badge-off'}`}>
@@ -72,7 +80,6 @@ export default async function AdminDashboardPage() {
                         Vendido
                       </span>
                     )}
-                    {launch && <LaunchSalesForm propertySlug={imovel.slug} percentage={launch.sold_percentage || 0} />}
                   </td>
                   <td>
                     <InterestThermometer
