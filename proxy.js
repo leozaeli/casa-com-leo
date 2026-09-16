@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { updateSession } from '@/lib/supabase/middleware';
+import { getLaunchSlugByHostname, getLaunchUrl } from '@/lib/launches';
 
 const ADMIN_HOST = 'admin.casacomleo.com.br';
 const MODELO_HOST = 'modelo.casacomleo.com.br';
@@ -11,6 +12,21 @@ export async function proxy(request) {
 
   if (hasExtension) {
     return NextResponse.next();
+  }
+
+  const launchSlug = getLaunchSlugByHostname(hostname);
+  if (launchSlug) {
+    if (pathname === '/') {
+      const rewriteUrl = request.nextUrl.clone();
+      rewriteUrl.pathname = `/lancamentos/${launchSlug}`;
+      return NextResponse.rewrite(rewriteUrl);
+    }
+
+    const siteUrl = request.nextUrl.clone();
+    siteUrl.protocol = 'https';
+    siteUrl.hostname = 'casacomleo.com.br';
+    siteUrl.port = '';
+    return NextResponse.redirect(siteUrl, 308);
   }
 
   if (hostname === MODELO_HOST) {
@@ -52,6 +68,16 @@ export async function proxy(request) {
     url.port = '';
     url.pathname = pathname === '/admin' ? '/' : pathname.slice('/admin'.length);
     return NextResponse.redirect(url, 308);
+  }
+
+  const launchMatch = pathname.match(/^\/lancamentos\/([^/]+)\/?$/);
+  if ((hostname === 'casacomleo.com.br' || hostname === 'www.casacomleo.com.br') && launchMatch) {
+    const launchUrl = getLaunchUrl(launchMatch[1]);
+    if (launchUrl.startsWith('https://')) {
+      const redirectUrl = new URL(launchUrl);
+      redirectUrl.search = request.nextUrl.search;
+      return NextResponse.redirect(redirectUrl, 308);
+    }
   }
 
   return NextResponse.next();

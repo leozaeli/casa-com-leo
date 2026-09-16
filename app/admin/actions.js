@@ -63,6 +63,36 @@ export async function createUploadTickets(formData) {
   return { tickets };
 }
 
+export async function createLaunchBrief(formData) {
+  await assertAdmin();
+  const title = formData.get('title')?.toString().trim();
+  const sourceMode = formData.get('source_mode')?.toString();
+  const rawSubdomain = formData.get('subdomain')?.toString().trim() || title;
+  const subdomain = slugify(rawSubdomain).replaceAll('-', '');
+  if (!title || !subdomain || !['reference', 'manual'].includes(sourceMode)) return { error: 'Preencha o nome e escolha como deseja começar.' };
+  if (sourceMode === 'reference' && !formData.get('reference_url')?.toString().trim()) return { error: 'Informe a URL de referência.' };
+  if (sourceMode === 'manual' && (!formData.get('location')?.toString().trim() || !formData.get('description')?.toString().trim())) return { error: 'Preencha localização e apresentação.' };
+  const admin = createAdminClient();
+  const { data: current, error: readError } = await admin.from('site_content').select('value').eq('key', 'launches').maybeSingle();
+  if (readError) return { error: `Não foi possível abrir os lançamentos: ${readError.message}` };
+  const launches = Array.isArray(current?.value) ? current.value : [];
+  if (launches.some((launch) => launch.subdomain === subdomain)) return { error: 'Esse subdomínio já está reservado.' };
+  const launch = {
+    id: crypto.randomUUID(), title, subdomain, source_mode: sourceMode, status: 'briefing', created_at: new Date().toISOString(),
+    reference_url: formData.get('reference_url')?.toString().trim() || null,
+    reference_notes: formData.get('reference_notes')?.toString().trim() || null,
+    location: formData.get('location')?.toString().trim() || null,
+    developer: formData.get('developer')?.toString().trim() || null,
+    description: formData.get('description')?.toString().trim() || null,
+    highlights: formData.get('highlights')?.toString().trim() || null,
+    assets_url: formData.get('assets_url')?.toString().trim() || null,
+  };
+  const { error } = await admin.from('site_content').upsert({ key: 'launches', value: [...launches, launch], updated_at: new Date().toISOString() });
+  if (error) return { error: `Erro ao salvar lançamento: ${error.message}` };
+  revalidatePath('/admin/lancamentos');
+  return { success: true, url: `https://${subdomain}.casacomleo.com.br` };
+}
+
 export async function updateHomeHero(formData) {
   await assertAdmin();
   const required = ['kicker', 'titleLineOne', 'titleLineTwo', 'intro', 'ctaLabel'];

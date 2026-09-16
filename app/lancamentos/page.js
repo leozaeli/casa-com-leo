@@ -2,6 +2,7 @@ import Nav from '@/components/Nav';
 import { SimpleFooter } from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import { getImovelBySlug } from '@/lib/imoveis';
+import { getLaunchUrl } from '@/lib/launches';
 import './launch.css';
 
 export const revalidate = 0;
@@ -28,7 +29,7 @@ export default async function LancamentosPage() {
         <section className="launch-index-list">
           <div className="wrap">
             {montBlanc && (
-              <a className="launch-index-card" href="/lancamentos/mont-blanc-hill">
+              <a className="launch-index-card" href={getLaunchUrl(montBlanc.slug)}>
                 <img src={montBlanc.fotos?.[0]} alt="Mont Blanc Hill" />
                 <div><span>Lançamento · Caminho das Árvores</span><h2>Mont Blanc Hill</h2><p>133,81 m² · 3 suítes · Sob consulta</p></div>
                 <b>Conhecer <span>→</span></b>

@@ -46,6 +46,9 @@ const LocationIcon = (
 const HomeEditorIcon = (
   <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="m6 16 4-4 3 3 2-2 3 3M8 8h.01" /></svg>
 );
+const LaunchIcon = (
+  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3 8 7-8 11L4 10l8-7Z" /><path d="m9 11 3 3 3-3" /></svg>
+);
 
 const GROUPS = [
   {
@@ -70,6 +73,10 @@ const GROUPS = [
       { href: '/studios', label: 'Studios', exact: true, icon: StudioIcon },
       { href: '/studios/novo', label: 'Novo studio', exact: false, icon: PlusIcon },
     ],
+  },
+  {
+    label: 'Lançamentos',
+    links: [{ href: '/lancamentos', label: 'Construir lançamento', exact: false, icon: LaunchIcon }],
   },
 ];
 
