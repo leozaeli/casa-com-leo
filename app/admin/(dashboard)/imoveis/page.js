@@ -14,6 +14,8 @@ const MODALITY_LABEL = { venda: 'Venda', temporada: 'Aluguel' };
 export default async function AdminDashboardPage() {
   const [imoveis, temperaturas, launches] = await Promise.all([listImoveisAdmin(), getImovelTemperatures(), listLaunchBriefs()]);
   const launchesByProperty = new Map(launches.filter((launch) => launch.property_slug).map((launch) => [launch.property_slug, launch]));
+  const standaloneLaunches = launches.filter((launch) => launch.status === 'published' && !launch.property_slug);
+  const totalItems = imoveis.length + standaloneLaunches.length;
 
   return (
     <div>
@@ -22,7 +24,7 @@ export default async function AdminDashboardPage() {
           <span className="admin-eyebrow">Painel</span>
           <h1>Imóveis</h1>
           <p className="admin-page-subtitle">
-            {imoveis.length} {imoveis.length === 1 ? 'imóvel cadastrado' : 'imóveis cadastrados'}
+            {totalItems} {totalItems === 1 ? 'imóvel cadastrado' : 'imóveis cadastrados'}
           </p>
         </div>
         <a className="button" href="/imoveis/novo">
@@ -30,7 +32,7 @@ export default async function AdminDashboardPage() {
         </a>
       </div>
 
-      {imoveis.length === 0 ? (
+      {totalItems === 0 ? (
         <div className="admin-empty">
           <span className="admin-eyebrow">Catálogo vazio</span>
           <h2>Nenhum imóvel cadastrado ainda.</h2>
@@ -65,10 +67,10 @@ export default async function AdminDashboardPage() {
                   </td>
                   <td className="admin-table-title">{imovel.titulo}</td>
                   <td>{imovel.localizacao}</td>
+                  <td>{formatPrice(imovel.preco)}</td>
                   <td>{CATEGORY_LABEL[imovel.categoria] || imovel.categoria || '—'}</td>
                   <td>{(imovel.modalidades || []).map((modality) => MODALITY_LABEL[modality] || modality).join(' + ') || '—'}</td>
                   <td className="admin-launch-cell">{launch ? <><span className="admin-badge admin-badge-on"><span className="dot"></span>Lançamento</span><LaunchSalesForm propertySlug={imovel.slug} percentage={launch.sold_percentage || 0} /></> : '—'}</td>
-                  <td>{formatPrice(imovel.preco)}</td>
                   <td>
                     <span className={`admin-badge ${imovel.destaque ? 'admin-badge-on' : 'admin-badge-off'}`}>
                       <span className="dot"></span>
@@ -99,6 +101,20 @@ export default async function AdminDashboardPage() {
                   </td>
                 </tr>;
               })}
+              {standaloneLaunches.map((launch) => <tr key={launch.id}>
+                <td className="admin-table-thumb-cell">
+                  <img className="admin-table-thumb" src={launch.subdomain === 'reservadosol' ? 'https://azinunes.com.br/empreendimentos/reserva-do-sol/rds/hero-piscina-fachada.webp' : launch.assets_url || '/brand/logo-4.png'} alt="" />
+                </td>
+                <td className="admin-table-title">{launch.title}</td>
+                <td>{launch.location || '—'}</td>
+                <td>Sob consulta</td>
+                <td>{launch.property_type || '—'}</td>
+                <td>{launch.modalities?.map((modality) => MODALITY_LABEL[modality] || modality).join(' + ') || 'Venda'}</td>
+                <td className="admin-launch-cell"><span className="admin-badge admin-badge-on"><span className="dot"></span>Lançamento</span><LaunchSalesForm propertySlug={launch.id} percentage={launch.sold_percentage || 0} /></td>
+                <td><span className="admin-badge admin-badge-on"><span className="dot"></span>Publicado</span></td>
+                <td>—</td>
+                <td><div className="admin-table-actions"><a href={getLaunchUrl(launch.subdomain)} target="_blank" rel="noreferrer">Ver página</a><a href="/lancamentos">Editar</a></div></td>
+              </tr>)}
             </tbody>
           </table>
         </div>
