@@ -7,6 +7,11 @@ import './dialog.css';
 export const metadata = {
   title: 'Casa com Leo — Imóveis com intenção',
   description: 'Casa com Leo — imóveis extraordinários para uma vida com mais intenção.',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
 };
 
 export default async function RootLayout({ children }) {
