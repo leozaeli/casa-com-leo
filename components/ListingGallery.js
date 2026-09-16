@@ -31,7 +31,9 @@ export default function ListingGallery({ photos, title, href }) {
     >
       <div className="listing-gallery-track" style={{ transform: `translateX(-${activeSlide * 100}%)` }}>
         {galleryPhotos.map((photo, index) => (
-          <img key={photo} src={photo} alt={index === 0 ? title : `${title} — foto ${index + 1}`} />
+          <a className="listing-gallery-photo" key={photo} href={href} aria-label={`Ver imóvel ${title}`}>
+            <img src={photo} alt={index === 0 ? title : `${title} — foto ${index + 1}`} />
+          </a>
         ))}
         {hasMorePhotos && (
           <a className="listing-gallery-more" href={href} aria-label={`Ver todas as fotos de ${title}`}>

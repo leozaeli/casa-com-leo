@@ -128,6 +128,57 @@ export async function publishLaunch(id) {
   return { success: true, url: `https://${launch.subdomain}.casacomleo.com.br` };
 }
 
+export async function updateLaunchBrief(formData) {
+  await assertAdmin();
+  const id = formData.get('id')?.toString();
+  const title = formData.get('title')?.toString().trim();
+  const sourceMode = formData.get('source_mode')?.toString();
+  if (!id || !title || !['reference', 'manual'].includes(sourceMode)) return { error: 'Preencha o nome e o modo de cadastro.' };
+  if (sourceMode === 'reference' && !formData.get('reference_url')?.toString().trim()) return { error: 'Informe a URL de referência.' };
+  if (sourceMode === 'manual' && (!formData.get('location')?.toString().trim() || !formData.get('description')?.toString().trim())) return { error: 'Preencha localização e apresentação.' };
+  const admin = createAdminClient();
+  const { data: current, error: readError } = await admin.from('site_content').select('value').eq('key', 'launches').maybeSingle();
+  if (readError) return { error: 'Não foi possível abrir os lançamentos.' };
+  const launches = Array.isArray(current?.value) ? current.value : [];
+  const existing = launches.find((launch) => launch.id === id);
+  if (!existing) return { error: 'Lançamento não encontrado.' };
+  const updatedLaunch = {
+    ...existing,
+    title,
+    source_mode: sourceMode,
+    reference_url: formData.get('reference_url')?.toString().trim() || null,
+    reference_notes: formData.get('reference_notes')?.toString().trim() || null,
+    location: formData.get('location')?.toString().trim() || null,
+    developer: formData.get('developer')?.toString().trim() || null,
+    description: formData.get('description')?.toString().trim() || null,
+    highlights: formData.get('highlights')?.toString().trim() || null,
+    assets_url: formData.get('assets_url')?.toString().trim() || null,
+    updated_at: new Date().toISOString(),
+  };
+  const { error } = await admin.from('site_content').upsert({ key: 'launches', value: launches.map((launch) => launch.id === id ? updatedLaunch : launch), updated_at: new Date().toISOString() });
+  if (error) return { error: 'Não foi possível salvar o briefing.' };
+  revalidatePath('/admin/lancamentos');
+  revalidatePath(`/lancamentos/${existing.subdomain}`);
+  return { success: true };
+}
+
+export async function deleteLaunchBrief(formData) {
+  await assertAdmin();
+  const id = formData.get('id')?.toString();
+  if (!id) return { error: 'Lançamento não encontrado.' };
+  const admin = createAdminClient();
+  const { data: current, error: readError } = await admin.from('site_content').select('value').eq('key', 'launches').maybeSingle();
+  if (readError) return { error: 'Não foi possível abrir os lançamentos.' };
+  const launches = Array.isArray(current?.value) ? current.value : [];
+  const launch = launches.find((item) => item.id === id);
+  if (!launch) return { error: 'Lançamento não encontrado.' };
+  const { error } = await admin.from('site_content').upsert({ key: 'launches', value: launches.filter((item) => item.id !== id), updated_at: new Date().toISOString() });
+  if (error) return { error: 'Não foi possível excluir o briefing.' };
+  revalidatePath('/admin/lancamentos');
+  revalidatePath(`/lancamentos/${launch.subdomain}`);
+  return { success: true };
+}
+
 export async function updateHomeHero(formData) {
   await assertAdmin();
   const required = ['kicker', 'titleLineOne', 'titleLineTwo', 'intro', 'ctaLabel'];
