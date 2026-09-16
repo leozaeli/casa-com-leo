@@ -3,6 +3,7 @@ import { SimpleFooter } from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import { getImovelBySlug } from '@/lib/imoveis';
 import { getLaunchUrl } from '@/lib/launches';
+import { listLaunchBriefs } from '@/lib/launch-admin';
 import './launch.css';
 
 export const revalidate = 0;
@@ -14,6 +15,14 @@ export const metadata = {
 
 export default async function LancamentosPage() {
   const montBlanc = await getImovelBySlug('mont-blanc-hill');
+  const launches = (await listLaunchBriefs()).filter((launch) => launch.status === 'published');
+  const cards = launches.map((launch) => ({
+    title: launch.title,
+    href: getLaunchUrl(launch.property_slug || launch.subdomain),
+    image: launch.subdomain === 'reservadosol' ? 'https://azinunes.com.br/empreendimentos/reserva-do-sol/rds/hero-piscina-fachada.webp' : montBlanc?.fotos?.[0],
+    eyebrow: launch.location ? `Lançamento · ${launch.location}` : 'Lançamento',
+    summary: launch.highlights || launch.description || 'Conheça o empreendimento.',
+  }));
 
   return (
     <div className="launch-page launch-index site-identity">
@@ -28,13 +37,7 @@ export default async function LancamentosPage() {
         </section>
         <section className="launch-index-list">
           <div className="wrap">
-            {montBlanc && (
-              <a className="launch-index-card" href={getLaunchUrl(montBlanc.slug)}>
-                <img src={montBlanc.fotos?.[0]} alt="Mont Blanc Hill" />
-                <div><span>Lançamento · Caminho das Árvores</span><h2>Mont Blanc Hill</h2><p>133,81 m² · 3 suítes · Sob consulta</p></div>
-                <b>Conhecer <span>→</span></b>
-              </a>
-            )}
+            {cards.map((launch) => <a className="launch-index-card" href={launch.href} key={launch.href}><img src={launch.image} alt={launch.title} /><div><span>{launch.eyebrow}</span><h2>{launch.title}</h2><p>{launch.summary}</p></div><b>Conhecer <span>→</span></b></a>)}
           </div>
         </section>
       </main>
