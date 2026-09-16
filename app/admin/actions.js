@@ -108,6 +108,23 @@ export async function updateLaunchSoldPercentage(propertySlug, percentage) {
   revalidatePath('/admin/lancamentos');
 }
 
+export async function publishLaunch(id) {
+  await assertAdmin();
+  const admin = createAdminClient();
+  const { data: current, error: readError } = await admin.from('site_content').select('value').eq('key', 'launches').maybeSingle();
+  if (readError) return { error: 'Não foi possível abrir os lançamentos.' };
+  const launches = Array.isArray(current?.value) ? current.value : [];
+  const launch = launches.find((item) => item.id === id);
+  if (!launch) return { error: 'Lançamento não encontrado.' };
+  const updated = launches.map((item) => item.id === id ? { ...item, status: 'published', published_at: new Date().toISOString() } : item);
+  const { error } = await admin.from('site_content').upsert({ key: 'launches', value: updated, updated_at: new Date().toISOString() });
+  if (error) return { error: 'Não foi possível publicar o lançamento.' };
+  revalidatePath('/admin/lancamentos');
+  revalidatePath('/lancamentos');
+  revalidatePath(`/lancamentos/${launch.subdomain}`);
+  return { success: true, url: `https://${launch.subdomain}.casacomleo.com.br` };
+}
+
 export async function updateHomeHero(formData) {
   await assertAdmin();
   const required = ['kicker', 'titleLineOne', 'titleLineTwo', 'intro', 'ctaLabel'];

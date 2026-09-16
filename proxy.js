@@ -70,6 +70,15 @@ export async function proxy(request) {
     return NextResponse.redirect(url, 308);
   }
 
+  if (hostname.endsWith('.casacomleo.com.br') && hostname !== ADMIN_HOST && hostname !== MODELO_HOST && !hostname.startsWith('www.')) {
+    const subdomain = hostname.slice(0, -'.casacomleo.com.br'.length);
+    if (subdomain && pathname === '/') {
+      const rewriteUrl = request.nextUrl.clone();
+      rewriteUrl.pathname = `/lancamentos/${subdomain}`;
+      return NextResponse.rewrite(rewriteUrl);
+    }
+  }
+
   const launchMatch = pathname.match(/^\/lancamentos\/([^/]+)\/?$/);
   if ((hostname === 'casacomleo.com.br' || hostname === 'www.casacomleo.com.br') && launchMatch) {
     const launchUrl = getLaunchUrl(launchMatch[1]);
