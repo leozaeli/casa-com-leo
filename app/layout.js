@@ -16,7 +16,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
       <head>
-        <link rel="stylesheet" href="/styles.css?v=20260915-logo-fit" />
+        <link rel="stylesheet" href="/styles.css?v=20260915-launch-nav" />
       </head>
       <body>
         {children}
