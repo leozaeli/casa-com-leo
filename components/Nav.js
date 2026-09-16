@@ -20,7 +20,7 @@ export default function Nav({ active }) {
           </a>
         </div>
         <a className="brand" href="/">
-          <img className="brand-logo" src="/brand/logo-1.png" alt="Casa com Leo" />
+          <span className="brand-logo-frame"><img className="brand-logo" src="/brand/logo-1.png" alt="Casa com Leo" /></span>
         </a>
         <button className="nav-cta" type="button" data-popup="fale-comigo">
           Fale comigo
