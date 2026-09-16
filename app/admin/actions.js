@@ -93,6 +93,21 @@ export async function createLaunchBrief(formData) {
   return { success: true, url: `https://${subdomain}.casacomleo.com.br` };
 }
 
+export async function updateLaunchSoldPercentage(propertySlug, percentage) {
+  await assertAdmin();
+  const soldPercentage = Math.max(0, Math.min(100, Number(percentage) || 0));
+  const admin = createAdminClient();
+  const { data: current, error: readError } = await admin.from('site_content').select('value').eq('key', 'launches').maybeSingle();
+  if (readError) throw new Error('Não foi possível abrir os lançamentos.');
+  const launches = Array.isArray(current?.value) ? current.value : [];
+  const updated = launches.map((launch) => launch.property_slug === propertySlug ? { ...launch, sold_percentage: soldPercentage } : launch);
+  if (updated.every((launch) => launch.property_slug !== propertySlug)) throw new Error('Lançamento não encontrado.');
+  const { error } = await admin.from('site_content').upsert({ key: 'launches', value: updated, updated_at: new Date().toISOString() });
+  if (error) throw new Error('Não foi possível salvar o percentual vendido.');
+  revalidatePath('/admin/imoveis');
+  revalidatePath('/admin/lancamentos');
+}
+
 export async function updateHomeHero(formData) {
   await assertAdmin();
   const required = ['kicker', 'titleLineOne', 'titleLineTwo', 'intro', 'ctaLabel'];

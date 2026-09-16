@@ -20,12 +20,13 @@ import {
   resolveMapEmbed,
 } from '@/lib/imoveis';
 import { getExchangeRates, formatUSD, formatEUR } from '@/lib/currency';
+import { getLaunchUrl } from '@/lib/launches';
 
 export const revalidate = 0;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  if (slug === 'mont-blanc-hill') redirect('/lancamentos/mont-blanc-hill');
+  if (slug === 'mont-blanc-hill') redirect(getLaunchUrl(slug));
   const imovel = await getImovelBySlug(slug);
   if (!imovel) return {};
   return {
@@ -38,6 +39,7 @@ const MODALITY_LABEL = { venda: 'Venda', temporada: 'Aluguel por temporada' };
 
 export default async function ImovelPage({ params }) {
   const { slug } = await params;
+  if (slug === 'mont-blanc-hill') redirect(getLaunchUrl(slug));
   const imovel = await getImovelBySlug(slug);
 
   if (!imovel) notFound();

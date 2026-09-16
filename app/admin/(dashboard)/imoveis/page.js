@@ -3,11 +3,15 @@ import { getImovelTemperatures } from '@/lib/leads';
 import DeleteImovelForm from '@/components/admin/DeleteImovelForm';
 import ToggleVendidoForm from '@/components/admin/ToggleVendidoForm';
 import InterestThermometer from '@/components/admin/InterestThermometer';
+import LaunchSalesForm from '@/components/admin/LaunchSalesForm';
+import { listLaunchBriefs } from '@/lib/launch-admin';
+import { getLaunchUrl } from '@/lib/launches';
 
 const SITE_URL = 'https://www.casacomleo.com.br';
 
 export default async function AdminDashboardPage() {
-  const [imoveis, temperaturas] = await Promise.all([listImoveisAdmin(), getImovelTemperatures()]);
+  const [imoveis, temperaturas, launches] = await Promise.all([listImoveisAdmin(), getImovelTemperatures(), listLaunchBriefs()]);
+  const launchesByProperty = new Map(launches.filter((launch) => launch.property_slug).map((launch) => [launch.property_slug, launch]));
 
   return (
     <div>
@@ -48,8 +52,9 @@ export default async function AdminDashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {imoveis.map((imovel) => (
-                <tr key={imovel.id}>
+              {imoveis.map((imovel) => {
+                const launch = launchesByProperty.get(imovel.slug);
+                return <tr key={imovel.id}>
                   <td className="admin-table-thumb-cell">
                     <img className="admin-table-thumb" src={coverPhoto(imovel)} alt="" />
                   </td>
@@ -67,6 +72,7 @@ export default async function AdminDashboardPage() {
                         Vendido
                       </span>
                     )}
+                    {launch && <LaunchSalesForm propertySlug={imovel.slug} percentage={launch.sold_percentage || 0} />}
                   </td>
                   <td>
                     <InterestThermometer
@@ -76,7 +82,7 @@ export default async function AdminDashboardPage() {
                   </td>
                   <td>
                     <div className="admin-table-actions">
-                      <a href={`${SITE_URL}/imoveis/${imovel.slug}`} target="_blank" rel="noreferrer">
+                      <a href={launch ? getLaunchUrl(imovel.slug) : `${SITE_URL}/imoveis/${imovel.slug}`} target="_blank" rel="noreferrer">
                         Ver página
                       </a>
                       <a href={`/imoveis/${imovel.id}/editar`}>Editar</a>
@@ -84,8 +90,8 @@ export default async function AdminDashboardPage() {
                       <DeleteImovelForm id={imovel.id} slug={imovel.slug} titulo={imovel.titulo} />
                     </div>
                   </td>
-                </tr>
-              ))}
+                </tr>;
+              })}
             </tbody>
           </table>
         </div>
