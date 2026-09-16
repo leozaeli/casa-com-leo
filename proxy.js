@@ -77,6 +77,13 @@ export async function proxy(request) {
       rewriteUrl.pathname = `/lancamentos/${subdomain}`;
       return NextResponse.rewrite(rewriteUrl);
     }
+    if (subdomain) {
+      const siteUrl = request.nextUrl.clone();
+      siteUrl.protocol = 'https';
+      siteUrl.hostname = 'casacomleo.com.br';
+      siteUrl.port = '';
+      return NextResponse.redirect(siteUrl, 308);
+    }
   }
 
   const launchMatch = pathname.match(/^\/lancamentos\/([^/]+)\/?$/);
