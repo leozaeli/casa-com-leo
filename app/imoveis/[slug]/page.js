@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages -- Full page navigation initializes the existing public/script.js handlers. */
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Nav from '@/components/Nav';
 import { SimpleFooter } from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
@@ -25,6 +25,7 @@ export const revalidate = 0;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
+  if (slug === 'mont-blanc-hill') redirect('/lancamentos/mont-blanc-hill');
   const imovel = await getImovelBySlug(slug);
   if (!imovel) return {};
   return {

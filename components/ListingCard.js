@@ -11,7 +11,8 @@ const MODALITY_LABEL = {
 export default function ListingCard({ imovel, carousel = false }) {
   const modalidades = imovel.modalidades || ['venda'];
   const modalityKey = modalidades.length > 1 ? 'ambos' : modalidades[0];
-  const href = `/imoveis/${imovel.slug}`;
+  const isLaunch = imovel.slug === 'mont-blanc-hill';
+  const href = isLaunch ? `/lancamentos/${imovel.slug}` : `/imoveis/${imovel.slug}`;
   const photos = imovel.fotos?.length ? imovel.fotos : [coverPhoto(imovel)];
 
   return (
@@ -26,6 +27,7 @@ export default function ListingCard({ imovel, carousel = false }) {
     >
       <div className="property-image">
         {carousel ? <ListingGallery photos={photos} title={imovel.titulo} href={href} /> : <img src={photos[0]} alt={imovel.titulo} />}
+        {isLaunch && <span className="property-launch-label">Lançamento</span>}
         {imovel.vendido ? (
           <div className="property-sold-overlay">
             <span>Vendido</span>

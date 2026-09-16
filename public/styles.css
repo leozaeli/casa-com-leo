@@ -40,6 +40,7 @@ nav.nav-hidden { transform: translateY(-100%); }
 .brand-mark { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--paper); font-family: 'Fraunces', serif; font-size: 13px; }
 .brand-logo-frame { display: block; width: 180px; height: 32px; overflow: hidden; }
 .brand-logo { display: block; width: 186px; height: auto; max-width: none; transform: translateY(-20px); }
+.property-launch-label { position: absolute; z-index: 3; top: 14px; left: 14px; padding: 8px 10px; border-radius: 2px; background: var(--accent); color: var(--ink); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 .nav-cta { justify-self: end; cursor: pointer; border: 0; border-radius: 99px; padding: 12px 20px; color: var(--white); background: var(--ink); font-size: 12.5px; font-weight: 600; }
 .nav-cta:hover { background: #322c22; }
 

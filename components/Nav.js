@@ -1,6 +1,7 @@
 const LINKS = [
   { key: 'home', href: '/', label: 'Home' },
   { key: 'imoveis', href: '/imoveis', label: 'Imóveis' },
+  { key: 'lancamentos', href: '/lancamentos', label: 'Lançamentos' },
   { key: 'manifesto', href: '/#manifesto', label: 'Manifesto' },
   { key: 'contato', href: '/contato', label: 'Contato' },
 ];
