@@ -34,17 +34,17 @@ export default function LaunchForm() {
   return (
     <form className="admin-form" onSubmit={submit}>
       <div className="admin-form-section">
-        <h2>Como deseja começar?</h2>
+        <h2>Como a página será construída?</h2>
         <div className="admin-choice-cards" role="radiogroup" aria-label="Modo de cadastro">
           <label className={mode === 'reference' ? 'admin-choice-card active' : 'admin-choice-card'}>
             <input type="radio" name="source_mode" value="reference" checked={mode === 'reference'} onChange={() => setMode('reference')} />
             <b>Enviar referência</b>
-            <span>Use uma página, material ou URL como direção para a experiência.</span>
+            <span>Envie uma página de referência para construirmos a experiência do empreendimento.</span>
           </label>
           <label className={mode === 'manual' ? 'admin-choice-card active' : 'admin-choice-card'}>
             <input type="radio" name="source_mode" value="manual" checked={mode === 'manual'} onChange={() => setMode('manual')} />
-            <b>Cadastrar manualmente</b>
-            <span>Preencha o briefing do empreendimento do zero.</span>
+            <b>Preencher dados</b>
+            <span>Informe os dados, textos e imagens para criar a página do zero.</span>
           </label>
         </div>
       </div>
@@ -75,8 +75,8 @@ export default function LaunchForm() {
       )}
 
       {result?.error && <p className="admin-form-error">{result.error}</p>}
-      {result?.success && <p className="admin-form-success">Briefing salvo. A página usará <strong>{result.url}</strong> quando for publicada.</p>}
-      <div className="admin-submit-row"><button className="button" type="submit" disabled={pending}>{pending ? 'Salvando…' : 'Salvar lançamento'}</button></div>
+      {result?.success && <p className="admin-form-success">Dados recebidos. A página será publicada em <strong>{result.url}</strong>.</p>}
+      <div className="admin-submit-row"><button className="button" type="submit" disabled={pending}>{pending ? 'Salvando…' : 'Criar lançamento'}</button></div>
     </form>
   );
 }

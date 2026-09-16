@@ -3,12 +3,14 @@ import LaunchPropertyPage from '@/components/LaunchPropertyPage';
 import { getImovelBySlug } from '@/lib/imoveis';
 import { getLaunchBrief } from '@/lib/launch-admin';
 import GenericLaunchPage from '@/components/GenericLaunchPage';
+import ReservaDoSolPage from '@/components/ReservaDoSolPage';
 import '../launch.css';
 
 export const revalidate = 0;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
+  if (slug === 'reservadosol') return { title: 'Reserva do Sol — Lançamentos | Casa com Leo', description: 'Apartamentos de 2 suítes em Itacimirim.' };
   if (slug !== 'mont-blanc-hill') {
     const launch = await getLaunchBrief(slug);
     return launch ? { title: `${launch.title} | Casa com Leo`, description: launch.description || 'Lançamento Casa com Leo.' } : {};
@@ -18,6 +20,7 @@ export async function generateMetadata({ params }) {
 
 export default async function LancamentoPage({ params }) {
   const { slug } = await params;
+  if (slug === 'reservadosol') return <ReservaDoSolPage />;
   if (slug !== 'mont-blanc-hill') {
     const launch = await getLaunchBrief(slug);
     if (!launch || launch.status !== 'published') notFound();
