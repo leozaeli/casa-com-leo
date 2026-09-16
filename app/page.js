@@ -6,16 +6,32 @@ import EditableImmersiveHero from '@/components/EditableImmersiveHero';
 import HomeMotion from '@/components/HomeMotion';
 import ExperienceIcon from '@/components/ExperienceIcon';
 import './home.css';
-import ListingCard from '@/components/ListingCard';
+import HomeCatalog from '@/components/HomeCatalog';
 import { listImoveis } from '@/lib/imoveis';
 import { listLocalizacoes } from '@/lib/localizacoes';
 import { getHomeHero } from '@/lib/home-hero';
+import { listLaunchBriefs } from '@/lib/launch-admin';
 
 export const revalidate = 0;
 
 export default async function HomePage() {
-  const [todosImoveis, localizacoes, hero] = await Promise.all([listImoveis(), listLocalizacoes(), getHomeHero()]);
-  const imoveis = todosImoveis.slice(0, 3);
+  const [todosImoveis, localizacoes, hero, launches] = await Promise.all([listImoveis(), listLocalizacoes(), getHomeHero(), listLaunchBriefs()]);
+  const launchCards = launches
+    .filter((launch) => launch.status === 'published' && !todosImoveis.some((imovel) => imovel.slug === launch.property_slug))
+    .map((launch) => ({
+      id: `launch-${launch.id}`,
+      slug: launch.subdomain,
+      titulo: launch.title,
+      localizacao: launch.location || 'Bahia',
+      categoria: launch.property_type || (launch.subdomain === 'reservadosol' ? 'apartamento' : 'outro'),
+      preco: 0,
+      suites: launch.subdomain === 'reservadosol' ? 2 : null,
+      area_m2: null,
+      fotos: [launch.subdomain === 'reservadosol' ? 'https://azinunes.com.br/empreendimentos/reserva-do-sol/rds/hero-piscina-fachada.webp' : 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85'],
+      launch_url: `https://${launch.subdomain}.casacomleo.com.br`,
+      is_launch: true,
+    }));
+  const catalogItems = [...todosImoveis, ...launchCards];
   const cidades = localizacoes.map((loc) => ({
     ...loc,
     total: todosImoveis.filter((im) => im.localizacao_filtro === loc.slug).length,
@@ -79,32 +95,8 @@ export default async function HomePage() {
                 Cada endereço tem um ritmo, uma luz, uma história. Encontre o espaço que conversa com a sua.
               </p>
             </div>
-            <div className="filter-row">
-              <button className="filter active" data-filter="todos">
-                Todos
-              </button>
-              <button className="filter" data-filter="casa">
-                Casas
-              </button>
-              <button className="filter" data-filter="apartamento">
-                Apartamentos
-              </button>
-              <button className="filter" data-filter="cobertura">
-                Coberturas
-              </button>
-              <button className="filter" data-filter="terreno">
-                Terrenos
-              </button>
-              <a className="filter" href="/studios">
-                Studios
-              </a>
-            </div>
-            {imoveis.length > 0 ? (
-              <div className="property-grid">
-                {imoveis.map((imovel) => (
-                  <ListingCard key={imovel.id} imovel={imovel} carousel />
-                ))}
-              </div>
+            {catalogItems.length > 0 ? (
+              <HomeCatalog imoveis={catalogItems} />
             ) : (
               <div className="admin-empty">
                 <p>Novidades a caminho. Fale comigo para saber mais sobre os próximos imóveis.</p>
