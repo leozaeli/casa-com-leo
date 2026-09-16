@@ -141,7 +141,10 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         <h2>Valor</h2>
         <label>
           Preço (R$)
-          <input name="preco" type="number" min="0" step="1000" required defaultValue={imovel?.preco} placeholder="8900000" />
+          <input name="preco" type="number" min="0" step="1000" defaultValue={imovel?.preco || ''} placeholder="8900000" />
+        </label>
+        <label className="admin-check-label">
+          <input type="checkbox" name="valor_sob_consulta" defaultChecked={Boolean(imovel && !Number(imovel.preco))} /> Valor sob consulta
         </label>
       </div>
 

@@ -139,7 +139,8 @@ export async function createImovel(prevState, formData) {
   const quartos = Number(formData.get('quartos') || 0);
   const suites = Number(formData.get('suites') || 0);
   const vagas = Number(formData.get('vagas') || 0);
-  if (!preco || !areaM2) return { error: 'Preço e área são obrigatórios.' };
+  const valorSobConsulta = formData.get('valor_sob_consulta') === 'on';
+  if ((!preco && !valorSobConsulta) || !areaM2) return { error: 'Informe o preço ou marque “Valor sob consulta”, além da área.' };
 
   const headline = formData.get('headline')?.toString().trim();
   if (!headline) return { error: 'Preencha a frase de destaque.' };
@@ -286,7 +287,8 @@ export async function updateImovel(formData) {
   const quartos = Number(formData.get('quartos') || 0);
   const suites = Number(formData.get('suites') || 0);
   const vagas = Number(formData.get('vagas') || 0);
-  if (!preco || !areaM2) return { error: 'Preço e área são obrigatórios.' };
+  const valorSobConsulta = formData.get('valor_sob_consulta') === 'on';
+  if ((!preco && !valorSobConsulta) || !areaM2) return { error: 'Informe o preço ou marque “Valor sob consulta”, além da área.' };
 
   const headline = formData.get('headline')?.toString().trim();
   if (!headline) return { error: 'Preencha a frase de destaque.' };

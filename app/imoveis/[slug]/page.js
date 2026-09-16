@@ -43,9 +43,10 @@ export default async function ImovelPage({ params }) {
 
   const modalidades = imovel.modalidades && imovel.modalidades.length > 0 ? imovel.modalidades : ['venda'];
   const fotos = imovel.fotos && imovel.fotos.length > 0 ? imovel.fotos : [coverPhoto(imovel)];
-  const rates = await getExchangeRates();
-  const precoUsd = imovel.preco / rates.usdBrl;
-  const precoEur = imovel.preco / rates.eurBrl;
+  const temPreco = Number(imovel.preco) > 0;
+  const rates = temPreco ? await getExchangeRates() : null;
+  const precoUsd = temPreco ? imovel.preco / rates.usdBrl : null;
+  const precoEur = temPreco ? imovel.preco / rates.eurBrl : null;
 
   const specs = buildImovelSpecs(imovel);
   const mapEmbed = await resolveMapEmbed(imovel.mapa_url);
@@ -70,8 +71,8 @@ export default async function ImovelPage({ params }) {
             <div className="detail-meta">
               <span>{imovel.localizacao}</span>
               <span className="property-hero-price">{formatPriceFull(imovel.preco)}</span>
-              <span title="Valor aproximado, convertido pela cotação atual">≈ {formatUSD(precoUsd)}</span>
-              <span title="Valor aproximado, convertido pela cotação atual">≈ {formatEUR(precoEur)}</span>
+              {temPreco && <span title="Valor aproximado, convertido pela cotação atual">≈ {formatUSD(precoUsd)}</span>}
+              {temPreco && <span title="Valor aproximado, convertido pela cotação atual">≈ {formatEUR(precoEur)}</span>}
               {modalidades.map((modalidade) => (
                 <span key={modalidade}>{MODALITY_LABEL[modalidade] || modalidade}</span>
               ))}
