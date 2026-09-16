@@ -47,7 +47,7 @@ export default async function LaunchPropertyPage({ imovel }) {
   return (
     <div className="launch-page site-identity">
       <HomeMotion />
-      <Nav active="lancamentos" />
+      <Nav active="lancamentos" launchOnly />
       <main>
         <section className="launch-hero">
           <img src={hero} alt="Fachada do Mont Blanc Hill" fetchPriority="high" />

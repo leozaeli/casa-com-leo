@@ -22,11 +22,9 @@ export async function proxy(request) {
       return NextResponse.rewrite(rewriteUrl);
     }
 
-    const siteUrl = request.nextUrl.clone();
-    siteUrl.protocol = 'https';
-    siteUrl.hostname = 'casacomleo.com.br';
-    siteUrl.port = '';
-    return NextResponse.redirect(siteUrl, 308);
+    const launchUrl = request.nextUrl.clone();
+    launchUrl.pathname = '/';
+    return NextResponse.redirect(launchUrl, 308);
   }
 
   if (hostname === MODELO_HOST) {
@@ -78,11 +76,9 @@ export async function proxy(request) {
       return NextResponse.rewrite(rewriteUrl);
     }
     if (subdomain) {
-      const siteUrl = request.nextUrl.clone();
-      siteUrl.protocol = 'https';
-      siteUrl.hostname = 'casacomleo.com.br';
-      siteUrl.port = '';
-      return NextResponse.redirect(siteUrl, 308);
+      const launchUrl = request.nextUrl.clone();
+      launchUrl.pathname = '/';
+      return NextResponse.redirect(launchUrl, 308);
     }
   }
 

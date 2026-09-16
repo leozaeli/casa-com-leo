@@ -6,11 +6,11 @@ const LINKS = [
   { key: 'contato', href: '/contato', label: 'Contato' },
 ];
 
-export default function Nav({ active }) {
+export default function Nav({ active, launchOnly = false }) {
   return (
     <nav>
       <div className="nav-inner">
-        <div className="nav-links">
+        {!launchOnly && <div className="nav-links">
           {LINKS.map((link) => (
             <a key={link.key} className={active === link.key ? 'active' : undefined} href={link.href}>
               {link.label}
@@ -19,18 +19,18 @@ export default function Nav({ active }) {
           <a className={`nav-studios${active === 'studios' ? ' active' : ''}`} href="/studios">
             Studios
           </a>
-        </div>
+        </div>}
         <a className="brand" href="/">
           <span className="brand-logo-frame"><img className="brand-logo" src="/brand/logo-1.png" alt="Casa com Leo" /></span>
         </a>
         <button className="nav-cta" type="button" data-popup="fale-comigo">
           Fale comigo
         </button>
-        <button className="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        {!launchOnly && <button className="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
           <span></span>
           <span></span>
           <span></span>
-        </button>
+        </button>}
       </div>
     </nav>
   );
