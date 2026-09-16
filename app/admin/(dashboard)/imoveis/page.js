@@ -14,7 +14,7 @@ const MODALITY_LABEL = { venda: 'Venda', temporada: 'Aluguel' };
 export default async function AdminDashboardPage() {
   const [imoveis, temperaturas, launches] = await Promise.all([listImoveisAdmin(), getImovelTemperatures(), listLaunchBriefs()]);
   const launchesByProperty = new Map(launches.filter((launch) => launch.property_slug).map((launch) => [launch.property_slug, launch]));
-  const standaloneLaunches = launches.filter((launch) => launch.status === 'published' && !launch.property_slug);
+  const standaloneLaunches = launches.filter((launch) => launch.status === 'published' && !imoveis.some((imovel) => imovel.slug === launch.property_slug));
   const totalItems = imoveis.length + standaloneLaunches.length;
 
   return (
