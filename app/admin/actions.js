@@ -7,6 +7,7 @@ import { enhanceImage } from '@/lib/image-enhance';
 import { generatePropertyCopy, generateSurroundingsCopy } from '@/lib/generate-copy';
 import { resolveMapEmbed, getNearbySurroundings, hasSurroundingsContent } from '@/lib/imoveis';
 import { DEFAULT_HOME_HERO } from '@/lib/home-hero';
+import { provisionLaunchDomain } from '@/lib/vercel-domains';
 
 function slugify(text) {
   return text
@@ -116,6 +117,8 @@ export async function publishLaunch(id) {
   const launches = Array.isArray(current?.value) ? current.value : [];
   const launch = launches.find((item) => item.id === id);
   if (!launch) return { error: 'Lançamento não encontrado.' };
+  const domain = await provisionLaunchDomain(launch.subdomain);
+  if (domain.error) return domain;
   const updated = launches.map((item) => item.id === id ? { ...item, status: 'published', published_at: new Date().toISOString() } : item);
   const { error } = await admin.from('site_content').upsert({ key: 'launches', value: updated, updated_at: new Date().toISOString() });
   if (error) return { error: 'Não foi possível publicar o lançamento.' };
