@@ -95,11 +95,8 @@ export default function AdminSidebar() {
     }}>
       <div className="admin-sidebar-header">
       <a className="admin-brand" href="/">
-        <span className="admin-brand-mark">L</span>
-        <span>
-          Casa com Leo
-          <small>Admin</small>
-        </span>
+        <span className="admin-brand-logo-frame"><img className="admin-brand-logo" src="/brand/logo-1.png" alt="Casa com Leo" /></span>
+        <small>Painel administrativo</small>
       </a>
       <button ref={menuToggle} className="admin-menu-toggle" type="button" aria-controls="admin-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d={menuOpen ? 'm6 6 12 12M6 18 18 6' : 'M4 8h16M4 16h16'} /></svg>
