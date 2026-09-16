@@ -108,7 +108,7 @@ export default async function AdminDashboardPage() {
                 <td className="admin-table-title">{launch.title}</td>
                 <td>{launch.location || '—'}</td>
                 <td>Sob consulta</td>
-                <td>{launch.property_type || '—'}</td>
+                <td>{launch.property_type || (launch.subdomain === 'reservadosol' ? 'Apartamento' : '—')}</td>
                 <td>{launch.modalities?.map((modality) => MODALITY_LABEL[modality] || modality).join(' + ') || 'Venda'}</td>
                 <td className="admin-launch-cell"><span className="admin-badge admin-badge-on"><span className="dot"></span>Lançamento</span><LaunchSalesForm propertySlug={launch.id} percentage={launch.sold_percentage || 0} /></td>
                 <td><span className="admin-badge admin-badge-on"><span className="dot"></span>Publicado</span></td>
