@@ -55,11 +55,13 @@ export default function ListingCard({ imovel, carousel = false }) {
             <BedIcon />
             {imovel.suites} suítes
           </span>
+          <span>{imovel.vagas || '—'} vagas</span>
           <span>
             <AreaIcon />
-            {imovel.area_m2} m²
+            {imovel.area_label || (imovel.area_m2 ? `${imovel.area_m2} m²` : '— m²')}
           </span>
         </div>
+        {imovel.unidades && <p className="property-units">{imovel.unidades} unidades</p>}
       </div>
       </a>
     </article>

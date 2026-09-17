@@ -73,7 +73,7 @@ export default function HomeCatalog({ imoveis }) {
         {visibleProperties.map((imovel) => <div className="catalog-rail-item" key={imovel.id}>
           <a className="property-card catalog-rail-card" href={propertyHref(imovel)}>
             <div className="property-image"><img src={imovel.fotos?.[0] || 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85'} alt={imovel.titulo} />{(imovel.is_launch || imovel.slug === 'mont-blanc-hill') && <span className="property-launch-label">Lançamento</span>}{imovel.vendido ? <div className="property-sold-overlay"><span>Vendido</span></div> : <span className="property-tag"><span className="dot"></span>Disponível</span>}</div>
-            <div className="property-info"><div className="property-info-top"><h3>{imovel.titulo}</h3><span className="property-price">{priceLabel(imovel.preco)}</span></div><p className="property-location">{imovel.localizacao}</p><div className="property-meta"><span>{imovel.suites || '—'} suítes</span><span>{imovel.area_m2 || '—'} m²</span></div></div>
+            <div className="property-info"><div className="property-info-top"><h3>{imovel.titulo}</h3><span className="property-price">{priceLabel(imovel.preco)}</span></div><p className="property-location">{imovel.localizacao}</p><div className="property-meta"><span>{imovel.suites || '—'} suítes</span><span>{imovel.vagas || '—'} vagas</span><span>{imovel.area_label || `${imovel.area_m2 || '—'} m²`}</span></div>{imovel.unidades && <p className="property-units">{imovel.unidades} unidades</p>}</div>
           </a>
         </div>)}
       </div>

@@ -9,6 +9,7 @@ import ToggleLaunchSoldForm from '@/components/admin/ToggleLaunchSoldForm';
 import DeleteLaunchForm from '@/components/admin/DeleteLaunchForm';
 import { listLaunchBriefs } from '@/lib/launch-admin';
 import { getLaunchUrl } from '@/lib/launches';
+import { getLaunchCatalogDetails } from '@/lib/catalog';
 
 const SITE_URL = 'https://www.casacomleo.com.br';
 const CATEGORY_LABEL = { casa: 'Casa', apartamento: 'Apartamento', cobertura: 'Cobertura', terreno: 'Lote' };
@@ -106,11 +107,15 @@ export default async function AdminDashboardPage() {
                   </td>
                 </tr>;
               })}
-              {standaloneLaunches.map((launch) => <tr key={launch.id}>
+              {standaloneLaunches.map((launch) => {
+                const details = getLaunchCatalogDetails(launch);
+                const areaLabel = details.area_m2 ? `${details.area_m2.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}${details.area_max_m2 ? `–${details.area_max_m2.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : ''} m²` : null;
+                const summary = [details.unidades && `${details.unidades} unidades`, details.suites && `${details.suites} suítes`, details.vagas && `${details.vagas} vagas`, areaLabel].filter(Boolean).join(' · ');
+                return <tr key={launch.id}>
                 <td className="admin-table-thumb-cell">
                   <img className="admin-table-thumb" src={launch.subdomain === 'reservadosol' ? 'https://azinunes.com.br/empreendimentos/reserva-do-sol/rds/hero-piscina-fachada.webp' : launch.assets_url || '/brand/logo-4.png'} alt="" />
                 </td>
-                <td className="admin-table-title">{launch.title}</td>
+                <td className="admin-table-title">{launch.title}{summary && <small className="admin-launch-details">{summary}</small>}</td>
                 <td>{launch.location || '—'}</td>
                 <td>Sob consulta</td>
                 <td>{launch.property_type || (launch.subdomain === 'reservadosol' ? 'Apartamento' : '—')}</td>
@@ -120,7 +125,8 @@ export default async function AdminDashboardPage() {
                 <td><ToggleDestaqueForm id={launch.id} slug={launch.subdomain} destaque={launch.destaque} itemType="lancamento" /></td>
                 <td><InterestThermometer temperatura={temperaturas[launch.subdomain]?.temperatura} count={temperaturas[launch.subdomain]?.count || 0} /></td>
                 <td><div className="admin-table-actions"><a href={getLaunchUrl(launch.subdomain)} target="_blank" rel="noreferrer">Ver página</a><a href="/lancamentos">Editar</a><ToggleLaunchSoldForm id={launch.id} sold={(launch.sold_percentage || 0) === 100} /><DeleteLaunchForm id={launch.id} title={launch.title} /></div></td>
-              </tr>)}
+              </tr>;
+              })}
             </tbody>
           </table>
         </div>

@@ -83,6 +83,7 @@
 @media(hover:none){.casa-experience .listing-gallery-nav{opacity:1}}
 .casa-experience .property-info-top{display:flex;flex-direction:column;align-items:start;gap:14px}.casa-experience .property-info h3{font-size:20px;font-weight:400;letter-spacing:-.6px;color:var(--ink)}
 .casa-experience .property-price{color:var(--accent);font-size:16px;white-space:normal}.casa-experience .property-location{color:#a8b09f;font-size:12px}.casa-experience .property-meta{color:#a8b09f;border-top:1px solid var(--line);padding-top:15px;margin-top:18px}
+.casa-experience .property-units{margin:10px 0 0;color:var(--accent);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
 .casa-experience .benefits{background:#1a1e17;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .casa-experience .benefits-grid{gap:24px;grid-template-columns:1fr 1fr}.casa-experience .benefit-cards{gap:1px;background:var(--line);border:1px solid var(--line)}
 .casa-experience .benefit-card{background:#1a1e17;border-radius:0;padding:32px}.casa-experience .benefit-card svg{stroke:var(--accent);margin-bottom:46px}.casa-experience .benefit-card h3{font-size:17px;font-weight:400}.casa-experience .benefit-card p{color:#a4ac9f;font-size:12px;line-height:1.8}
