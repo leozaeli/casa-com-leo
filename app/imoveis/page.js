@@ -116,6 +116,7 @@ export default async function ImoveisPage() {
               <label className="sort-field">
                 Ordenar por
                 <select id="sort-filter">
+                  <option value="all">Todos</option>
                   <option value="featured">Destaques</option>
                   <option value="price-asc">Menor valor</option>
                   <option value="price-desc">Maior valor</option>

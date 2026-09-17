@@ -301,8 +301,8 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
 
       <div className="admin-checkbox-row">
         <label>
-          <input type="checkbox" name="destaque" defaultChecked={isEdit ? imovel.destaque : true} /> Publicado (aparece no
-          catálogo)
+          <input type="checkbox" name="destaque" defaultChecked={isEdit ? imovel.destaque : true} /> Destaque (aparece primeiro
+          na home e no catálogo)
         </label>
         {isEdit && (
           <label>

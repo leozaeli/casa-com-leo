@@ -160,17 +160,18 @@ if (listingPage) {
     const modality = modalityFilter.value;
     const price = priceFilter.value;
     const bedrooms = bedroomFilter.value;
+    const sort = sortFilter.value;
     const visibleCards = listingCards.filter((card) => {
       const matches = (location === 'todos' || card.dataset.location === location)
         && (type === 'todos' || card.dataset.category === type)
         && (modality === 'todos' || card.dataset.modality.split(' ').includes(modality))
         && matchesPrice(Number(card.dataset.price), price)
-        && (bedrooms === 'todos' || Number(card.dataset.bedrooms) >= Number(bedrooms));
+        && (bedrooms === 'todos' || Number(card.dataset.bedrooms) >= Number(bedrooms))
+        && (sort !== 'featured' || card.dataset.featured === 'true');
       card.hidden = !matches;
       return matches;
     });
 
-    const sort = sortFilter.value;
     visibleCards.sort((first, second) => {
       if (sort === 'price-asc') return Number(first.dataset.price) - Number(second.dataset.price);
       if (sort === 'price-desc') return Number(second.dataset.price) - Number(first.dataset.price);
@@ -184,7 +185,7 @@ if (listingPage) {
 
   function clearListingFilters() {
     [locationFilter, typeFilter, modalityFilter, priceFilter, bedroomFilter].forEach((control) => { control.value = 'todos'; });
-    sortFilter.value = 'featured';
+    sortFilter.value = 'all';
     applyListingFilters();
   }
 

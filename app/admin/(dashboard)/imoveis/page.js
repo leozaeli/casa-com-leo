@@ -2,6 +2,7 @@ import { listImoveisAdmin, coverPhoto, formatPrice } from '@/lib/imoveis';
 import { getImovelTemperatures } from '@/lib/leads';
 import DeleteImovelForm from '@/components/admin/DeleteImovelForm';
 import ToggleVendidoForm from '@/components/admin/ToggleVendidoForm';
+import ToggleDestaqueForm from '@/components/admin/ToggleDestaqueForm';
 import InterestThermometer from '@/components/admin/InterestThermometer';
 import LaunchSalesForm from '@/components/admin/LaunchSalesForm';
 import ToggleLaunchSoldForm from '@/components/admin/ToggleLaunchSoldForm';
@@ -56,6 +57,7 @@ export default async function AdminDashboardPage() {
                 <th>Modalidade</th>
                 <th>Lançamento</th>
                 <th>Status</th>
+                <th>Destaque</th>
                 <th>Interesse</th>
                 <th></th>
               </tr>
@@ -76,7 +78,7 @@ export default async function AdminDashboardPage() {
                   <td>
                     <span className={`admin-badge ${imovel.destaque ? 'admin-badge-on' : 'admin-badge-off'}`}>
                       <span className="dot"></span>
-                      {imovel.destaque ? 'Publicado' : 'Oculto'}
+                      {imovel.destaque ? 'Destaque' : 'No catálogo'}
                     </span>
                     {imovel.vendido && (
                       <span className="admin-badge admin-badge-off" style={{ marginLeft: '0.4rem' }}>
@@ -85,6 +87,7 @@ export default async function AdminDashboardPage() {
                       </span>
                     )}
                   </td>
+                  <td><ToggleDestaqueForm id={imovel.id} slug={imovel.slug} destaque={imovel.destaque} /></td>
                   <td>
                     <InterestThermometer
                       temperatura={temperaturas[imovel.slug]?.temperatura}
@@ -114,6 +117,7 @@ export default async function AdminDashboardPage() {
                 <td>{launch.modalities?.map((modality) => MODALITY_LABEL[modality] || modality).join(' + ') || 'Venda'}</td>
                 <td className="admin-launch-cell"><span className="admin-badge admin-badge-on"><span className="dot"></span>Lançamento</span><LaunchSalesForm propertySlug={launch.id} percentage={launch.sold_percentage || 0} /></td>
                 <td><span className="admin-badge admin-badge-on"><span className="dot"></span>Publicado</span></td>
+                <td>—</td>
                 <td>—</td>
                 <td><div className="admin-table-actions"><a href={getLaunchUrl(launch.subdomain)} target="_blank" rel="noreferrer">Ver página</a><a href="/lancamentos">Editar</a><ToggleLaunchSoldForm id={launch.id} sold={(launch.sold_percentage || 0) === 100} /><DeleteLaunchForm id={launch.id} title={launch.title} /></div></td>
               </tr>)}

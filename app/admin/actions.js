@@ -240,6 +240,7 @@ export async function createLocalizacao(prevState, formData) {
   revalidatePath('/admin/imoveis/localizacoes');
   revalidatePath('/admin/imoveis/novo');
   revalidatePath('/imoveis');
+  revalidatePath('/');
   return { success: true };
 }
 
@@ -535,6 +536,23 @@ export async function toggleVendido(formData) {
 
   revalidatePath('/imoveis');
   revalidatePath('/');
+  revalidatePath('/admin/imoveis');
+  if (slug) revalidatePath(`/imoveis/${slug}`);
+}
+
+export async function toggleDestaque(formData) {
+  await assertAdmin();
+  const id = formData.get('id')?.toString();
+  const slug = formData.get('slug')?.toString();
+  const destaque = formData.get('destaque') === 'on';
+  if (!id) return;
+
+  const admin = createAdminClient();
+  const { error } = await admin.from('imoveis').update({ destaque }).eq('id', id);
+  if (error) throw new Error(`Não foi possível atualizar o destaque: ${error.message}`);
+
+  revalidatePath('/');
+  revalidatePath('/imoveis');
   revalidatePath('/admin/imoveis');
   if (slug) revalidatePath(`/imoveis/${slug}`);
 }

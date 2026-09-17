@@ -25,6 +25,7 @@ export default function ListingCard({ imovel, carousel = false }) {
       data-price={imovel.preco}
       data-bedrooms={imovel.suites}
       data-area={imovel.area_m2}
+      data-featured={String(Boolean(imovel.destaque))}
     >
       <div className="property-image">
         {carousel ? <ListingGallery photos={photos} title={imovel.titulo} href={href} /> : <img src={photos[0]} alt={imovel.titulo} />}
