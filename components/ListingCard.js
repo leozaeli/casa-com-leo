@@ -12,8 +12,8 @@ const MODALITY_LABEL = {
 export default function ListingCard({ imovel, carousel = false }) {
   const modalidades = imovel.modalidades || ['venda'];
   const modalityKey = modalidades.length > 1 ? 'ambos' : modalidades[0];
-  const isLaunch = imovel.slug === 'mont-blanc-hill';
-  const href = isLaunch ? getLaunchUrl(imovel.slug) : `/imoveis/${imovel.slug}`;
+  const isLaunch = imovel.is_launch || imovel.slug === 'mont-blanc-hill';
+  const href = imovel.launch_url || (isLaunch ? getLaunchUrl(imovel.slug) : `/imoveis/${imovel.slug}`);
   const photos = imovel.fotos?.length ? imovel.fotos : [coverPhoto(imovel)];
 
   return (

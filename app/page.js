@@ -11,27 +11,13 @@ import { listImoveis } from '@/lib/imoveis';
 import { listLocalizacoes } from '@/lib/localizacoes';
 import { getHomeHero } from '@/lib/home-hero';
 import { listLaunchBriefs } from '@/lib/launch-admin';
+import { buildCatalogItems } from '@/lib/catalog';
 
 export const revalidate = 0;
 
 export default async function HomePage() {
   const [todosImoveis, localizacoes, hero, launches] = await Promise.all([listImoveis(), listLocalizacoes(), getHomeHero(), listLaunchBriefs()]);
-  const launchCards = launches
-    .filter((launch) => launch.status === 'published' && !todosImoveis.some((imovel) => imovel.slug === launch.property_slug))
-    .map((launch) => ({
-      id: `launch-${launch.id}`,
-      slug: launch.subdomain,
-      titulo: launch.title,
-      localizacao: launch.location || 'Bahia',
-      categoria: launch.property_type || (launch.subdomain === 'reservadosol' ? 'apartamento' : 'outro'),
-      preco: 0,
-      suites: launch.subdomain === 'reservadosol' ? 2 : null,
-      area_m2: null,
-      fotos: [launch.subdomain === 'reservadosol' ? 'https://azinunes.com.br/empreendimentos/reserva-do-sol/rds/hero-piscina-fachada.webp' : 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85'],
-      launch_url: `https://${launch.subdomain}.casacomleo.com.br`,
-      is_launch: true,
-    }));
-  const catalogItems = [...todosImoveis, ...launchCards];
+  const catalogItems = buildCatalogItems(todosImoveis, launches);
   const cidades = localizacoes.map((loc) => ({
     ...loc,
     total: todosImoveis.filter((im) => im.localizacao_filtro === loc.slug).length,

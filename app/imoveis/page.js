@@ -4,6 +4,8 @@ import WhatsAppFloat from '@/components/WhatsAppFloat';
 import ListingCard from '@/components/ListingCard';
 import { listImoveis } from '@/lib/imoveis';
 import { listLocalizacoes } from '@/lib/localizacoes';
+import { listLaunchBriefs } from '@/lib/launch-admin';
+import { buildCatalogItems } from '@/lib/catalog';
 import '../identity.css';
 
 export const metadata = {
@@ -14,7 +16,8 @@ export const metadata = {
 export const revalidate = 0;
 
 export default async function ImoveisPage() {
-  const [imoveis, localizacoes] = await Promise.all([listImoveis(), listLocalizacoes()]);
+  const [imoveis, localizacoes, launches] = await Promise.all([listImoveis(), listLocalizacoes(), listLaunchBriefs()]);
+  const catalogItems = buildCatalogItems(imoveis, launches);
 
   return (
     <div className="site-identity">
@@ -109,7 +112,7 @@ export default async function ImoveisPage() {
             <div className="results-bar">
               <p>
                 <strong id="results-count">
-                  {imoveis.length} {imoveis.length === 1 ? 'imóvel' : 'imóveis'}
+                  {catalogItems.length} {catalogItems.length === 1 ? 'imóvel' : 'imóveis'}
                 </strong>{' '}
                 encontrados
               </p>
@@ -125,11 +128,11 @@ export default async function ImoveisPage() {
               </label>
             </div>
             <div className="property-grid listing-grid" id="property-results">
-              {imoveis.map((imovel) => (
+              {catalogItems.map((imovel) => (
                 <ListingCard key={imovel.id} imovel={imovel} carousel />
               ))}
             </div>
-            <div className="empty-results" id="empty-results" hidden={imoveis.length > 0}>
+            <div className="empty-results" id="empty-results" hidden={catalogItems.length > 0}>
               <span className="eyebrow-tag">Nenhum encontro ainda</span>
               <h2>Vamos ampliar a busca?</h2>
               <p>
