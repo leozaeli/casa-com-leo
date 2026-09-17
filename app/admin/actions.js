@@ -544,16 +544,31 @@ export async function toggleDestaque(formData) {
   await assertAdmin();
   const id = formData.get('id')?.toString();
   const slug = formData.get('slug')?.toString();
+  const itemType = formData.get('item_type')?.toString();
   const destaque = formData.get('destaque') === 'on';
   if (!id) return;
 
   const admin = createAdminClient();
-  const { error } = await admin.from('imoveis').update({ destaque }).eq('id', id);
+  let error;
+  if (itemType === 'lancamento') {
+    const { data: current, error: readError } = await admin.from('site_content').select('value').eq('key', 'launches').maybeSingle();
+    if (readError) throw new Error(`Não foi possível abrir os lançamentos: ${readError.message}`);
+    const launches = Array.isArray(current?.value) ? current.value : [];
+    if (!launches.some((launch) => launch.id === id)) throw new Error('Lançamento não encontrado.');
+    ({ error } = await admin.from('site_content').upsert({
+      key: 'launches',
+      value: launches.map((launch) => launch.id === id ? { ...launch, destaque } : launch),
+      updated_at: new Date().toISOString(),
+    }));
+  } else {
+    ({ error } = await admin.from('imoveis').update({ destaque }).eq('id', id));
+  }
   if (error) throw new Error(`Não foi possível atualizar o destaque: ${error.message}`);
 
   revalidatePath('/');
   revalidatePath('/imoveis');
   revalidatePath('/admin/imoveis');
+  if (itemType === 'lancamento') revalidatePath('/admin/lancamentos');
   if (slug) revalidatePath(`/imoveis/${slug}`);
 }
 

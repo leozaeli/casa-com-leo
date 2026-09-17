@@ -105,7 +105,7 @@ function sendLead({ nome, contato, mensagem, canal }) {
   fetch('/api/lead', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nome, contato, mensagem, canal, origem: window.location.pathname }),
+    body: JSON.stringify({ nome, contato, mensagem, canal, origem: window.location.href }),
     keepalive: true,
   }).catch(() => {});
 }

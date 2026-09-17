@@ -116,9 +116,9 @@ export default async function AdminDashboardPage() {
                 <td>{launch.property_type || (launch.subdomain === 'reservadosol' ? 'Apartamento' : '—')}</td>
                 <td>{launch.modalities?.map((modality) => MODALITY_LABEL[modality] || modality).join(' + ') || 'Venda'}</td>
                 <td className="admin-launch-cell"><span className="admin-badge admin-badge-on"><span className="dot"></span>Lançamento</span><LaunchSalesForm propertySlug={launch.id} percentage={launch.sold_percentage || 0} /></td>
-                <td><span className="admin-badge admin-badge-on"><span className="dot"></span>Publicado</span></td>
-                <td>—</td>
-                <td>—</td>
+                <td><span className={`admin-badge ${launch.destaque ? 'admin-badge-on' : 'admin-badge-off'}`}><span className="dot"></span>{launch.destaque ? 'Destaque' : 'No catálogo'}</span></td>
+                <td><ToggleDestaqueForm id={launch.id} slug={launch.subdomain} destaque={launch.destaque} itemType="lancamento" /></td>
+                <td><InterestThermometer temperatura={temperaturas[launch.subdomain]?.temperatura} count={temperaturas[launch.subdomain]?.count || 0} /></td>
                 <td><div className="admin-table-actions"><a href={getLaunchUrl(launch.subdomain)} target="_blank" rel="noreferrer">Ver página</a><a href="/lancamentos">Editar</a><ToggleLaunchSoldForm id={launch.id} sold={(launch.sold_percentage || 0) === 100} /><DeleteLaunchForm id={launch.id} title={launch.title} /></div></td>
               </tr>)}
             </tbody>
