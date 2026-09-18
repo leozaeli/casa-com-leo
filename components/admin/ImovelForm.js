@@ -8,7 +8,7 @@ import SpecsExtraEditor from '@/components/admin/SpecsExtraEditor';
 
 const LocationPicker = dynamic(() => import('@/components/admin/LocationPicker'), { ssr: false });
 
-export default function ImovelForm({ mode, imovel, localizacoes }) {
+export default function ImovelForm({ mode, imovel, localizacoes, launchMode = false }) {
   const isEdit = mode === 'editar';
   const [error, setError] = useState(null);
   const [pending, setPending] = useState(false);
@@ -16,13 +16,16 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
   const [success, setSuccess] = useState(false);
   const [savedUrl, setSavedUrl] = useState(null);
   const [launchSetupUrl, setLaunchSetupUrl] = useState(null);
+  const [launchUrl, setLaunchUrl] = useState(null);
   const [fotosAtuais, setFotosAtuais] = useState(imovel?.fotos || []);
   const [uploads, setUploads] = useState([]);
   const [specsExtra, setSpecsExtra] = useState(
     imovel?.specs_extra && imovel.specs_extra.length > 0 ? imovel.specs_extra : []
   );
-  const [isLaunch, setIsLaunch] = useState(Boolean(imovel?.is_launch));
-  const [sourceMode, setSourceMode] = useState(imovel?.reference_url ? 'reference' : 'manual');
+  const [isLaunch, setIsLaunch] = useState(launchMode || Boolean(imovel?.is_launch));
+  const [sourceMode, setSourceMode] = useState(launchMode || imovel?.reference_url ? 'reference' : 'manual');
+  const [createSubdomain, setCreateSubdomain] = useState(launchMode || Boolean(imovel?.is_launch && imovel?.reference_url));
+  const [launchSubdomain, setLaunchSubdomain] = useState('');
   const [referenceUrl, setReferenceUrl] = useState(imovel?.reference_url || '');
   const [description, setDescription] = useState(
     isEdit ? [imovel.paragrafo_1, imovel.paragrafo_2].filter(Boolean).join(' ') : ''
@@ -53,7 +56,10 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
 
   function selectSourceMode(nextMode) {
     setSourceMode(nextMode);
-    if (nextMode === 'reference') setIsLaunch(true);
+    if (nextMode === 'reference') {
+      setIsLaunch(true);
+      setCreateSubdomain(true);
+    }
   }
 
   async function handleReadReference() {
@@ -76,6 +82,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
     setSuccess(false);
     setSavedUrl(null);
     setLaunchSetupUrl(null);
+    setLaunchUrl(null);
 
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -99,6 +106,8 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
       }
       if (result?.url) setSavedUrl(result.url);
       if (result?.editUrl) setLaunchSetupUrl(result.editUrl);
+      if (result?.launchUrl) setLaunchUrl(result.launchUrl);
+      if (result?.warning) setError(result.warning);
       if (!isEdit) {
         form.reset();
         setSpecsExtra([]);
@@ -108,6 +117,8 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         setReferenceMessage(null);
         setSourceMode('manual');
         setIsLaunch(false);
+        setCreateSubdomain(false);
+        setLaunchSubdomain('');
       }
       setPending(false);
       setProgress(null);
@@ -193,12 +204,25 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
           </label>
         </div>
         <div className="admin-checkbox-row">
+          {launchMode && <input type="hidden" name="is_launch" value="on" />}
           <label>
-            <input type="checkbox" name="is_launch" checked={isLaunch} onChange={(event) => setIsLaunch(event.target.checked)} /> É lançamento
+            <input type="checkbox" name={launchMode ? undefined : 'is_launch'} checked={isLaunch} disabled={launchMode} onChange={(event) => setIsLaunch(event.target.checked)} /> É lançamento
           </label>
+          {!isEdit && (
+            <label>
+              <input type="checkbox" name="create_subdomain" checked={createSubdomain} onChange={(event) => { setCreateSubdomain(event.target.checked); if (event.target.checked) setIsLaunch(true); }} /> Criar página no subdomínio
+            </label>
+          )}
         </div>
+        {!isEdit && createSubdomain && (
+          <label>
+            Subdomínio da página
+            <input name="launch_subdomain" value={launchSubdomain} onChange={(event) => setLaunchSubdomain(event.target.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ''))} placeholder="montblanchill" />
+            <span className="admin-hint">Se ficar vazio, o endereço será criado a partir do título.</span>
+          </label>
+        )}
         <div className="admin-reference-builder">
-          <p className="admin-reference-builder-title">Como deseja montar este imóvel?</p>
+          <p className="admin-reference-builder-title">{launchMode ? 'Como deseja montar este lançamento?' : 'Como deseja montar este imóvel?'}</p>
           <div className="admin-choice-cards">
             <label className={`admin-choice-card ${sourceMode === 'manual' ? 'active' : ''}`}>
               <input type="radio" name="property_source_mode" value="manual" checked={sourceMode === 'manual'} onChange={() => selectSourceMode('manual')} />
@@ -402,6 +426,9 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
           )}
           {launchSetupUrl && (
             <> <a href={launchSetupUrl}>Criar página no subdomínio →</a></>
+          )}
+          {launchUrl && (
+            <> <a href={launchUrl} target="_blank" rel="noopener noreferrer">Ver subdomínio →</a></>
           )}
         </p>
       )}

@@ -64,6 +64,12 @@ const GROUPS = [
     ],
   },
   {
+    label: 'Lançamentos',
+    links: [
+      { href: '/lancamentos', label: 'Lançamentos', exact: true, icon: HomeIcon },
+    ],
+  },
+  {
     label: 'Studios',
     links: [
       { href: '/studios', label: 'Studios', exact: true, icon: StudioIcon },

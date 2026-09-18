@@ -2,6 +2,7 @@ import Nav from '@/components/Nav';
 import { SimpleFooter } from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import { listImoveis } from '@/lib/imoveis';
+import { listLaunchBriefs } from '@/lib/launch-admin';
 import './launch.css';
 
 export const revalidate = 0;
@@ -12,10 +13,14 @@ export const metadata = {
 };
 
 export default async function LancamentosPage() {
-  const launches = (await listImoveis()).filter((imovel) => imovel.is_launch);
+  const [imoveis, launchPages] = await Promise.all([listImoveis(), listLaunchBriefs()]);
+  const launchPagesByProperty = new Map(launchPages.filter((launch) => launch.property_slug).map((launch) => [launch.property_slug, launch]));
+  const launches = imoveis.filter((imovel) => imovel.is_launch);
   const cards = launches.map((imovel) => ({
     title: imovel.titulo,
-    href: `/imoveis/${imovel.slug}`,
+    href: launchPagesByProperty.get(imovel.slug)?.status === 'published'
+      ? 'https://' + launchPagesByProperty.get(imovel.slug).subdomain + '.casacomleo.com.br'
+      : '/imoveis/' + imovel.slug,
     image: imovel.fotos?.[0],
     eyebrow: `Lançamento · ${imovel.localizacao}`,
     summary: imovel.headline || imovel.paragrafo_1 || 'Conheça o empreendimento.',

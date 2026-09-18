@@ -489,6 +489,8 @@ export async function createImovel(prevState, formData) {
   const destaque = formData.get('destaque') === 'on';
   const isLaunch = formData.get('is_launch') === 'on';
   const referenceUrl = formData.get('reference_url')?.toString().trim() || null;
+  const createSubdomain = formData.get('create_subdomain') === 'on';
+  const launchSubdomain = formData.get('launch_subdomain')?.toString().trim() || titulo;
   const mapaUrl = formData.get('mapa_url')?.toString().trim() || null;
 
   let manualSpecsExtra;
@@ -594,14 +596,31 @@ export async function createImovel(prevState, formData) {
 
   if (insertError) return { error: `Erro ao salvar imóvel: ${insertError.message}` };
 
+  let launchUrl = null;
+  let launchWarning = null;
+  if (isLaunch && createSubdomain) {
+    const launchForm = new FormData();
+    launchForm.set('property_id', inserted.id);
+    launchForm.set('subdomain', launchSubdomain);
+    if (referenceUrl) launchForm.set('reference_url', referenceUrl);
+    const launchResult = referenceUrl
+      ? await importAndPublishPropertyLaunchPage(launchForm)
+      : await publishPropertyLaunchPage(launchForm);
+    if (launchResult?.success) launchUrl = launchResult.url;
+    else launchWarning = launchResult?.error || 'O imóvel foi salvo, mas não foi possível publicar o subdomínio agora.';
+  }
+
   revalidatePath('/imoveis');
   revalidatePath('/');
   revalidatePath('/admin/imoveis');
+  revalidatePath('/lancamentos');
   return {
     success: true,
     slug,
     url: 'https://www.casacomleo.com.br/imoveis/' + slug,
     editUrl: isLaunch ? '/admin/imoveis/' + inserted.id + '/editar' : null,
+    launchUrl,
+    warning: launchWarning,
   };
 }
 
