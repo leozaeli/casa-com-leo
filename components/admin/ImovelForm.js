@@ -15,6 +15,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
   const [progress, setProgress] = useState(null);
   const [success, setSuccess] = useState(false);
   const [savedUrl, setSavedUrl] = useState(null);
+  const [launchSetupUrl, setLaunchSetupUrl] = useState(null);
   const [fotosAtuais, setFotosAtuais] = useState(imovel?.fotos || []);
   const [uploads, setUploads] = useState([]);
   const [specsExtra, setSpecsExtra] = useState(
@@ -74,6 +75,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
     setError(null);
     setSuccess(false);
     setSavedUrl(null);
+    setLaunchSetupUrl(null);
 
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -99,6 +101,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         return;
       }
       if (result?.url) setSavedUrl(result.url);
+      if (result?.editUrl) setLaunchSetupUrl(result.editUrl);
       if (!isEdit) {
         form.reset();
         setSpecsExtra([]);
@@ -399,6 +402,9 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
             <a href={savedUrl} target="_blank" rel="noopener noreferrer">
               Ver página →
             </a>
+          )}
+          {launchSetupUrl && (
+            <> <a href={launchSetupUrl}>Criar página no subdomínio →</a></>
           )}
         </p>
       )}
