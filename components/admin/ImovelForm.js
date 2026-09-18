@@ -85,9 +85,6 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
     if (isEdit) {
       formData.set('id', imovel.id);
       formData.set('fotos_atuais', JSON.stringify(fotosAtuais));
-    } else if (files.length === 0) {
-      setError('Envie ao menos uma foto.');
-      return;
     }
 
     formData.set('specs_extra', JSON.stringify(specsExtra.filter((spec) => spec.value?.trim() || spec.label?.trim())));
@@ -284,11 +281,11 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         <div className="admin-form-row">
           <label>
             Área total (m²)
-            <input name="area_total_m2" type="number" min="0" step="1" defaultValue={imovel?.area_total_m2 ?? ''} placeholder="1050" />
+            <input name="area_total_m2" type="text" inputMode="decimal" defaultValue={imovel?.area_total_m2 ?? ''} placeholder="145,67" />
           </label>
           <label>
             Área construída (m²)
-            <input name="area_m2" type="number" min="0" step="1" required defaultValue={imovel?.area_m2} placeholder="420" />
+            <input name="area_m2" type="text" inputMode="decimal" required defaultValue={imovel?.area_m2} placeholder="145,67" />
           </label>
           <label>
             Quartos
@@ -346,8 +343,8 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
           </div>
         )}
         <label>
-          {isEdit ? 'Adicionar novas fotos' : 'Fotos do imóvel (a primeira vira a capa)'}
-          <input type="file" name="fotos" accept="image/*" multiple required={!isEdit} onChange={handleFilesChange} />
+          {isEdit ? 'Adicionar novas fotos' : 'Fotos do imóvel (opcional — a referência pode fornecer imagens para a página de lançamento)'}
+          <input type="file" name="fotos" accept="image/*" multiple onChange={handleFilesChange} />
         </label>
         {uploads.length > 0 && (
           <div className="admin-photo-grid">

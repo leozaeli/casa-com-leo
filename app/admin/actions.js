@@ -20,6 +20,13 @@ function slugify(text) {
     .replace(/(^-|-$)/g, '');
 }
 
+function parseDecimal(value) {
+  const raw = value?.toString().trim() || '';
+  if (!raw) return 0;
+  const normalized = raw.includes(',') ? raw.replaceAll('.', '').replace(',', '.') : raw;
+  return Number(normalized);
+}
+
 async function computeEntornoTexto({ mapaUrl, titulo, localizacao }) {
   if (!mapaUrl) return null;
   try {
@@ -466,8 +473,8 @@ export async function createImovel(prevState, formData) {
   if (modalidades.length === 0) return { error: 'Selecione ao menos uma modalidade (venda ou temporada).' };
 
   const preco = Number(formData.get('preco'));
-  const areaM2 = Number(formData.get('area_m2'));
-  const areaTotalM2 = Number(formData.get('area_total_m2') || 0);
+  const areaM2 = parseDecimal(formData.get('area_m2'));
+  const areaTotalM2 = parseDecimal(formData.get('area_total_m2'));
   const quartos = Number(formData.get('quartos') || 0);
   const suites = Number(formData.get('suites') || 0);
   const vagas = Number(formData.get('vagas') || 0);
@@ -536,7 +543,7 @@ export async function createImovel(prevState, formData) {
   } catch {
     fotoPaths = [];
   }
-  if (!Array.isArray(fotoPaths) || fotoPaths.length === 0) return { error: 'Envie ao menos uma foto.' };
+  if (!Array.isArray(fotoPaths)) fotoPaths = [];
 
   const fotoUrls = [];
   for (let i = 0; i < fotoPaths.length; i += 1) {
@@ -623,8 +630,8 @@ export async function updateImovel(formData) {
   if (modalidades.length === 0) return { error: 'Selecione ao menos uma modalidade (venda ou temporada).' };
 
   const preco = Number(formData.get('preco'));
-  const areaM2 = Number(formData.get('area_m2'));
-  const areaTotalM2 = Number(formData.get('area_total_m2') || 0);
+  const areaM2 = parseDecimal(formData.get('area_m2'));
+  const areaTotalM2 = parseDecimal(formData.get('area_total_m2'));
   const quartos = Number(formData.get('quartos') || 0);
   const suites = Number(formData.get('suites') || 0);
   const vagas = Number(formData.get('vagas') || 0);
