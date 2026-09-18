@@ -40,10 +40,10 @@ export default function GenericLaunchPage({ launch, property }) {
         </section>
 
         {sections.map((section, index) => (
-          <section className="launch-intro launch-reference-section" key={section.title + index}>
-            <div className="wrap launch-intro-grid">
-              <h2><span className="launch-kicker">{String(index + 1).padStart(2, '0')} / DETALHES</span>{section.title}</h2>
-              <p>{section.text}</p>
+          <section className={'launch-story ' + (index % 2 ? 'launch-story-reverse' : '')} key={section.title + index}>
+            <div className="wrap launch-story-grid">
+              <div className="launch-story-copy"><span className="launch-kicker">{String(index + 1).padStart(2, '0')} / EM DETALHE</span><h2>{section.title}</h2><p>{section.text}</p></div>
+              {photos[(index + 1) % photos.length] && <figure className="launch-story-image"><img src={photos[(index + 1) % photos.length]} alt={section.title} /></figure>}
             </div>
           </section>
         ))}
