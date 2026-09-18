@@ -248,7 +248,58 @@ export async function importAndPublishPropertyLaunchPage(formData) {
   revalidatePath('/admin/imoveis');
   revalidatePath('/lancamentos');
   revalidatePath('/lancamentos/' + subdomain);
-  return { success: true, url: 'https://' + subdomain + '.casacomleo.com.br' };
+  return {
+    success: true,
+    url: 'https://' + subdomain + '.casacomleo.com.br',
+    pageContent: imported.pageContent,
+    extracted: { images: imported.images.length, sections: imported.pageContent.sections.length, facts: imported.pageContent.facts.length },
+  };
+}
+
+function cleanLaunchPairs(items, limit) {
+  if (!Array.isArray(items)) return [];
+  return items
+    .slice(0, limit)
+    .map((item) => ({ label: item?.label?.toString().trim().slice(0, 160) || '', value: item?.value?.toString().trim().slice(0, 1000) || '' }))
+    .filter((item) => item.label || item.value);
+}
+
+function cleanLaunchSections(items) {
+  if (!Array.isArray(items)) return [];
+  return items
+    .slice(0, 10)
+    .map((item) => ({ title: item?.title?.toString().trim().slice(0, 180) || '', text: item?.text?.toString().trim().slice(0, 6000) || '' }))
+    .filter((item) => item.title || item.text);
+}
+
+export async function savePropertyLaunchPageContent(propertySlug, pageContent) {
+  await assertAdmin();
+  const slug = propertySlug?.toString();
+  if (!slug || !pageContent || typeof pageContent !== 'object') return { error: 'Conteúdo da página inválido.' };
+  const content = {
+    title: pageContent.title?.toString().trim().slice(0, 180) || '',
+    hero: pageContent.hero?.toString().trim().slice(0, 1000) || '',
+    summary: pageContent.summary?.toString().trim().slice(0, 8000) || '',
+    stats: cleanLaunchPairs(pageContent.stats, 12),
+    sections: cleanLaunchSections(pageContent.sections),
+    facts: cleanLaunchPairs(pageContent.facts, 30),
+  };
+  const admin = createAdminClient();
+  const { data: current, error: readError } = await admin.from('site_content').select('value').eq('key', 'launches').maybeSingle();
+  if (readError) return { error: 'Não foi possível abrir a página de lançamento.' };
+  const launches = Array.isArray(current?.value) ? current.value : [];
+  const launch = launches.find((item) => item.property_slug === slug);
+  if (!launch) return { error: 'Página de lançamento não encontrada.' };
+  const now = new Date().toISOString();
+  const { error: saveError } = await admin.from('site_content').upsert({
+    key: 'launches',
+    value: launches.map((item) => (item.id === launch.id ? { ...item, page_content: content, updated_at: now } : item)),
+    updated_at: now,
+  });
+  if (saveError) return { error: 'Não foi possível salvar as alterações: ' + saveError.message };
+  revalidatePath('/admin/imoveis');
+  revalidatePath('/lancamentos/' + launch.subdomain);
+  return { success: true };
 }
 
 export async function updateLaunchSoldPercentage(propertySlug, percentage) {
