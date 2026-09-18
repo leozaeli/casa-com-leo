@@ -1,9 +1,7 @@
 import Nav from '@/components/Nav';
 import { SimpleFooter } from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
-import { getImovelBySlug } from '@/lib/imoveis';
-import { getLaunchUrl } from '@/lib/launches';
-import { listLaunchBriefs } from '@/lib/launch-admin';
+import { listImoveis } from '@/lib/imoveis';
 import './launch.css';
 
 export const revalidate = 0;
@@ -14,14 +12,13 @@ export const metadata = {
 };
 
 export default async function LancamentosPage() {
-  const montBlanc = await getImovelBySlug('mont-blanc-hill');
-  const launches = (await listLaunchBriefs()).filter((launch) => launch.status === 'published');
-  const cards = launches.map((launch) => ({
-    title: launch.title,
-    href: getLaunchUrl(launch.property_slug || launch.subdomain),
-    image: launch.subdomain === 'reservadosol' ? 'https://azinunes.com.br/empreendimentos/reserva-do-sol/rds/hero-piscina-fachada.webp' : montBlanc?.fotos?.[0],
-    eyebrow: launch.location ? `Lançamento · ${launch.location}` : 'Lançamento',
-    summary: launch.highlights || launch.description || 'Conheça o empreendimento.',
+  const launches = (await listImoveis()).filter((imovel) => imovel.is_launch);
+  const cards = launches.map((imovel) => ({
+    title: imovel.titulo,
+    href: `/imoveis/${imovel.slug}`,
+    image: imovel.fotos?.[0],
+    eyebrow: `Lançamento · ${imovel.localizacao}`,
+    summary: imovel.headline || imovel.paragrafo_1 || 'Conheça o empreendimento.',
   }));
 
   return (

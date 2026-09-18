@@ -272,6 +272,8 @@ export async function createImovel(prevState, formData) {
   if (!descricao) return { error: 'Descreva o imóvel.' };
   const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Imóvel · Exclusivo';
   const destaque = formData.get('destaque') === 'on';
+  const isLaunch = formData.get('is_launch') === 'on';
+  const referenceUrl = formData.get('reference_url')?.toString().trim() || null;
   const mapaUrl = formData.get('mapa_url')?.toString().trim() || null;
 
   let manualSpecsExtra;
@@ -369,6 +371,8 @@ export async function createImovel(prevState, formData) {
     specs_extra: manualSpecsExtra,
     fotos: fotoUrls,
     destaque,
+    is_launch: isLaunch,
+    reference_url: isLaunch ? referenceUrl : null,
     mapa_url: mapaUrl,
     entorno_texto: entornoTexto,
   });
@@ -420,6 +424,8 @@ export async function updateImovel(formData) {
   if (!descricao) return { error: 'Descreva o imóvel.' };
   const eyebrow = formData.get('eyebrow')?.toString().trim() || 'Imóvel · Exclusivo';
   const destaque = formData.get('destaque') === 'on';
+  const isLaunch = formData.get('is_launch') === 'on';
+  const referenceUrl = formData.get('reference_url')?.toString().trim() || null;
   const vendido = formData.get('vendido') === 'on';
   const mapaUrl = formData.get('mapa_url')?.toString().trim() || null;
 
@@ -509,6 +515,8 @@ export async function updateImovel(formData) {
       specs_extra: manualSpecsExtra,
       fotos,
       destaque,
+      is_launch: isLaunch,
+      reference_url: isLaunch ? referenceUrl : null,
       vendido,
       mapa_url: mapaUrl,
       entorno_texto: entornoTexto,

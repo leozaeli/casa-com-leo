@@ -10,14 +10,12 @@ import HomeCatalog from '@/components/HomeCatalog';
 import { listImoveis } from '@/lib/imoveis';
 import { listLocalizacoes } from '@/lib/localizacoes';
 import { getHomeHero } from '@/lib/home-hero';
-import { listLaunchBriefs } from '@/lib/launch-admin';
-import { buildCatalogItems } from '@/lib/catalog';
 
 export const revalidate = 0;
 
 export default async function HomePage() {
-  const [todosImoveis, localizacoes, hero, launches] = await Promise.all([listImoveis(), listLocalizacoes(), getHomeHero(), listLaunchBriefs()]);
-  const catalogItems = buildCatalogItems(todosImoveis, launches);
+  const [todosImoveis, localizacoes, hero] = await Promise.all([listImoveis(), listLocalizacoes(), getHomeHero()]);
+  const catalogItems = todosImoveis;
   const cidades = localizacoes.map((loc) => ({
     ...loc,
     total: todosImoveis.filter((im) => im.localizacao_filtro === loc.slug).length,

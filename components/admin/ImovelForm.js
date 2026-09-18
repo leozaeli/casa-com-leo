@@ -20,6 +20,7 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
   const [specsExtra, setSpecsExtra] = useState(
     imovel?.specs_extra && imovel.specs_extra.length > 0 ? imovel.specs_extra : []
   );
+  const [isLaunch, setIsLaunch] = useState(Boolean(imovel?.is_launch));
 
   function removerFoto(url) {
     setFotosAtuais((atual) => atual.filter((foto) => foto !== url));
@@ -160,6 +161,18 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
             <input name="eyebrow" defaultValue={imovel?.eyebrow} placeholder="Ex: Casa · Exclusivo" />
           </label>
         </div>
+        <div className="admin-checkbox-row">
+          <label>
+            <input type="checkbox" name="is_launch" checked={isLaunch} onChange={(event) => setIsLaunch(event.target.checked)} /> É lançamento
+          </label>
+        </div>
+        {isLaunch && (
+          <label>
+            Link de referência para leitura
+            <input name="reference_url" type="url" defaultValue={imovel?.reference_url || ''} placeholder="https://..." />
+            <span className="admin-hint">Use a página de referência do empreendimento para apoiar a leitura e o cadastro.</span>
+          </label>
+        )}
       </div>
 
       <div className="admin-form-section">

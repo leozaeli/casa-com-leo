@@ -4,8 +4,6 @@ import WhatsAppFloat from '@/components/WhatsAppFloat';
 import ListingCard from '@/components/ListingCard';
 import { listImoveis } from '@/lib/imoveis';
 import { listLocalizacoes } from '@/lib/localizacoes';
-import { listLaunchBriefs } from '@/lib/launch-admin';
-import { buildCatalogItems } from '@/lib/catalog';
 import '../identity.css';
 
 export const metadata = {
@@ -16,8 +14,8 @@ export const metadata = {
 export const revalidate = 0;
 
 export default async function ImoveisPage() {
-  const [imoveis, localizacoes, launches] = await Promise.all([listImoveis(), listLocalizacoes(), listLaunchBriefs()]);
-  const catalogItems = buildCatalogItems(imoveis, launches);
+  const [imoveis, localizacoes] = await Promise.all([listImoveis(), listLocalizacoes()]);
+  const catalogItems = imoveis;
 
   return (
     <div className="site-identity">
