@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { createImovel, updateImovel, createUploadTickets } from '@/app/admin/actions';
+import { createImovel, updateImovel, createUploadTickets, readPropertyReference } from '@/app/admin/actions';
 import { uploadFilesWithProgress } from '@/lib/client-upload';
 import SpecsExtraEditor from '@/components/admin/SpecsExtraEditor';
 
@@ -21,6 +21,13 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
     imovel?.specs_extra && imovel.specs_extra.length > 0 ? imovel.specs_extra : []
   );
   const [isLaunch, setIsLaunch] = useState(Boolean(imovel?.is_launch));
+  const [sourceMode, setSourceMode] = useState(imovel?.reference_url ? 'reference' : 'manual');
+  const [referenceUrl, setReferenceUrl] = useState(imovel?.reference_url || '');
+  const [description, setDescription] = useState(
+    isEdit ? [imovel.paragrafo_1, imovel.paragrafo_2].filter(Boolean).join(' ') : ''
+  );
+  const [readingReference, setReadingReference] = useState(false);
+  const [referenceMessage, setReferenceMessage] = useState(null);
 
   function removerFoto(url) {
     setFotosAtuais((atual) => atual.filter((foto) => foto !== url));
@@ -41,6 +48,25 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
       if (alvo) URL.revokeObjectURL(alvo.url);
       return atual.filter((_, i) => i !== index);
     });
+  }
+
+  function selectSourceMode(nextMode) {
+    setSourceMode(nextMode);
+    if (nextMode === 'reference') setIsLaunch(true);
+  }
+
+  async function handleReadReference() {
+    setReferenceMessage(null);
+    setError(null);
+    setReadingReference(true);
+    const result = await readPropertyReference(referenceUrl);
+    setReadingReference(false);
+    if (result?.error) {
+      setError(result.error);
+      return;
+    }
+    setDescription(result.description);
+    setReferenceMessage('Referência lida. Revise o texto abaixo, complete os dados do imóvel e publique a página.');
   }
 
   async function handleSubmit(event) {
@@ -77,6 +103,11 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
         form.reset();
         setSpecsExtra([]);
         setUploads([]);
+        setDescription('');
+        setReferenceUrl('');
+        setReferenceMessage(null);
+        setSourceMode('manual');
+        setIsLaunch(false);
       }
       setPending(false);
       setProgress(null);
@@ -166,13 +197,34 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
             <input type="checkbox" name="is_launch" checked={isLaunch} onChange={(event) => setIsLaunch(event.target.checked)} /> É lançamento
           </label>
         </div>
-        {isLaunch && (
-          <label>
-            Link de referência para leitura
-            <input name="reference_url" type="url" defaultValue={imovel?.reference_url || ''} placeholder="https://..." />
-            <span className="admin-hint">Use a página de referência do empreendimento para apoiar a leitura e o cadastro.</span>
-          </label>
-        )}
+        <div className="admin-reference-builder">
+          <p className="admin-reference-builder-title">Como deseja montar este imóvel?</p>
+          <div className="admin-choice-cards">
+            <label className={`admin-choice-card ${sourceMode === 'manual' ? 'active' : ''}`}>
+              <input type="radio" name="property_source_mode" value="manual" checked={sourceMode === 'manual'} onChange={() => selectSourceMode('manual')} />
+              <b>Preencher manualmente</b>
+              <span>Cadastre as informações com seus próprios textos e imagens.</span>
+            </label>
+            <label className={`admin-choice-card ${sourceMode === 'reference' ? 'active' : ''}`}>
+              <input type="radio" name="property_source_mode" value="reference" checked={sourceMode === 'reference'} onChange={() => selectSourceMode('reference')} />
+              <b>Montar a partir de um link</b>
+              <span>Lemos a página de referência e usamos seu conteúdo para construir a apresentação deste imóvel.</span>
+            </label>
+          </div>
+          {sourceMode === 'reference' && (
+            <div className="admin-reference-fields">
+              <label>
+                Link de referência
+                <input name="reference_url" type="url" value={referenceUrl} onChange={(event) => setReferenceUrl(event.target.value)} required placeholder="https://..." />
+                <span className="admin-hint">O link fica registrado neste imóvel para consulta posterior.</span>
+              </label>
+              <button className="admin-secondary-button" type="button" disabled={readingReference || !referenceUrl.trim()} onClick={handleReadReference}>
+                {readingReference ? 'Lendo referência…' : 'Ler link e preparar apresentação'}
+              </button>
+              {referenceMessage && <p className="admin-form-success">{referenceMessage}</p>}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="admin-form-section">
@@ -265,7 +317,8 @@ export default function ImovelForm({ mode, imovel, localizacoes }) {
           <textarea
             name="descricao"
             required
-            defaultValue={isEdit ? [imovel.paragrafo_1, imovel.paragrafo_2].filter(Boolean).join(' ') : ''}
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
             placeholder="Escreva livremente sobre o imóvel: a história, o entorno, a rotina de quem mora ali, detalhes que fazem diferença..."
           ></textarea>
           <span className="admin-hint">

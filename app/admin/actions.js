@@ -44,6 +44,52 @@ async function assertAdmin() {
   }
 }
 
+function plainTextFromHtml(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export async function readPropertyReference(referenceUrl) {
+  await assertAdmin();
+
+  let url;
+  try {
+    url = new URL(referenceUrl);
+  } catch {
+    return { error: 'Informe um link válido.' };
+  }
+  if (!['http:', 'https:'].includes(url.protocol)) return { error: 'Use um link iniciado por http:// ou https://.' };
+  if (['localhost', '127.0.0.1', '::1'].includes(url.hostname) || url.hostname.endsWith('.local')) {
+    return { error: 'Use uma página pública como referência.' };
+  }
+
+  try {
+    const response = await fetch(url, {
+      cache: 'no-store',
+      headers: { 'User-Agent': 'CasaComLeo reference reader' },
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!response.ok) return { error: `Não foi possível ler esse link (status ${response.status}).` };
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.includes('text/html')) return { error: 'O link precisa apontar para uma página da web.' };
+    const html = (await response.text()).slice(0, 120000);
+    const description = plainTextFromHtml(html).slice(0, 7000);
+    if (description.length < 80) return { error: 'Essa página não trouxe texto suficiente para preparar a apresentação.' };
+    return { success: true, description };
+  } catch (error) {
+    console.error('Erro ao ler referência do imóvel:', error);
+    return { error: 'Não foi possível ler esse link agora. Confira o endereço e tente novamente.' };
+  }
+}
+
 export async function createUploadTickets(formData) {
   await assertAdmin();
 
