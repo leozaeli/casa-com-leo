@@ -30,8 +30,11 @@ async function migrate() {
       );
     }
 
+    await client.query("update public.imoveis set is_launch = true where slug = 'mont-blanc-hill'");
+
+    const { rows: catalog } = await client.query("select slug, titulo, destaque, is_launch from public.imoveis where slug in ('mont-blanc-hill', 'reserva-do-sol') order by slug");
     await client.query('commit');
-    console.log(JSON.stringify({ migrated: true, location: location.slug, created: existing.length === 0 }));
+    console.log(JSON.stringify({ migrated: true, location: location.slug, created: existing.length === 0, catalog }));
   } catch (error) {
     await client.query('rollback');
     throw error;
