@@ -115,9 +115,9 @@ export default function ImovelForm({ mode, imovel, localizacoes, launchMode = fa
         setDescription('');
         setReferenceUrl('');
         setReferenceMessage(null);
-        setSourceMode('manual');
-        setIsLaunch(false);
-        setCreateSubdomain(false);
+        setSourceMode(launchMode ? 'reference' : 'manual');
+        setIsLaunch(launchMode);
+        setCreateSubdomain(launchMode);
         setLaunchSubdomain('');
       }
       setPending(false);
