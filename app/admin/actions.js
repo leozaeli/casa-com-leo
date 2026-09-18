@@ -8,6 +8,7 @@ import { generatePropertyCopy, generateSurroundingsCopy } from '@/lib/generate-c
 import { resolveMapEmbed, getNearbySurroundings, hasSurroundingsContent } from '@/lib/imoveis';
 import { DEFAULT_HOME_HERO } from '@/lib/home-hero';
 import { provisionLaunchDomain } from '@/lib/vercel-domains';
+import { importLaunchReference } from '@/lib/launch-reference';
 
 function slugify(text) {
   return text
@@ -191,6 +192,62 @@ export async function publishPropertyLaunchPage(formData) {
   revalidatePath('/lancamentos');
   revalidatePath('/lancamentos/' + subdomain);
   revalidatePath('/imoveis/' + property.slug);
+  return { success: true, url: 'https://' + subdomain + '.casacomleo.com.br' };
+}
+
+export async function importAndPublishPropertyLaunchPage(formData) {
+  await assertAdmin();
+  const propertyId = formData.get('property_id')?.toString();
+  const subdomain = slugify(formData.get('subdomain')?.toString().trim() || '').replaceAll('-', '');
+  const referenceUrl = formData.get('reference_url')?.toString().trim();
+  if (!propertyId || !subdomain || !referenceUrl) return { error: 'Informe o subdomínio e o link de referência.' };
+
+  const admin = createAdminClient();
+  const { data: property, error: propertyError } = await admin.from('imoveis').select('id, slug, titulo, localizacao, headline, paragrafo_1, paragrafo_2').eq('id', propertyId).maybeSingle();
+  if (propertyError || !property) return { error: 'Imóvel não encontrado.' };
+
+  let imported;
+  try {
+    imported = await importLaunchReference(referenceUrl);
+  } catch (error) {
+    console.error('Erro ao importar referência do lançamento:', error);
+    return { error: error.message || 'Não foi possível importar a página de referência.' };
+  }
+
+  const { data: current, error: readError } = await admin.from('site_content').select('value').eq('key', 'launches').maybeSingle();
+  if (readError) return { error: 'Não foi possível abrir as páginas de lançamento: ' + readError.message };
+  const launches = Array.isArray(current?.value) ? current.value : [];
+  const existing = launches.find((launch) => launch.property_slug === property.slug);
+  const owner = launches.find((launch) => launch.subdomain === subdomain && launch.property_slug !== property.slug);
+  if (owner) return { error: 'Esse subdomínio já está sendo usado por outro imóvel.' };
+
+  const domain = await provisionLaunchDomain(subdomain);
+  if (domain.error) return domain;
+  const now = new Date().toISOString();
+  const launch = {
+    ...(existing || {}),
+    id: existing?.id || crypto.randomUUID(),
+    title: imported.pageContent.title || property.titulo,
+    property_slug: property.slug,
+    subdomain,
+    source_mode: 'reference',
+    reference_url: referenceUrl,
+    location: property.localizacao,
+    description: imported.pageContent.summary || [property.headline, property.paragrafo_1, property.paragrafo_2].filter(Boolean).join(' '),
+    page_content: imported.pageContent,
+    source_images: imported.images,
+    status: 'published',
+    created_at: existing?.created_at || now,
+    published_at: now,
+    updated_at: now,
+  };
+  const updated = existing ? launches.map((item) => (item.id === existing.id ? launch : item)) : [...launches, launch];
+  const { error: saveError } = await admin.from('site_content').upsert({ key: 'launches', value: updated, updated_at: now });
+  if (saveError) return { error: 'Não foi possível salvar a página de lançamento: ' + saveError.message };
+
+  revalidatePath('/admin/imoveis');
+  revalidatePath('/lancamentos');
+  revalidatePath('/lancamentos/' + subdomain);
   return { success: true, url: 'https://' + subdomain + '.casacomleo.com.br' };
 }
 
